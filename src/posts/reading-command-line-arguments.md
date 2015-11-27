@@ -6,6 +6,6 @@ var firstArg = args[0];
 // ...
 ```
 
-eg. `neko Main.n --debug trace` returns the array `["--debug", "trace"]`.
+This works when you compile and execute your Haxe code. For example, if you compile a `Main.hx` class with neko, and then run `neko Main.n --debug trace`, you get the array `["--debug", "trace"]`.
 
-If you use `haxe blah.hx --interp`, you get the array `["blah.hx", "--interp"]`
+However, it doesn't work with `--interp`. If you run `haxe -main Main --interp`, you get the array `["-main", "Main", "--interp"]`. Trying to append any more arguments will result in the error `Could not process argument <foo>`
