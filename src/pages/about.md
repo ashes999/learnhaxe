@@ -1,6 +1,6 @@
 I created Learn Haxe to fill a void in Haxe learning. While Haxe sports excellent documentation (specifically, the API sections), a lot of good information lives on `old.haxe.org` or on the archived `nabble` forums. This confuses people.
 
-Anything that isn't trivial to Google, or lives primarily on `old.haxe.org` on the old forums, now finds a home here. I hope this will help people learn Haxe faster.
+I plan to post content on anything that isn't trivial to search out, or that lives primarily on out-dated websites. I also post lots of my own interesting experiments (such as my plugin architecture experiment).
 
 Below, you can find an excellent lists of blogs to follow on various aspects of Haxe.
 
