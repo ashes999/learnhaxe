@@ -5,3 +5,5 @@ Once you install a library through haxelib, you need to tell the compiler to inc
 `haxe -lib <libName> ...`
 
 This includes the library code. Don't forget to add the relevant `import ...` statements to include library classes (if the library uses packages).
+
+ To include multiple libraries, just add more `-lib <foo>` arguments.
