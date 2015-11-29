@@ -1,3 +1,5 @@
+Tags: haxe
+
 To read from the command line, use the `Sys.args()` call. It returns an array of arguments:
 
 ```

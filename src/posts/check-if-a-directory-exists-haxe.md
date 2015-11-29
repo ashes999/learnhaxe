@@ -1,3 +1,5 @@
+Tags: haxe
+
 To check if a directory exists, you can use `sys.FileSystem.exists(path)`. This returns true if a file *or directory* exists at the specified path.
 
 To be sure it's a directory, you can also include `sys.FileSystem.isDirectory(path)`. You can combine them together:
