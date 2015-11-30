@@ -1,4 +1,5 @@
-Tags: haxelib
+meta-tags: haxelib
+meta-publishedOn: 2015-11-29
 
 Haxe includes a built-in package manager, [haxelib](http://haxe.org/manual/haxelib.html). You can install, upgrade, and manage libraries [via the command-line](http://lib.haxe.org/).
 

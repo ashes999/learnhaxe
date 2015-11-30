@@ -1,4 +1,5 @@
-Tags: haxe
+meta-tags: haxe
+meta-publishedOn: 2015-11-28
 
 Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the `sys.FileSystem` class [includes a deleteDirectory method](http://api.haxe.org/sys/FileSystem.html#deleteDirectory), it throws an exception if the directory contains subdirectories or files.
 

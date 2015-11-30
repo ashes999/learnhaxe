@@ -1,4 +1,5 @@
-Tags: haxe
+meta-tags: haxe
+meta-publishedOn: 2015-11-27
 
 To exit from the command-line in Haxe, you can use `Sys.exit(n)`, where `n` is the exit code. (`0` indicates normal termination, and anything non-zero is usually treated as an error.)
 
