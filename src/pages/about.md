@@ -6,3 +6,5 @@ Below, you can find an excellent lists of blogs to follow on various aspects of 
 
 - [I Call Haxe!](http://player03.com/): Haxe and OpenFL
 - [A Programming Devblog](http://coinflipstudios.com/devblog/): Haxe, OpenFL, and HaxeFlixel
+
+I created Learn Haxe with [Butterfly](https://github.com/ashes999/butterfly). You can use Butterfly to create your own static-content blog. You can find the Learn Haxe source [on GitHub](https://github.com/ashes999/learnhaxe).
