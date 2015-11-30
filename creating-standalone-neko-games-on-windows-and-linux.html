@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="ashes999">
+    <link rel="icon" href="content/favicon.ico">
+
+    <title>Creating Standalone Neko Games on Windows and Linux | Learn Haxe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="content/blog.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item" href="about.html">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">Learn Haxe</h1>
+        <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Creating Standalone Neko Games on Windows and Linux</h2>
+<p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p class="blog-post-meta">Posted 2015-02-26</p>
+<p><a href="http:/ashes999.github.io/learnhaxe/neko-plugin-architecture-with-reflection.html">Prototyping a pluggable-architecture</a> led me to the path of building my games against the <code>neko</code> target, and no other. That's manageable. The next question is, <strong>how can I release a single zip that contains my game</strong>, <em>without requiring users to install Neko themselves</em>?</p>
+<h1>On Windows</h1>
+<p>On Windows, Neko does a great job of linking to libraries in the current directory. When I build my Haxeflixel game against the <code>neko</code> target on Windows, copy it to a clean VM, and run it, Neko complains about these three files missing (in order):</p><ul><li><code>std.ndll</code> (Haxe standard library)</li><li><code>regexp.ndll</code> (Haxe regular expressions library)</li><li><code>zlib.dll</code> (ZLib)</li></ul>
+<p>Copying them over gives me <strong>a working, stand-alone game!</strong> The rest of my code builds as a standard HaxeFlixel game.</p>
+<h1>On Linux</h1>
+<p>Neko is less forgiving on Linux. Neko on Linux doesn't search the current path for the Neko DLLs, despite <code>$loader_path</code> including <code>./</code> and <code>@executable_path</code>. Fortunately, Ibilon <a href="http://community.openfl.org/t/stand-alone-neko-executables-with-neko/770/5">pointed me to an easy work-around</a>:</p><ul><li>Create a <code>run.sh</code> executable script</li><li>In your script, set <code>LD_LIBRARY_PATH</code> to the current directory and call your executable</li></ul>
+<p>Here's what mine looks like:</p>
+<pre><code>#!/bin/sh
+export LD_LIBRARY_PATH=$( pwd )
+./GameExecutable</code></pre>
+<p>Like Windows, you need to include the <code>std.ndll</code>, <code>regexp.ndll</code>, and <code>zlib.dll</code> files with your executable. This gives you <strong>a working, stand-alone game!</strong> And yes, you're telling Neko where to look for the Neko libraries (the current directory). That's okay.</p>
+<p>Eventually, perhaps a new version of Neko will emerge, one that looks in the current directory for the libraries. Until then, this is good enough for me.</p>
+
+          </div>
+
+          <!--nav>
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav-->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Short, direct, how-to articles about Haxe and the ecosystem. <a href="/about.html">Read more</a></p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              <ul><li><a href="tag-Haxe.html">Haxe</a> (9)</li>
+<li><a href="tag-HaxeFlixel.html">HaxeFlixel</a> (3)</li>
+<li><a href="tag-Haxelib.html">Haxelib</a> (1)</li>
+<li><a href="tag-OpenFL.html">OpenFL</a> (1)</li>
+</ul>
+            </ul>
+          </div>
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe on GitHub</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a> ::
+        crafted with <a href="https://github.com/ashes999/butterfly">Butterfly</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>

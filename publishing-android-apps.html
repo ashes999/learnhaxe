@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="ashes999">
+    <link rel="icon" href="content/favicon.ico">
+
+    <title>Publishing Android Apps | Learn Haxe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="content/blog.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item" href="about.html">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">Learn Haxe</h1>
+        <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Publishing Android Apps</h2>
+<p><strong>Tagged with:</strong> <a href="tag-OpenFL.html">OpenFL</a></p>
+<p class="blog-post-meta">Posted 2015-01-15</p>
+<p>I recently <a href="https://play.google.com/store/apps/details?id=com.deengames.thisismylord">published a HaxeFlixel/OpenFL game to Google Play</a>. During the process, I navigated a few issues, which I document here for future benefit.</p>
+<h3>Signing Your APK</h3>
+<p>As you know, every Android app must be signed with a private key. The <a href="http://stackoverflow.com/a/15330139/210780">process to generate a keystore</a> is well-known. All I can re-iterate is: <strong>please keep your keystore and alias safe.</strong> You will need to know them, and you cannot publish your app without them, nor can you reverse-engineer them from existing apps.</p>
+<p>If you forgot your app alias, you can actually open the <code>keystore</code> file in a text editor, and you'll see it in plaintext (while the rest of the file is binary).</p>
+<p>To automatically sign your APK, add your <code>keystore</code> file to the local directory (with <code>project.xml</code>) and add this to your <code>project.xml</code> file:</p>
+<pre><code>&lt;certificate
+  path="android_release.keystore"
+  alias="deengamesproductionkey"
+  if="android" /&gt;</code></pre>
+<p>If you run the <code>android</code> build, the SDK will prompt you to enter your password. If your source-control repository is private, you can commit your <code>keystore</code> file and add this attribute to the <code>certificate</code> to not be prompted each build: <code>password="put your keystore password here"</code>.</p>
+<h3>Specifying the Package Name</h3>
+<p>Google Play requires a unique package identifier (eg. <code>com.deengames.thisismylord</code>) to uniquely identify each game. The default package generates as <code>com.example.myapp</code>. To change it, open up <code>project.xml</code> and add this attribute to the <code>app</code> tag:</p>
+<p><code>package="com.deengames.thisismylord"</code></p>
+<p>You can also specify a <code>company</code> (eg. <code>Deen Games</code>) and a human-readable <code>version</code> (eg. <code>1.0.1</code>). I suggest using <a href="http://semver.org/">semantic versioning</a>.</p>
+<h3>The Generated AndroidManifest.xml</h3>
+<p>As you may know (if you published Android apps), Google Play requires you to specify special permissions your app needs (the entire list is <a href="http://developer.android.com/reference/android/Manifest.permission.html">in the Manifest permissions doc</a>).</p>
+<p>OpenFL automatically generates the android manifest XML file for you. For fine-grained control, you can overwrite the entire file with your own, like so:</p>
+<p><code>&lt;template path="to/your/manifest.xml" rename="bin/AndroidManifest.xml" /&gt;</code></p>
+<p>However, I don't recommend this, for a couple of reasons:</p><ul><li>The default generated manifest is quite good, and guaranteed to work with all OpenFL functionality. Changing something may break that.</li><li>If future versions of OpenFL generate different XML, you may find weird bugs with your app once you run it on Android, because of your mismstached manifest file.</li></ul>
+<p>If you <em>must</em> do this, <em>please</em> check in your manifest.xml to source control and don't upgrade your version of OpenFL. This guarantees that things will keep working.</p>
+<p>The generated Android manifest also has a <code>versionCode</code> in it. You can specify it in your template (but I don't recommend it, because you have to remember to update it every time you publish.)</p>
+<p>If you prefer a better approach, read the next two sections on permissions and the APK version.</p>
+<h3>Declaring Permissions</h3>
+<p>OpenFL allows you to specify Android permissions in your <code>project.xml</code>, like so:</p>
+<p><code>&lt;android permission="com.android.vending.CHECK_LICENSE" /&gt;</code></p>
+<p>Some functionality, like Flurry Analytics, requires certain permissions. By default, OpenFL (currently, as of version <code>2.1.7</code>) specifies some permissions by default.</p>
+<h3>Specifying the VersionCode</h3>
+<p>If yo upload your app now, you're fine. But, if you need to upload an upgraded version, you may find a mysterious error that <code>version code must be greater than n</code> (eg. 68).</p>
+<p>It turns out that OpenFL creates a file in <code>export</code> called <code>.build</code> which contains an auto-incremented build number; this is precisely the number that it uses in the generated Android manifest. If you work on one machine and never delete <code>export</code>, this doesn't matter.</p>
+<p>But if you clean <code>export</code> or work on multiple machines, you get inconsistent builds. Your solutions are either:</p><ul><li>Check in this file (not necessarily a good, or bad, approach), or</li><li>Update this version by hand whenever you need to publish, or</li><li>Override the android manifest.</li></ul>
+<p>I prefer the second approach: let this file exist on it's own, but update it by hand if the version ever drops.</p>
+<h3>In Conclusion</h3>
+<p>All this information is current as of OpenFL 2.1.8. Things may change in the future, so check before you do anything.</p>
+
+          </div>
+
+          <!--nav>
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav-->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Short, direct, how-to articles about Haxe and the ecosystem. <a href="/about.html">Read more</a></p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              <ul><li><a href="tag-Haxe.html">Haxe</a> (9)</li>
+<li><a href="tag-HaxeFlixel.html">HaxeFlixel</a> (3)</li>
+<li><a href="tag-Haxelib.html">Haxelib</a> (1)</li>
+<li><a href="tag-OpenFL.html">OpenFL</a> (1)</li>
+</ul>
+            </ul>
+          </div>
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe on GitHub</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a> ::
+        crafted with <a href="https://github.com/ashes999/butterfly">Butterfly</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>

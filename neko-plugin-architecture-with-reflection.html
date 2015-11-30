@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="ashes999">
+    <link rel="icon" href="content/favicon.ico">
+
+    <title>Neko Plugin Architecture With Reflection | Learn Haxe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="content/blog.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item" href="about.html">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">Learn Haxe</h1>
+        <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Neko Plugin Architecture With Reflection</h2>
+<p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p class="blog-post-meta">Posted 2015-02-18</p>
+<p>The plugin architecture allows you to create apps or games that can tolerate plugins: custom code that others (or you) wrote that you load and execute at runtime.</p>
+<p>In languages like C# and Java, you can do this by:</p><ul><li>Creating your main application</li><li>Creating an interface for plugins (either in the main app or a separate project)</li><li>Loading compiled code at runtime</li><li>Looking for classes that implement your interfaces</li><li>Instantiating and calling those classes reflectively</li></ul>
+<p>Haxe also supports this functionality, but it took some research, and works with some caveats. Let's begin.</p>
+<h1>Main Application</h1>
+<p>My main application will be a console app with a simple <code>Speaks</code> interface. When run, the application finds all classes that implement <code>Speaks</code>, instantiate them, and call the <code>speak</code> method.</p>
+<p>The interface looks like this:</p>
+<pre><code>public interface Speak {
+  function speak() : String;
+}</code></pre>
+<p>To test this, I create a simple <code>Cat</code> class:</p>
+<pre><code>// Cat.hx
+class Cat implements Speak {
+  public function speak() : String {
+    return "Meow!";
+  }
+}
+
+// Main.hx
+class Main {
+  public static function main() : Void {
+    trace(new Cat().speak());
+  }
+}</code></pre>
+<p>Simple. One important key to all this is that <strong>I build and execute my code against neko</strong>, like so: <code>haxe -main Main -neko main.n</code></p>
+<p>I then run <code>neko main.n</code> which prints <code>Meow!</code></p>
+<h1>Creating a Dog Plugin</h1>
+<p>I create a new project with a <code>Dog</code> class that implements <code>Speak</code>:</p>
+<pre><code>// Dog.hx
+class Dog implements Speak {
+  public function speak() : String {
+    return "WOOF!";
+  }
+}</code></pre>
+<p>To compile it, I reference my initial code repository, which contains my interface class source. (Alternatively, I could have both the main app and the plugin reference a separate, interface-only project.)</p>
+<p>To compile:</p>
+<p><code>haxe Dog -neko plugin.n -cp ../main_app</code></p>
+<p>(My main application lives in the <code>main_app</code> directory, and my plugin in the <code>plugin</code> directory; both have a common root directory.)</p>
+<p>The code creates <code>plugin.n</code>.</p>
+<h1>Linking it Together: Finding Dog at Runtime</h1>
+<p>First, I copied <code>plugin.n</code> into <code>main_app\plugins</code>.</p>
+<p>Now, the secret sauce:
+- Load the module at runtime
+- Iterate over all classes
+- Iterate over all interfaces
+- Look for the <code>Speak</code> interface
+- If it exists, instantiate the class, and call <code>speak</code></p>
+<p>The code looks like this:</p>
+<pre><code>  import neko.vm.Loader;
+  import neko.vm.Module;
+
+  function makeAllSpeakersSpeak() : Void
+  {
+    var loader = Loader.local();
+    // Loads the plugin class
+    var module = loader.loadModule("plugins/plugin");
+    var classes:Dynamic = module.exportsTable().__classes;
+
+    // Dynamic object; fields are classes (Class instances)
+    var classesTypes = Reflect.fields(classes);
+    for (i in classesTypes)
+    {
+      var c:Dynamic = Reflect.field(classes, i);
+      if (isSpeakClass(c))
+      {
+        createInstanceAndSpeak(c);
+      }
+    }
+  }
+
+  function isSpeakClass(c:Dynamic) : Bool
+  {
+    var interfaces:Dynamic = c.__interfaces__;
+    var interfaceTypes = Reflect.fields(interfaces);
+    // Dynamic class: array of interface Class instances
+    for (interfaceType in interfaceTypes)
+    {
+      var interfaceArray:Dynamic = Reflect.field(interfaces, interfaceType);
+      for (i in 0 ... interfaces.length) {
+        var inter = interfaces[i];
+        // Looks deceptive, but interfaces only have one name. It's an array ...
+        if (inter.__name__[0] == 'Speak') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function createInstanceAndSpeak(c:Dynamic) : Void
+  {
+    // Requires a constructor with no parameters
+    var instance = Type.createInstance(c, []);
+    trace(instance.speak());
+  }</code></pre>
+<p>That's it! The code correctly prints out <code>Meow!</code> and <code>WOOF!</code>. We have a trivial, albeit working example, of loading and executing plugin code at runtime.</p>
+<h1>Caveats and Extensions</h1>
+<p>To recap and summarize, the caveats include:</p><ul><li>Only works in Neko. (You can't access neko namespaces in any other platform.)</li><li>Doesn't work with haxe running with <code>--interp</code>; that results in a runtime error: <code>File "interp.ml", line 3407, characters 43-49: Assertion failed</code></li><li>Classes that implement the interface must all have the same constructor (in this case, a no-parameter constructor)</li><li>Your client/consumer classes must have access to the original source of the interface class</li><li>The code contains a hard-coded reference to the interface class name (<code>Speak</code>).</li><li>The interfaces are on the plugin side; the classes are dynamic, so invocation fails at runtime if your interface changes.</li></ul>
+<p>To extend and improve this example, we could:</p><ul><li>Add some parameters to pass in to our <code>speak</code> method to allow the plugins to execute useful code that interfaces with our main application (such as passing in an object to manipulate).</li><li>Add multiple plugin modules, and load them all at runtime, instead of just one</li><li>Consume the interface class from a binary/executable (how?)</li></ul>
+
+          </div>
+
+          <!--nav>
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav-->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Short, direct, how-to articles about Haxe and the ecosystem. <a href="/about.html">Read more</a></p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              <ul><li><a href="tag-Haxe.html">Haxe</a> (9)</li>
+<li><a href="tag-HaxeFlixel.html">HaxeFlixel</a> (3)</li>
+<li><a href="tag-Haxelib.html">Haxelib</a> (1)</li>
+<li><a href="tag-OpenFL.html">OpenFL</a> (1)</li>
+</ul>
+            </ul>
+          </div>
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe on GitHub</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a> ::
+        crafted with <a href="https://github.com/ashes999/butterfly">Butterfly</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>

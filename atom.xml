@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <title>Learn Haxe</title>
+        <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
+  	    <updated>2015-11-29T00:00:00Z</updated><entry>
+      		<title>Using a Haxelib in Haxe</title>
+      		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Using a Haxelib in Haxe</summary>
+      		<content type="xhtml">
+      			<p>Haxe includes a built-in package manager, <a href="http://haxe.org/manual/haxelib.html">haxelib</a>. You can install, upgrade, and manage libraries <a href="http://lib.haxe.org/">via the command-line</a>.</p>
+<p>Once you install a library through haxelib, you need to tell the compiler to include it when you compile. As mentioned <a href="http://haxe.org/manual/haxelib-using-haxe.html">on this page</a>, you specify the library via the command-line:</p>
+<p><code>haxe -lib &lt;libName&gt; ...</code></p>
+<p>This includes the library code. Don't forget to add the relevant <code>import ...</code> statements to include library classes (if the library uses packages).</p>
+<p>To include multiple libraries, just add more <code>-lib &lt;foo&gt;</code> arguments.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Trim Replace and More Haxe String Extensions</title>
+      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Trim Replace and More Haxe String Extensions</summary>
+      		<content type="xhtml">
+      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
+<pre><code>import StringTools;</code></pre>
+<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
+<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Sorting an Array of Strings in Haxe</title>
+      		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Sorting an Array of Strings in Haxe</summary>
+      		<content type="xhtml">
+      			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
+<p>To sort the array, you can use this method:</p>
+<pre><code>someArray.sort(function(a:String, b:String):Int {
+  a = a.toUpperCase();
+  b = b.toUpperCase();
+
+  if (a &lt; b) {
+    return -1;
+  }
+  else if (a &gt; b) {
+    return 1;
+  } else {
+    return 0;
+  }
+});</code></pre>
+<p>Alternatively, you can create the function <code>sortAlphabetically(a:String, b:String):Int</code> and call <code>someArray.sort(sortAlphabetically)</code>.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Recursively Delete a Directory in Haxe</title>
+      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Recursively Delete a Directory in Haxe</summary>
+      		<content type="xhtml">
+      			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
+<p>This code recursively deletes directories and their contents:</p>
+<pre><code>private function deleteDirRecursively(path:String) : Void
+{
+  if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path))
+  {
+    var entries = sys.FileSystem.readDirectory(path);
+    for (entry in entries) {
+      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
+        deleteDirRecursively(path + '/' + entry);
+        sys.FileSystem.deleteDirectory(path + '/' + entry);
+      } else {
+        sys.FileSystem.deleteFile(path + '/' + entry);
+      }
+    }
+  }
+}</code></pre>
+<p>It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Reading Command Line Arguments in Haxe</title>
+      		<id>urn:uuid:c62d47e8387759b2fe0c964e78e208c4</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Reading Command Line Arguments in Haxe</summary>
+      		<content type="xhtml">
+      			<p>To read from the command line, use the <code>Sys.args()</code> call. It returns an array of arguments:</p>
+<pre><code>var args = Sys.args();
+var firstArg = args[0];
+// ...</code></pre>
+<p>This works when you compile and execute your Haxe code. For example, if you compile a <code>Main.hx</code> class with neko, and then run <code>neko Main.n --debug trace</code>, you get the array <code>["--debug", "trace"]</code>.</p>
+<p>However, it doesn't work with <code>--interp</code>. If you run <code>haxe -main Main --interp</code>, you get the array <code>["-main", "Main", "--interp"]</code>. Trying to append any more arguments will result in the error <code>Could not process argument &lt;foo&gt;</code></p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Check if a Directory Exists Haxe</title>
+      		<id>urn:uuid:8bc1b122afd9fc35914118ccbf6085bb</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Check if a Directory Exists Haxe</summary>
+      		<content type="xhtml">
+      			<p>To check if a directory exists, you can use <code>sys.FileSystem.exists(path)</code>. This returns true if a file <em>or directory</em> exists at the specified path.</p>
+<p>To be sure it's a directory, you can also include <code>sys.FileSystem.isDirectory(path)</code>. You can combine them together:</p>
+<pre><code>if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path)) {
+  // path exists and is a directory
+} else {
+  // path doesn't exist, or is a file or something else
+}</code></pre>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Exit From the Command Line in Haxe</title>
+      		<id>urn:uuid:c71b679fb94346ab815d1a1cd5a0f55b</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Exit From the Command Line in Haxe</summary>
+      		<content type="xhtml">
+      			<p>To exit from the command-line in Haxe, you can use <code>Sys.exit(n)</code>, where <code>n</code> is the exit code. (<code>0</code> indicates normal termination, and anything non-zero is usually treated as an error.)</p>
+<p>Note that this is not <code>sys.exit(n)</code> (with a lower-case S -- the <code>sys</code> package), but <code>Sys</code>, <a href="http://api.haxe.org/Sys.html">the class</a> that provides access to system APIs.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Namespaces and Class Names in Haxe</title>
+      		<id>urn:uuid:ebd9019e8a03775a87f9cec8104ce184</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Namespaces and Class Names in Haxe</summary>
+      		<content type="xhtml">
+      			<p>In Haxe, namespaces are called packages, and classes are upper-case. If you want to create a <code>MersenneTwister</code> class in a <code>com.foo.bar.random</code> package, it looks like this:</p>
+<pre><code>package com.foo.bar.random;
+
+class MersenneTwister {
+  // ...
+}</code></pre>
+<p>Like Java, Haxe expects class names to start with an upper-case letter.  Also like Java, Haxe expects the directory structure and package to match. For the above example, you place <code>MersenneTwister.hx</code> in the directory <code>/com/foo/bar/random</code>.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Setting the Image on a Haxeflixel Flxbutton</title>
+      		<id>urn:uuid:b8bb1123150575a008001882eab7fc3a</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Setting the Image on a Haxeflixel Flxbutton</summary>
+      		<content type="xhtml">
+      			<p><code>FlxButton</code> is a hybrid of an image and a text object. You can set both properties separately:</p>
+<pre><code>var button = new FlxButton(0, 0, "Click Me!", myCallback);
+// Load a custom image
+button.loadGraphic("assets/images/blue-button.png");
+button.label.setFormat("assets/fonts/awesome-font.ttf", 20, FlxColor.WHITE);</code></pre>
+<p>This code:</p><ul><li>Creates a new button with "Click Me!" as the caption</li><li>Sets the background image to <code>assets/images/blue-button.png</code></li><li>Sets the font to a custom font, white letters, size 20</li></ul>
+<p>You can also create a button from a spritesheet. From <a href="http://coinflipstudios.com/devblog/?p=225">this blog post</a>:</p>
+<pre><code>button.loadGraphic("assets/images/button-spritesheet.png", false, 128, 128);</code></pre>
+<p>This creates a button using <code>button-spritesheet.png</code>. It uses 128x128 as the frame size; so the first 128x128 is the "normal" sprite, the next 128x128 frame is the "mouse over" sprite, and the last frame is the "clicked" sprite. You can see what that looks like <a href="http://coinflipstudios.com/devblog/?p=225">from the same blog post</a> (scroll all the way to the end).</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Haxeflixel on Ouya</title>
+      		<id>urn:uuid:c98cbc55d472779a956e0503cef2a3c6</id>
+      		<updated>2015-11-30T17:41:35Z</updated>
+      		<summary>Haxeflixel on Ouya</summary>
+      		<content type="xhtml">
+      			<p>HaxeFlixel supports OUYA integration. Since OUYA uses an Android-based system, you get most of what you want for free.</p>
+<p>Issues of concern:</p><ul><li>Controller support</li><li>OUYA detection</li><li>Screen resolution and how to scale</li><li>Placement of UI elements</li></ul>
+<p>The first two present technical challenges, while the latter two are usability challenges.</p>
+<h3>Controller Support</h3>
+<p>HaxeFlixel includes OUYA support, including analog stick support. Some code:</p>
+<pre><code>import flixel.input.gamepad.OUYAButtonID;
+
+class SomeState extends FlxState {
+  override public function update() : Void {
+    var gamePad = FlxG.gamepads.lastActive;
+    var gamePadX:Float = 0;
+    var gamePadY:Float = 0;
+    if (gamePad == null)
+    {
+      #if (OUYA)
+        // TODO: freeze/notify that the gamepad is off.
+        return;
+      #end
+    } else {
+      // Caveat: these will change to LEFT_ANALOG_STICK _X/_Y in the latest version
+      var xAxisValue = gamePad.getXAxis(OUYAButtonID.LEFT_ANALOGUE_X);
+      var yAxisValue = gamePad.getYAxis(OUYAButtonID.LEFT_ANALOGUE_Y);
+    }
+  }
+}</code></pre>
+<p>This code demonstrates getting input from the latest (only) controller. It does assume only one controller. It uses the left analog stick to get the directions (<code>getXAxis</code>/<code>getYAxis</code> return a float from <code>-1</code> to <code>+1</code>).</p>
+<p>As far as D-pad support, <code>FlxG.keys.anyPressed(["UP"])</code> (and <code>DOWN</code>, <code>LEFT</code>, and <code>RIGHT</code>) automatically take into account the D-pad. You don't need to write any additional code.</p>
+<h3>OUYA Detection</h3>
+<p>How can you tell if you're running on an OUYA, as opposed to a generic Android device? I don't know yet. If you figure something out, please comment and let me know.</p>
+<p>You can't use controllers, because a user can unplug their controller at any time.</p>
+<h3>Screen Resolution</h3>
+<p>OUYA runs one of three resolutions: <code>1920x1080</code>, <code>1280x720</code>, and, surprisingly, <code>640x480</code> -- the latter if your device doesn't support HD resolutions natively (eg. you're using an old monitor and a flaky HDMI-to-DVI converter).</p>
+<p>If you want crisp, clean images (without aliasing/jaggies), <em>and</em> you don't support other Android device resolutions, I suggest a resolution matching the OUYA ones, or an integer-scaled version (eg. <code>960x540</code> scales up to 2x on the OUYA).</p>
+<h3>Placement of UI Elements</h3>
+<p>Due to the nature of LCD screens and the OUYA, you often get overdraw (the edges of your game area aren't visible). To compensate for this, you need to:</p><ul><li>Account for 5-10% of your screen being unusable, and locate the most important UI elements inside that area. Don't let the player character get too close to the edge!</li><li>Try to keep your UI elements as centered as possible</li></ul>
+<p>That's all you should need to create an OUYA game.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry></feed>

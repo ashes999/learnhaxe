@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="ashes999">
+    <link rel="icon" href="content/favicon.ico">
+
+    <title>Animated Gifs in Haxeflixel | Learn Haxe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="content/blog.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item" href="about.html">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">Learn Haxe</h1>
+        <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Animated Gifs in Haxeflixel</h2>
+<p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p class="blog-post-meta">Posted 2015-01-10</p>
+<p>Why would you want to display animated GIFs in a HaxeFlixel game?</p>
+<p>Simple: every mobile device has a maximum texture size; you can see this on the Haxe <a href="http://haxeflixel.com/documentation/mobile-targets/">mobile targets</a> page. The smallest maximum is <code>1024×1024</code>.</p>
+<p>What if you want a large animated background of that size, or of a similar size? You can’t even use a spritesheet, because it would run over the maximum texture size.</p>
+<p>Enter animated GIFs. Since GIFs generally use diffs for pixel changes from frame to frame, they’re small, cheap, fast, and high-quality (if you stick to the 256-colour limit).</p>
+<h2>YAGP + HaxeFlixel = GIFs</h2>
+<p>HaxeFlixel doesn’t currently natively support GIFs. Instead, I looked to third-party libraries. <code>haxe-gif</code> froze on Flash (which is a game breaker for me), and instead I ended up using <a href="https://github.com/Yanrishatum/yagp">yagp</a>. From their <code>README.md</code>:</p>
+<blockquote>
+<p>This library provides simple API to parse animated GIF images. In difference between haxe-gif library, this library successfully parses most of the Gif images (exclude too big images).</p></blockquote>
+<p>The library must be installed through <code>haxelib</code> with the GitHub repository, as it’s not on the central repository yet.</p>
+<p>It takes a few lines to get a GIF set up:</p>
+<pre><code>// Parsing from openfl.utils.ByteArray:
+var gif:Gif = GifDecoder.parseByteArray(Assets.getBytes(“gif_file.gif”));
+var gif:Gif = GifDecoder.parseText(text);
+
+// Simple player example:
+var player:GifPlayer = new GifPlayer(gif);
+// openfl.display.Bitmap wrapper for GifPlayer.
+// GifPlayer provides only BitmapData for further displaying and must be updated manually.
+var wrapper:GifPlayerWrapper = new GifPlayerWrapper(player);
+addChild(wrapper);</code></pre>
+<p>I admittedly don’t understand why I need a <code>GifPlayer</code> and <code>GifPlayerWrapper</code>. The library works quite well, and performs quite well, even on mobile. Integrating with HaxeFlixel only required two other things:</p><ol><li>Update <code>Project.xml</code> and add <code></code>. This will tell <code>lime</code> to process your <code>gif</code> files as binary, so you can load them via <code>Assets.getBytes</code>.</li><li>Add the sprite to the stage via <code>FlxG.addChildBelowMouse(wrapper);</code></li></ol>
+<h2>Caveats</h2>
+<p>Yes, it works, but how well? Here are some issues I ran into:</p><ul><li>Loading and displaying the GIF is quite slow (on the order of a few seconds).</li><li>The GIF plays smoothly, but leaks memory; even if you change states, some memory leaks</li><li>The GIF library isn’t part of HaxeFlixel, so you need to scale it up or down appropriately (<code>GifPlayerWrapper</code> has <code>scaleX</code> and <code>scaleY</code> properties you can use)</li></ul>
+<p>Overall, it works quite well, and I will definitely look into this later if and when I need large animations.</p>
+
+          </div>
+
+          <!--nav>
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav-->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Short, direct, how-to articles about Haxe and the ecosystem. <a href="/about.html">Read more</a></p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              <ul><li><a href="tag-Haxe.html">Haxe</a> (9)</li>
+<li><a href="tag-HaxeFlixel.html">HaxeFlixel</a> (3)</li>
+<li><a href="tag-Haxelib.html">Haxelib</a> (1)</li>
+<li><a href="tag-OpenFL.html">OpenFL</a> (1)</li>
+</ul>
+            </ul>
+          </div>
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe on GitHub</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a> ::
+        crafted with <a href="https://github.com/ashes999/butterfly">Butterfly</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>
