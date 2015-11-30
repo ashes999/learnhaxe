@@ -1,4 +1,4 @@
-meta-tags: haxe
+meta-tags: Haxe
 meta-publishedOn: 2015-11-27
 
 To check if a directory exists, you can use `sys.FileSystem.exists(path)`. This returns true if a file *or directory* exists at the specified path.

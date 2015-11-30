@@ -1,4 +1,4 @@
-meta-tags: haxe
+meta-tags: Haxe
 meta-publishedOn: 2015-11-28
 
 Haxe includes convenient string-modification methods like `trim` and `replace`. They don't exist on the `String` class by default, but need to be included via the `StringTools` extension:

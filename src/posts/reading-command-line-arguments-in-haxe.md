@@ -1,4 +1,4 @@
-meta-tags: haxe
+meta-tags: Haxe
 meta-publishedOn: 2015-11-27
 
 To read from the command line, use the `Sys.args()` call. It returns an array of arguments:

@@ -1,4 +1,4 @@
-meta-tags: haxe
+meta-tags: Haxe
 meta-publishedOn: 2015-11-28
 
 To sort an array of strings alphabetically, you can use the `Array.Sort` method (see: [API](http://api.haxe.org/Array.html#sort)). It takes a function parameter `f(a, b)` that returns a negative integer if `a` is greater, zero if `a` and `b` are equal, and a positive integer if `b` is greater.

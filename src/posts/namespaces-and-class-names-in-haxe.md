@@ -1,4 +1,4 @@
-meta-tags: haxe
+meta-tags: Haxe
 meta-publishedOn: 2015-11-27
 
 In Haxe, namespaces are called packages, and classes are upper-case. If you want to create a `MersenneTwister` class in a `com.foo.bar.random` package, it looks like this:
