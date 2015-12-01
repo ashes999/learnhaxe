@@ -5,7 +5,7 @@
   	    <updated>2015-12-01T00:00:00Z</updated><entry>
       		<title>Filestat Ctime on Unix</title>
       		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
-      		<updated>2015-12-01T12:34:17Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Filestat Ctime on Unix</summary>
       		<content type="xhtml">
       			<p>The <a href="http://api.haxe.org/sys/FileStat.html#ctime">API docs for sys.FileStat</a> state that <code>ctime</code> returns <code>the creation time for the file</code>.</p>
@@ -26,7 +26,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       	</entry><entry>
       		<title>Using a Haxelib in Haxe</title>
       		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Using a Haxelib in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe includes a built-in package manager, <a href="http://haxe.org/manual/haxelib.html">haxelib</a>. You can install, upgrade, and manage libraries <a href="http://lib.haxe.org/">via the command-line</a>.</p>
@@ -42,7 +42,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       	</entry><entry>
       		<title>Trim Replace and More Haxe String Extensions</title>
       		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Trim Replace and More Haxe String Extensions</summary>
       		<content type="xhtml">
       			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
@@ -57,7 +57,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       	</entry><entry>
       		<title>Sorting an Array of Strings in Haxe</title>
       		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Sorting an Array of Strings in Haxe</summary>
       		<content type="xhtml">
       			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
@@ -84,7 +84,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       	</entry><entry>
       		<title>Recursively Delete a Directory in Haxe</title>
       		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Recursively Delete a Directory in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
@@ -113,7 +113,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       	</entry><entry>
       		<title>Reading Command Line Arguments in Haxe</title>
       		<id>urn:uuid:c62d47e8387759b2fe0c964e78e208c4</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Reading Command Line Arguments in Haxe</summary>
       		<content type="xhtml">
       			<p>To read from the command line, use the <code>Sys.args()</code> call. It returns an array of arguments:</p>
@@ -130,7 +130,7 @@ var firstArg = args[0];
       	</entry><entry>
       		<title>Check if a Directory Exists Haxe</title>
       		<id>urn:uuid:8bc1b122afd9fc35914118ccbf6085bb</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Check if a Directory Exists Haxe</summary>
       		<content type="xhtml">
       			<p>To check if a directory exists, you can use <code>sys.FileSystem.exists(path)</code>. This returns true if a file <em>or directory</em> exists at the specified path.</p>
@@ -148,7 +148,7 @@ var firstArg = args[0];
       	</entry><entry>
       		<title>Exit From the Command Line in Haxe</title>
       		<id>urn:uuid:c71b679fb94346ab815d1a1cd5a0f55b</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Exit From the Command Line in Haxe</summary>
       		<content type="xhtml">
       			<p>To exit from the command-line in Haxe, you can use <code>Sys.exit(n)</code>, where <code>n</code> is the exit code. (<code>0</code> indicates normal termination, and anything non-zero is usually treated as an error.)</p>
@@ -161,7 +161,7 @@ var firstArg = args[0];
       	</entry><entry>
       		<title>Namespaces and Class Names in Haxe</title>
       		<id>urn:uuid:ebd9019e8a03775a87f9cec8104ce184</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Namespaces and Class Names in Haxe</summary>
       		<content type="xhtml">
       			<p>In Haxe, namespaces are called packages, and classes are upper-case. If you want to create a <code>MersenneTwister</code> class in a <code>com.foo.bar.random</code> package, it looks like this:</p>
@@ -179,7 +179,7 @@ class MersenneTwister {
       	</entry><entry>
       		<title>Setting the Image on a Haxeflixel Flxbutton</title>
       		<id>urn:uuid:b8bb1123150575a008001882eab7fc3a</id>
-      		<updated>2015-12-01T00:10:40Z</updated>
+      		<updated>2015-12-01T12:36:17Z</updated>
       		<summary>Setting the Image on a Haxeflixel Flxbutton</summary>
       		<content type="xhtml">
       			<p><code>FlxButton</code> is a hybrid of an image and a text object. You can set both properties separately:</p>
