@@ -1,7 +1,7 @@
 meta-tags: Haxe
 meta-publishedOn: 2015-12-01
 
-The [API docs for sys.FileStat](http://api.haxe.org/sys/FileStat.html#ctime) state that `ctime` returns `the creation time for the file`.
+The [API docs for sys.FileStat](http://api.haxe.org/sys/FileStat.html#ctime) state that `ctime` returns `the creation time for the file (not all filesystems support this)`.
 
 This returns correctly on Windows, but not on Linux (I tested with both `cpp` and `neko` targets).
 
