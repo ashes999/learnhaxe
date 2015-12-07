@@ -27,7 +27,16 @@
 
   <body>
     <script type="text/javascript">
-    alert(window.location.href);
+    if (window.location.href.indexOf('file://') == -1) {
+      // Not locally viewing the file. Do your Google Analytics thing.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-57858649-1', 'auto');
+      ga('send', 'pageview');
+    }
     </script>
 
     <div class="blog-masthead">
@@ -51,7 +60,7 @@
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <ul><li><a href="filestat-ctime-on-unix.html">Filestat Ctime on Unix</a> (2015-12-01)</li><li><a href="using-a-haxelib-in-haxe.html">Using a Haxelib in Haxe</a> (2015-11-29)</li><li><a href="recursively-delete-a-directory-in-haxe.html">Recursively Delete a Directory in Haxe</a> (2015-11-28)</li><li><a href="sorting-an-array-of-strings-in-haxe.html">Sorting an Array of Strings in Haxe</a> (2015-11-28)</li><li><a href="trim-replace-and-more-haxe-string-extensions.html">Trim Replace and More Haxe String Extensions</a> (2015-11-28)</li><li><a href="reading-command-line-arguments-in-haxe.html">Reading Command Line Arguments in Haxe</a> (2015-11-27)</li><li><a href="check-if-a-directory-exists-haxe.html">Check if a Directory Exists Haxe</a> (2015-11-27)</li><li><a href="namespaces-and-class-names-in-haxe.html">Namespaces and Class Names in Haxe</a> (2015-11-27)</li><li><a href="exit-from-the-command-line-in-haxe.html">Exit From the Command Line in Haxe</a> (2015-11-27)</li><li><a href="setting-the-image-on-a-haxeflixel-flxbutton.html">Setting the Image on a Haxeflixel Flxbutton</a> (2015-04-09)</li><li><a href="haxeflixel-on-ouya.html">Haxeflixel on Ouya</a> (2015-03-30)</li><li><a href="creating-standalone-neko-games-on-windows-and-linux.html">Creating Standalone Neko Games on Windows and Linux</a> (2015-02-26)</li><li><a href="neko-plugin-architecture-with-reflection.html">Neko Plugin Architecture With Reflection</a> (2015-02-18)</li><li><a href="publishing-android-apps.html">Publishing Android Apps</a> (2015-01-15)</li><li><a href="animated-gifs-in-haxeflixel.html">Animated Gifs in Haxeflixel</a> (2015-01-10)</li></ul>
+            <ul><li><a href="filestat-ctime-on-unix.html">Filestat Ctime on Unix</a> (2015-12-01)</li><li><a href="using-a-haxelib-in-haxe.html">Using a Haxelib in Haxe</a> (2015-11-29)</li><li><a href="trim-replace-and-more-haxe-string-extensions.html">Trim Replace and More Haxe String Extensions</a> (2015-11-28)</li><li><a href="sorting-an-array-of-strings-in-haxe.html">Sorting an Array of Strings in Haxe</a> (2015-11-28)</li><li><a href="recursively-delete-a-directory-in-haxe.html">Recursively Delete a Directory in Haxe</a> (2015-11-28)</li><li><a href="reading-command-line-arguments-in-haxe.html">Reading Command Line Arguments in Haxe</a> (2015-11-27)</li><li><a href="check-if-a-directory-exists-haxe.html">Check if a Directory Exists Haxe</a> (2015-11-27)</li><li><a href="exit-from-the-command-line-in-haxe.html">Exit From the Command Line in Haxe</a> (2015-11-27)</li><li><a href="namespaces-and-class-names-in-haxe.html">Namespaces and Class Names in Haxe</a> (2015-11-27)</li><li><a href="setting-the-image-on-a-haxeflixel-flxbutton.html">Setting the Image on a Haxeflixel Flxbutton</a> (2015-04-09)</li><li><a href="haxeflixel-on-ouya.html">Haxeflixel on Ouya</a> (2015-03-30)</li><li><a href="creating-standalone-neko-games-on-windows-and-linux.html">Creating Standalone Neko Games on Windows and Linux</a> (2015-02-26)</li><li><a href="neko-plugin-architecture-with-reflection.html">Neko Plugin Architecture With Reflection</a> (2015-02-18)</li><li><a href="publishing-android-apps.html">Publishing Android Apps</a> (2015-01-15)</li><li><a href="animated-gifs-in-haxeflixel.html">Animated Gifs in Haxeflixel</a> (2015-01-10)</li></ul>
           </div>
 
           <!--nav>
