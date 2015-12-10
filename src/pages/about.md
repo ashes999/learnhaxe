@@ -1,3 +1,5 @@
+meta-id: 244b06a1ff00fb0978fe74be748d34e76c07398e
+
 I created Learn Haxe to fill a void in Haxe learning. While Haxe sports excellent documentation (specifically, the API sections), a lot of good information lives on `old.haxe.org` or on the archived `nabble` forums. This confuses people.
 
 I plan to post content on anything that isn't trivial to search out, or that lives primarily on out-dated websites. I also post lots of my own interesting experiments (such as my plugin architecture experiment).
