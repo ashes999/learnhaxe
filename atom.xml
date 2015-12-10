@@ -2,7 +2,53 @@
       <feed xmlns="http://www.w3.org/2005/Atom">
         <title>Learn Haxe</title>
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2015-12-01T00:00:00Z</updated><entry>
+  	    <updated>2015-12-10T00:00:00Z</updated><entry>
+      		<title>Properties and Dynamic</title>
+      		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
+      		<updated>2015-12-10T00:00:00Z</updated>
+      		<summary>Properties and Dynamic</summary>
+      		<content type="xhtml">
+      			<p>While reading through the <a href="http://haxe.org/manual/">Haxe manual</a> (which, by the way, is a good reference, but not a good learning resource), I stumbled upon <a href="http://haxe.org/manual/class-field-property-type-system-impact.html">this page about properties</a>:</p>
+<blockquote>
+<p>The presence of properties has several consequences on the type system. Most importantly, it is necessary to understand that properties are a compile-time feature and thus <strong>require the types to be known.</strong> If we were to assign a class with properties to <code>Dynamic</code>, field access would <strong>not</strong> respect accessor methods. Likewise, access restrictions no longer apply and all access is virtually public.</p></blockquote>
+<p>(If you don't understand properties yet, go and read <a href="http://haxe.org/manual/class-field-property.html">this</a> and <a href="http://haxe.org/manual/class-field-property-common-combinations.html">this</a> first.) This example demonstrates how this works:</p>
+<pre><code>class Test {
+    static function main() {
+        var p = new Props();
+        p.x = 35;
+        trace('p.x is ${p.x}');
+
+        var p2:Dynamic = new Props();
+        p2.x = 35;
+        trace('p2.x is ${p2.x}');
+    }
+}
+
+class Props {
+    public function new() { }
+    public var x(get, set):Int;
+
+    function get_x() : Int
+    {
+        return -1;
+    }
+
+    function set_x(x:Int) : Int
+    {
+        return -2;
+    }
+}</code></pre>
+<p>(You can also try <a href="http://try.haxe.org/#CA2Cf">this example online</a>.) The output is:</p>
+<pre><code>16:42:46:878   p.x is -1
+16:42:46:878   p2.x is 35</code></pre>
+<p>Because the Haxe runtime knows that <code>p</code> is an instance of <code>Props</code>, it can apply the getter/setter functions. Because <code>p2</code> is typed as <code>Dynamic</code>, the runtime doesn't respect the field access. (In this case, the runtime treats the field like a regular field or public variable.)</p>
+<p>Use <code>Dynamic</code> judiciously, and tread carefully if you use it on instances of classes that have properties. If you rely on your getter/setter to set up certain invariants about your properties, you  may find them no longer respected.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Filestat Ctime on Unix</title>
       		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
       		<updated>2015-12-01T00:00:00Z</updated>
@@ -171,26 +217,6 @@ class MersenneTwister {
   // ...
 }</code></pre>
 <p>Like Java, Haxe expects class names to start with an upper-case letter.  Also like Java, Haxe expects the directory structure and package to match. For the above example, you place <code>MersenneTwister.hx</code> in the directory <code>/com/foo/bar/random</code>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
-      		<title>Setting the Image on a Haxeflixel Flxbutton</title>
-      		<id>urn:uuid:b8bb1123150575a008001882eab7fc3a</id>
-      		<updated>2015-04-09T00:00:00Z</updated>
-      		<summary>Setting the Image on a Haxeflixel Flxbutton</summary>
-      		<content type="xhtml">
-      			<p><code>FlxButton</code> is a hybrid of an image and a text object. You can set both properties separately:</p>
-<pre><code>var button = new FlxButton(0, 0, "Click Me!", myCallback);
-// Load a custom image
-button.loadGraphic("assets/images/blue-button.png");
-button.label.setFormat("assets/fonts/awesome-font.ttf", 20, FlxColor.WHITE);</code></pre>
-<p>This code:</p><ul><li>Creates a new button with "Click Me!" as the caption</li><li>Sets the background image to <code>assets/images/blue-button.png</code></li><li>Sets the font to a custom font, white letters, size 20</li></ul>
-<p>You can also create a button from a spritesheet. From <a href="http://coinflipstudios.com/devblog/?p=225">this blog post</a>:</p>
-<pre><code>button.loadGraphic("assets/images/button-spritesheet.png", false, 128, 128);</code></pre>
-<p>This creates a button using <code>button-spritesheet.png</code>. It uses 128x128 as the frame size; so the first 128x128 is the "normal" sprite, the next 128x128 frame is the "mouse over" sprite, and the last frame is the "clicked" sprite. You can see what that looks like <a href="http://coinflipstudios.com/devblog/?p=225">from the same blog post</a> (scroll all the way to the end).</p>
       		</content>
       		<author>
       			<name>ashes999</name>
