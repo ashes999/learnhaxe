@@ -88,6 +88,25 @@ addChild(wrapper);</code></pre>
 <p>Yes, it works, but how well? Here are some issues I ran into:</p><ul><li>Loading and displaying the GIF is quite slow (on the order of a few seconds).</li><li>The GIF plays smoothly, but leaks memory; even if you change states, some memory leaks</li><li>The GIF library isn’t part of HaxeFlixel, so you need to scale it up or down appropriately (<code>GifPlayerWrapper</code> has <code>scaleX</code> and <code>scaleY</code> properties you can use)</li></ul>
 <p>Overall, it works quite well, and I will definitely look into this later if and when I need large animations.</p>
 
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/animated-gifs-in-haxeflixel"; // Absolute page URL
+  this.page.identifier = "8076d551e1181e1b76b8e376b849d9794daaa498"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>

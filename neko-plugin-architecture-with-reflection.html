@@ -162,6 +162,25 @@ class Dog implements Speak {
 <p>To recap and summarize, the caveats include:</p><ul><li>Only works in Neko. (You can't access neko namespaces in any other platform.)</li><li>Doesn't work with haxe running with <code>--interp</code>; that results in a runtime error: <code>File "interp.ml", line 3407, characters 43-49: Assertion failed</code></li><li>Classes that implement the interface must all have the same constructor (in this case, a no-parameter constructor)</li><li>Your client/consumer classes must have access to the original source of the interface class</li><li>The code contains a hard-coded reference to the interface class name (<code>Speak</code>).</li><li>The interfaces are on the plugin side; the classes are dynamic, so invocation fails at runtime if your interface changes.</li></ul>
 <p>To extend and improve this example, we could:</p><ul><li>Add some parameters to pass in to our <code>speak</code> method to allow the plugins to execute useful code that interfaces with our main application (such as passing in an object to manipulate).</li><li>Add multiple plugin modules, and load them all at runtime, instead of just one</li><li>Consume the interface class from a binary/executable (how?)</li></ul>
 
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/neko-plugin-architecture-with-reflection"; // Absolute page URL
+  this.page.identifier = "0724a812e5fbff39df8050b33513d0f73af5429b"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>
