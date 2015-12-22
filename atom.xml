@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
         <title>Learn Haxe</title>
+        <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2015-12-10T00:00:00Z</updated><entry>
+  	    <updated>2015-12-22T00:00:00Z</updated><entry>
+      		<title>Embedding Fonts in Haxeflixel With Flxtext</title>
+          <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
+      		<id>urn:uuid:37b0dd21a6d89a19e35f072a3895808d</id>
+      		<updated>2015-12-22T00:00:00Z</updated>
+      		<summary>Embedding Fonts in Haxeflixel With Flxtext</summary>
+      		<content type="xhtml">
+      			<p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
+<p>The third method strikes me as the most maintainable, because it's <strong>immediately obvious which font you're using</strong>, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to <code>Assets</code>? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).</p>
+<p>The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.</p>
+<p><a href="https://www.google.com/fonts">Google Fonts</a> provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Properties and Dynamic</title>
+          <link href="http://ashes999.github.io/learnhaxe/properties-and-dynamic" />
       		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
       		<updated>2015-12-10T00:00:00Z</updated>
       		<summary>Properties and Dynamic</summary>
@@ -50,6 +68,7 @@ class Props {
       		</author>
       	</entry><entry>
       		<title>Filestat Ctime on Unix</title>
+          <link href="http://ashes999.github.io/learnhaxe/filestat-ctime-on-unix" />
       		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
       		<updated>2015-12-01T00:00:00Z</updated>
       		<summary>Filestat Ctime on Unix</summary>
@@ -71,6 +90,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		</author>
       	</entry><entry>
       		<title>Using a Haxelib in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/using-a-haxelib-in-haxe" />
       		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
       		<updated>2015-11-29T00:00:00Z</updated>
       		<summary>Using a Haxelib in Haxe</summary>
@@ -86,49 +106,8 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
-      		<title>Trim Replace and More Haxe String Extensions</title>
-      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Trim Replace and More Haxe String Extensions</summary>
-      		<content type="xhtml">
-      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
-<pre><code>import StringTools;</code></pre>
-<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
-<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
-      		<title>Sorting an Array of Strings in Haxe</title>
-      		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Sorting an Array of Strings in Haxe</summary>
-      		<content type="xhtml">
-      			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
-<p>To sort the array, you can use this method:</p>
-<pre><code>someArray.sort(function(a:String, b:String):Int {
-  a = a.toUpperCase();
-  b = b.toUpperCase();
-
-  if (a &lt; b) {
-    return -1;
-  }
-  else if (a &gt; b) {
-    return 1;
-  } else {
-    return 0;
-  }
-});</code></pre>
-<p>Alternatively, you can create the function <code>sortAlphabetically(a:String, b:String):Int</code> and call <code>someArray.sort(sortAlphabetically)</code>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
       		<title>Recursively Delete a Directory in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
       		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
       		<updated>2015-11-28T00:00:00Z</updated>
       		<summary>Recursively Delete a Directory in Haxe</summary>
@@ -157,7 +136,52 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
+      		<title>Sorting an Array of Strings in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/sorting-an-array-of-strings-in-haxe" />
+      		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
+      		<updated>2015-11-28T00:00:00Z</updated>
+      		<summary>Sorting an Array of Strings in Haxe</summary>
+      		<content type="xhtml">
+      			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
+<p>To sort the array, you can use this method:</p>
+<pre><code>someArray.sort(function(a:String, b:String):Int {
+  a = a.toUpperCase();
+  b = b.toUpperCase();
+
+  if (a &lt; b) {
+    return -1;
+  }
+  else if (a &gt; b) {
+    return 1;
+  } else {
+    return 0;
+  }
+});</code></pre>
+<p>Alternatively, you can create the function <code>sortAlphabetically(a:String, b:String):Int</code> and call <code>someArray.sort(sortAlphabetically)</code>.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
+      		<title>Trim Replace and More Haxe String Extensions</title>
+          <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
+      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
+      		<updated>2015-11-28T00:00:00Z</updated>
+      		<summary>Trim Replace and More Haxe String Extensions</summary>
+      		<content type="xhtml">
+      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
+<pre><code>import StringTools;</code></pre>
+<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
+<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Reading Command Line Arguments in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/reading-command-line-arguments-in-haxe" />
       		<id>urn:uuid:c62d47e8387759b2fe0c964e78e208c4</id>
       		<updated>2015-11-27T00:00:00Z</updated>
       		<summary>Reading Command Line Arguments in Haxe</summary>
@@ -175,6 +199,7 @@ var firstArg = args[0];
       		</author>
       	</entry><entry>
       		<title>Check if a Directory Exists Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/check-if-a-directory-exists-haxe" />
       		<id>urn:uuid:8bc1b122afd9fc35914118ccbf6085bb</id>
       		<updated>2015-11-27T00:00:00Z</updated>
       		<summary>Check if a Directory Exists Haxe</summary>
@@ -192,20 +217,8 @@ var firstArg = args[0];
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
-      		<title>Exit From the Command Line in Haxe</title>
-      		<id>urn:uuid:c71b679fb94346ab815d1a1cd5a0f55b</id>
-      		<updated>2015-11-27T00:00:00Z</updated>
-      		<summary>Exit From the Command Line in Haxe</summary>
-      		<content type="xhtml">
-      			<p>To exit from the command-line in Haxe, you can use <code>Sys.exit(n)</code>, where <code>n</code> is the exit code. (<code>0</code> indicates normal termination, and anything non-zero is usually treated as an error.)</p>
-<p>Note that this is not <code>sys.exit(n)</code> (with a lower-case S -- the <code>sys</code> package), but <code>Sys</code>, <a href="http://api.haxe.org/Sys.html">the class</a> that provides access to system APIs.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
       		<title>Namespaces and Class Names in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/namespaces-and-class-names-in-haxe" />
       		<id>urn:uuid:ebd9019e8a03775a87f9cec8104ce184</id>
       		<updated>2015-11-27T00:00:00Z</updated>
       		<summary>Namespaces and Class Names in Haxe</summary>
