@@ -3,7 +3,27 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2015-12-22T00:00:00Z</updated><entry>
+  	    <updated>2015-12-28T00:00:00Z</updated><entry>
+      		<title>Appending to a File in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe" />
+      		<id>urn:uuid:4b7bda57b940ac159b93bc734983c4cb</id>
+      		<updated>2015-12-28T00:00:00Z</updated>
+      		<summary>Appending to a File in Haxe</summary>
+      		<content type="xhtml">
+      			<p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
+<p>The <code>FileOutput</code> <a href="http://api.haxe.org/sys/io/FileOutput.html">API</a> looks pretty sparse and unusable, until you click on the <a href="http://api.haxe.org/haxe/io/Output.html">base-class <code>Output</code> API</a>. There, you see promising methods, like <a href="http://api.haxe.org/haxe/io/Output.html#writeString"><code>writeString</code></a>.</p>
+<p>To combine these together, you can append a string to a file like so (don't forget to close the output stream):</p>
+<pre><code>public function append(message:String, fileName:String) {
+  var output:FileOutput = sys.io.File.append(fileName, false);
+  output.writeString(message);
+  output.close()
+}</code></pre>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Embedding Fonts in Haxeflixel With Flxtext</title>
           <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
       		<id>urn:uuid:37b0dd21a6d89a19e35f072a3895808d</id>
@@ -211,25 +231,6 @@ var firstArg = args[0];
 } else {
   // path doesn't exist, or is a file or something else
 }</code></pre>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
-      		<title>Namespaces and Class Names in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/namespaces-and-class-names-in-haxe" />
-      		<id>urn:uuid:ebd9019e8a03775a87f9cec8104ce184</id>
-      		<updated>2015-11-27T00:00:00Z</updated>
-      		<summary>Namespaces and Class Names in Haxe</summary>
-      		<content type="xhtml">
-      			<p>In Haxe, namespaces are called packages, and classes are upper-case. If you want to create a <code>MersenneTwister</code> class in a <code>com.foo.bar.random</code> package, it looks like this:</p>
-<pre><code>package com.foo.bar.random;
-
-class MersenneTwister {
-  // ...
-}</code></pre>
-<p>Like Java, Haxe expects class names to start with an upper-case letter.  Also like Java, Haxe expects the directory structure and package to match. For the above example, you place <code>MersenneTwister.hx</code> in the directory <code>/com/foo/bar/random</code>.</p>
       		</content>
       		<author>
       			<name>ashes999</name>

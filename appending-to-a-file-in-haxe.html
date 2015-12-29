@@ -10,7 +10,7 @@
     <link rel="icon" href="content/favicon.ico">
     <link type="application/atom+xml" title="Learn Haxe" href="http://ashes999.github.io/learnhaxe/atom.xml/" rel="alternate" />
 
-    <title>Embedding Fonts in Haxeflixel With Flxtext | Learn Haxe</title>
+    <title>Appending to a File in Haxe | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -60,20 +60,24 @@
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Embedding Fonts in Haxeflixel With Flxtext</h2>
-<p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
-<p class="blog-post-meta">Posted 2015-12-22</p>
-<p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
-<p>The third method strikes me as the most maintainable, because it's <strong>immediately obvious which font you're using</strong>, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to <code>Assets</code>? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).</p>
-<p>The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.</p>
-<p><a href="https://www.google.com/fonts">Google Fonts</a> provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.</p>
+            <h2 class="blog-post-title">Appending to a File in Haxe</h2>
+<p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p class="blog-post-meta">Posted 2015-12-28</p>
+<p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
+<p>The <code>FileOutput</code> <a href="http://api.haxe.org/sys/io/FileOutput.html">API</a> looks pretty sparse and unusable, until you click on the <a href="http://api.haxe.org/haxe/io/Output.html">base-class <code>Output</code> API</a>. There, you see promising methods, like <a href="http://api.haxe.org/haxe/io/Output.html#writeString"><code>writeString</code></a>.</p>
+<p>To combine these together, you can append a string to a file like so (don't forget to close the output stream):</p>
+<pre><code>public function append(message:String, fileName:String) {
+  var output:FileOutput = sys.io.File.append(fileName, false);
+  output.writeString(message);
+  output.close()
+}</code></pre>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext"; // Absolute page URL
-  this.page.identifier = "a20bb3116db754de2bfc7f1a1a1b80e30bf876dd"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe"; // Absolute page URL
+  this.page.identifier = "f71a8c2503ea1f094fc155b87ac2249cde3e61f9"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE
