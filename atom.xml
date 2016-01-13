@@ -3,11 +3,53 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2015-12-28T00:00:00Z</updated><entry>
+  	    <updated>2016-01-12TZ</updated><entry>
+      		<title>Logitech F310 Support in Haxeflixe</title>
+          <link href="http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixe" />
+      		<id>urn:uuid:63e5e080f7f0cec9300e8936403e142a</id>
+      		<updated>2016-01-12TZ</updated>
+      		<summary>Logitech F310 Support in Haxeflixe</summary>
+      		<content type="xhtml">
+      			<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
+<p>Right?</p>
+<p>It turns out that the <code>LogitechButtonID</code> class contains values based on the <strong>Cordless Rumblepad 2</strong> controller. If you look <a href="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1440&amp;bih=799&amp;q=rumblepad+2&amp;oq=rumblepad+2&amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA">at screenshots</a>, you'll notice the pads all have numbers on them.</p>
+<p>That's no good -- the F310 uses <code>A</code>, <code>B</code>, <code>X</code>, and <code>Y</code> for buttons, with left and right triggers (<code>LB</code> and <code>RB</code> respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:</p>
+<pre><code>static inline read only FOUR:Int = 11
+Placement equivalent to 'Y' button on the Xbox 360 controller</code></pre>
+<p>That only leaves the D-Pads. The built in enum values don't work; instead, I used <a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39">the four <code>dpad*</code> properties</a> defined on the controller itself; these work perfectly.</p>
+<p>If you want to try this for yourself, it's quite easy:</p>
+<p>1) Run <code>flixel create</code> and then select demo <code>34</code>, <code>GamepadTest</code>.</p>
+<p>2) Replace the contents of the <code>GamepadIDs</code> class with the correct button enum values:</p>
+<pre><code>public static inline var A = LogitechButtonID.TWO;
+public static inline var B = LogitechButtonID.THREE;
+public static inline var X = LogitechButtonID.ONE;
+public static inline var Y = LogitechButtonID.FOUR;
+public static inline var LB = LogitechButtonID.FIVE;
+public static inline var RB = LogitechButtonID.SIX;
+public static inline var START = LogitechButtonID.TEN;
+public static inline var SELECT = LogitechButtonID.NINE;
+public static inline var LEFT_ANALOGUE = LogitechButtonID.LEFT_ANALOGUE;
+public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
+public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
+public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
+public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
+public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;</code></pre>
+<p>3) Modify <code>PlayState.hx</code>'s <code>updateDpad</code> function; the values assigned to the four <code>dpad*</code> variables should be:</p>
+<pre><code>var dpadLeft = _gamePad.dpadLeft;
+var dpadRight = _gamePad.dpadRight;
+var dpadUp = _gamePad.dpadUp;
+var dpadDown = _gamePad.dpadDown;</code></pre>
+<p>Run <code>lime test neko</code> and observe that all input displays as expected.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Appending to a File in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe" />
       		<id>urn:uuid:4b7bda57b940ac159b93bc734983c4cb</id>
-      		<updated>2015-12-28T00:00:00Z</updated>
+      		<updated>2015-12-28TZ</updated>
       		<summary>Appending to a File in Haxe</summary>
       		<content type="xhtml">
       			<p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
@@ -27,7 +69,7 @@
       		<title>Embedding Fonts in Haxeflixel With Flxtext</title>
           <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
       		<id>urn:uuid:37b0dd21a6d89a19e35f072a3895808d</id>
-      		<updated>2015-12-22T00:00:00Z</updated>
+      		<updated>2015-12-22TZ</updated>
       		<summary>Embedding Fonts in Haxeflixel With Flxtext</summary>
       		<content type="xhtml">
       			<p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
@@ -43,7 +85,7 @@
       		<title>Properties and Dynamic</title>
           <link href="http://ashes999.github.io/learnhaxe/properties-and-dynamic" />
       		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
-      		<updated>2015-12-10T00:00:00Z</updated>
+      		<updated>2015-12-10TZ</updated>
       		<summary>Properties and Dynamic</summary>
       		<content type="xhtml">
       			<p>While reading through the <a href="http://haxe.org/manual/">Haxe manual</a> (which, by the way, is a good reference, but not a good learning resource), I stumbled upon <a href="http://haxe.org/manual/class-field-property-type-system-impact.html">this page about properties</a>:</p>
@@ -90,7 +132,7 @@ class Props {
       		<title>Filestat Ctime on Unix</title>
           <link href="http://ashes999.github.io/learnhaxe/filestat-ctime-on-unix" />
       		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
-      		<updated>2015-12-01T00:00:00Z</updated>
+      		<updated>2015-12-01TZ</updated>
       		<summary>Filestat Ctime on Unix</summary>
       		<content type="xhtml">
       			<p>The <a href="http://api.haxe.org/sys/FileStat.html#ctime">API docs for sys.FileStat</a> state that <code>ctime</code> returns <code>the creation time for the file (not all filesystems support this)</code>.</p>
@@ -112,7 +154,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Using a Haxelib in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/using-a-haxelib-in-haxe" />
       		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
-      		<updated>2015-11-29T00:00:00Z</updated>
+      		<updated>2015-11-29TZ</updated>
       		<summary>Using a Haxelib in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe includes a built-in package manager, <a href="http://haxe.org/manual/haxelib.html">haxelib</a>. You can install, upgrade, and manage libraries <a href="http://lib.haxe.org/">via the command-line</a>.</p>
@@ -129,7 +171,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Recursively Delete a Directory in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
       		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
+      		<updated>2015-11-28TZ</updated>
       		<summary>Recursively Delete a Directory in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
@@ -159,7 +201,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Sorting an Array of Strings in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/sorting-an-array-of-strings-in-haxe" />
       		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
+      		<updated>2015-11-28TZ</updated>
       		<summary>Sorting an Array of Strings in Haxe</summary>
       		<content type="xhtml">
       			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
@@ -187,7 +229,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Trim Replace and More Haxe String Extensions</title>
           <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
       		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
+      		<updated>2015-11-28TZ</updated>
       		<summary>Trim Replace and More Haxe String Extensions</summary>
       		<content type="xhtml">
       			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
@@ -200,28 +242,10 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
-      		<title>Reading Command Line Arguments in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/reading-command-line-arguments-in-haxe" />
-      		<id>urn:uuid:c62d47e8387759b2fe0c964e78e208c4</id>
-      		<updated>2015-11-27T00:00:00Z</updated>
-      		<summary>Reading Command Line Arguments in Haxe</summary>
-      		<content type="xhtml">
-      			<p>To read from the command line, use the <code>Sys.args()</code> call. It returns an array of arguments:</p>
-<pre><code>var args = Sys.args();
-var firstArg = args[0];
-// ...</code></pre>
-<p>This works when you compile and execute your Haxe code. For example, if you compile a <code>Main.hx</code> class with neko, and then run <code>neko Main.n --debug trace</code>, you get the array <code>["--debug", "trace"]</code>.</p>
-<p>However, it doesn't work with <code>--interp</code>. If you run <code>haxe -main Main --interp</code>, you get the array <code>["-main", "Main", "--interp"]</code>. Trying to append any more arguments will result in the error <code>Could not process argument &lt;foo&gt;</code></p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
       		<title>Check if a Directory Exists Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/check-if-a-directory-exists-haxe" />
       		<id>urn:uuid:8bc1b122afd9fc35914118ccbf6085bb</id>
-      		<updated>2015-11-27T00:00:00Z</updated>
+      		<updated>2015-11-27TZ</updated>
       		<summary>Check if a Directory Exists Haxe</summary>
       		<content type="xhtml">
       			<p>To check if a directory exists, you can use <code>sys.FileSystem.exists(path)</code>. This returns true if a file <em>or directory</em> exists at the specified path.</p>
