@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="ashes999">
+    <link rel="icon" href="content/favicon.ico">
+    <link type="application/atom+xml" title="Learn Haxe" href="http://ashes999.github.io/learnhaxe/atom.xml/" rel="alternate" />
+
+    <title>Logitech F310 Support in Haxeflixe | Learn Haxe</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="content/blog.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <script type="text/javascript">
+    if (window.location.href.indexOf('file://') == -1) {
+      // Not locally viewing the file. Do your Google Analytics thing.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-57858649-1', 'auto');
+      ga('send', 'pageview');
+    }
+    </script>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <a class="blog-nav-item" href="index.html">Home</a>
+          <a class="blog-nav-item" href="about.html">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title">Learn Haxe</h1>
+        <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h2 class="blog-post-title">Logitech F310 Support in Haxeflixe</h2>
+<p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p class="blog-post-meta">Posted 2016-01-12</p>
+<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
+<p>Right?</p>
+<p>It turns out that the <code>LogitechButtonID</code> class contains values based on the <strong>Cordless Rumblepad 2</strong> controller. If you look <a href="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1440&amp;bih=799&amp;q=rumblepad+2&amp;oq=rumblepad+2&amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA">at screenshots</a>, you'll notice the pads all have numbers on them.</p>
+<p>That's no good -- the F310 uses <code>A</code>, <code>B</code>, <code>X</code>, and <code>Y</code> for buttons, with left and right triggers (<code>LB</code> and <code>RB</code> respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:</p>
+<pre><code>static inline read only FOUR:Int = 11
+Placement equivalent to 'Y' button on the Xbox 360 controller</code></pre>
+<p>That only leaves the D-Pads. The built in enum values don't work; instead, I used <a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39">the four <code>dpad*</code> properties</a> defined on the controller itself; these work perfectly.</p>
+<p>If you want to try this for yourself, it's quite easy:</p>
+<p>1) Run <code>flixel create</code> and then select demo <code>34</code>, <code>GamepadTest</code>.</p>
+<p>2) Replace the contents of the <code>GamepadIDs</code> class with the correct button enum values:</p>
+<pre><code>public static inline var A = LogitechButtonID.TWO;
+public static inline var B = LogitechButtonID.THREE;
+public static inline var X = LogitechButtonID.ONE;
+public static inline var Y = LogitechButtonID.FOUR;
+public static inline var LB = LogitechButtonID.FIVE;
+public static inline var RB = LogitechButtonID.SIX;
+public static inline var START = LogitechButtonID.TEN;
+public static inline var SELECT = LogitechButtonID.NINE;
+public static inline var LEFT_ANALOGUE = LogitechButtonID.LEFT_ANALOGUE;
+public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
+public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
+public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
+public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
+public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;</code></pre>
+<p>3) Modify <code>PlayState.hx</code>'s <code>updateDpad</code> function; the values assigned to the four <code>dpad*</code> variables should be:</p>
+<pre><code>var dpadLeft = _gamePad.dpadLeft;
+var dpadRight = _gamePad.dpadRight;
+var dpadUp = _gamePad.dpadUp;
+var dpadDown = _gamePad.dpadDown;</code></pre>
+<p>Run <code>lime test neko</code> and observe that all input displays as expected.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixe"; // Absolute page URL
+  this.page.identifier = "ab541e331c5408001c04fd5dd1d140db2ee767de"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+          </div>
+
+          <!--nav>
+            <ul class="pager">
+              <li><a href="#">Previous</a></li>
+              <li><a href="#">Next</a></li>
+            </ul>
+          </nav-->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>Short, direct, how-to articles about Haxe and the ecosystem. <a href="http://ashes999.github.io/learnhaxe/about.html">Read more</a></p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Tags</h4>
+            <ul class="list-unstyled">
+              <ul><li><a href="tag-Haxe.html">Haxe</a> (12)</li>
+<li><a href="tag-HaxeFlixel.html">HaxeFlixel</a> (5)</li>
+<li><a href="tag-Haxelib.html">Haxelib</a> (1)</li>
+<li><a href="tag-OpenFL.html">OpenFL</a> (1)</li>
+</ul>
+            </ul>
+          </div>
+          <div class="sidebar-module">
+            <h4>RSS Feed</h4>
+            <a href="http://ashes999.github.io/learnhaxe/atom.xml"><img src="content/rss-icon.svg" width="64" height="64"</a>
+          </div>
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe source on GitHub</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+        <a href="#">Back to top</a> ::
+        crafted with <a href="https://github.com/ashes999/butterfly">Butterfly</a>
+      </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>
