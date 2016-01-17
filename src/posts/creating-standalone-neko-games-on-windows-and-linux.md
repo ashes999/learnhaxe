@@ -3,7 +3,7 @@ meta-id: 62b21fe546dfcfa10f24252bf75d127d8f8180d2
 meta-tags: Haxe
 meta-publishedOn: 2015-02-26
 
-[Prototyping a pluggable-architecture](http:/ashes999.github.io/learnhaxe/neko-plugin-architecture-with-reflection.html) led me to the path of building my games against the `neko` target, and no other. That's manageable. The next question is, **how can I release a single zip that contains my game**, *without requiring users to install Neko themselves*?
+While prototyping a pluggable-architecture in my post on [[Neko Plugin Architecture with Reflection]], I frequently built my games to work against the `neko` target (and no other). While manageable, that begs the question: **how can I release a single zip that contains my game**, *without requiring users to install Neko themselves*?
 
 # On Windows
 
