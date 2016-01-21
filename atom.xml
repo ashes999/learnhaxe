@@ -3,11 +3,28 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-01-12TZ</updated><entry>
+  	    <updated>2016-01-20T00:00:00Z</updated><entry>
+      		<title>Dynamically Adding and Reloading Assets in Haxeflixel</title>
+          <link href="http://ashes999.github.io/learnhaxe/dynamically-adding-and-reloading-assets-in-haxeflixel" />
+      		<id>urn:uuid:7831ef7024bdda0da3c935848e7e6c2d</id>
+      		<updated>2016-01-20T00:00:00Z</updated>
+      		<summary>Dynamically Adding and Reloading Assets in Haxeflixel</summary>
+      		<content type="xhtml">
+      			<p>Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)</p><ul><li>First, run your project via <code>lime test neko</code></li><li>Second, add (or modify) your assets to the <code>assets</code> directory.</li><li>Finally, run <code>lime update neko</code>. This copies and re-bundles the assets, in a way that the running process can access them.</li></ul>
+<h2>Internal Details</h2>
+<p>When you run your lime project, it actually creates a copies of the <code>assets</code> directory in <code>export/&lt;os name&gt;/neko/bin</code>. Interestingly, copying your asset files here isn't enough; you still need to run <code>lime update neko</code> to make them accessible to the running game.</p>
+<p>Also, when the assets reload, they become available to calls like <code>getBitmapData</code> et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.</p>
+<p>You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Logitech F310 Support in Haxeflixe</title>
           <link href="http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixe" />
       		<id>urn:uuid:63e5e080f7f0cec9300e8936403e142a</id>
-      		<updated>2016-01-12TZ</updated>
+      		<updated>2016-01-12T00:00:00Z</updated>
       		<summary>Logitech F310 Support in Haxeflixe</summary>
       		<content type="xhtml">
       			<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
@@ -49,7 +66,7 @@ var dpadDown = _gamePad.dpadDown;</code></pre>
       		<title>Appending to a File in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe" />
       		<id>urn:uuid:4b7bda57b940ac159b93bc734983c4cb</id>
-      		<updated>2015-12-28TZ</updated>
+      		<updated>2015-12-28T00:00:00Z</updated>
       		<summary>Appending to a File in Haxe</summary>
       		<content type="xhtml">
       			<p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
@@ -69,7 +86,7 @@ var dpadDown = _gamePad.dpadDown;</code></pre>
       		<title>Embedding Fonts in Haxeflixel With Flxtext</title>
           <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
       		<id>urn:uuid:37b0dd21a6d89a19e35f072a3895808d</id>
-      		<updated>2015-12-22TZ</updated>
+      		<updated>2015-12-22T00:00:00Z</updated>
       		<summary>Embedding Fonts in Haxeflixel With Flxtext</summary>
       		<content type="xhtml">
       			<p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
@@ -85,7 +102,7 @@ var dpadDown = _gamePad.dpadDown;</code></pre>
       		<title>Properties and Dynamic</title>
           <link href="http://ashes999.github.io/learnhaxe/properties-and-dynamic" />
       		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
-      		<updated>2015-12-10TZ</updated>
+      		<updated>2015-12-10T00:00:00Z</updated>
       		<summary>Properties and Dynamic</summary>
       		<content type="xhtml">
       			<p>While reading through the <a href="http://haxe.org/manual/">Haxe manual</a> (which, by the way, is a good reference, but not a good learning resource), I stumbled upon <a href="http://haxe.org/manual/class-field-property-type-system-impact.html">this page about properties</a>:</p>
@@ -132,7 +149,7 @@ class Props {
       		<title>Filestat Ctime on Unix</title>
           <link href="http://ashes999.github.io/learnhaxe/filestat-ctime-on-unix" />
       		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
-      		<updated>2015-12-01TZ</updated>
+      		<updated>2015-12-01T00:00:00Z</updated>
       		<summary>Filestat Ctime on Unix</summary>
       		<content type="xhtml">
       			<p>The <a href="http://api.haxe.org/sys/FileStat.html#ctime">API docs for sys.FileStat</a> state that <code>ctime</code> returns <code>the creation time for the file (not all filesystems support this)</code>.</p>
@@ -154,7 +171,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Using a Haxelib in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/using-a-haxelib-in-haxe" />
       		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
-      		<updated>2015-11-29TZ</updated>
+      		<updated>2015-11-29T00:00:00Z</updated>
       		<summary>Using a Haxelib in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe includes a built-in package manager, <a href="http://haxe.org/manual/haxelib.html">haxelib</a>. You can install, upgrade, and manage libraries <a href="http://lib.haxe.org/">via the command-line</a>.</p>
@@ -171,7 +188,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Recursively Delete a Directory in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
       		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-11-28TZ</updated>
+      		<updated>2015-11-28T00:00:00Z</updated>
       		<summary>Recursively Delete a Directory in Haxe</summary>
       		<content type="xhtml">
       			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
@@ -201,7 +218,7 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Sorting an Array of Strings in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/sorting-an-array-of-strings-in-haxe" />
       		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
-      		<updated>2015-11-28TZ</updated>
+      		<updated>2015-11-28T00:00:00Z</updated>
       		<summary>Sorting an Array of Strings in Haxe</summary>
       		<content type="xhtml">
       			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
@@ -229,32 +246,13 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       		<title>Trim Replace and More Haxe String Extensions</title>
           <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
       		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
-      		<updated>2015-11-28TZ</updated>
+      		<updated>2015-11-28T00:00:00Z</updated>
       		<summary>Trim Replace and More Haxe String Extensions</summary>
       		<content type="xhtml">
       			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
 <pre><code>import StringTools;</code></pre>
 <p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
 <p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
-      		<title>Check if a Directory Exists Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/check-if-a-directory-exists-haxe" />
-      		<id>urn:uuid:8bc1b122afd9fc35914118ccbf6085bb</id>
-      		<updated>2015-11-27TZ</updated>
-      		<summary>Check if a Directory Exists Haxe</summary>
-      		<content type="xhtml">
-      			<p>To check if a directory exists, you can use <code>sys.FileSystem.exists(path)</code>. This returns true if a file <em>or directory</em> exists at the specified path.</p>
-<p>To be sure it's a directory, you can also include <code>sys.FileSystem.isDirectory(path)</code>. You can combine them together:</p>
-<pre><code>if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path)) {
-  // path exists and is a directory
-} else {
-  // path doesn't exist, or is a file or something else
-}</code></pre>
       		</content>
       		<author>
       			<name>ashes999</name>

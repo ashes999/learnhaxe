@@ -10,7 +10,7 @@
     <link rel="icon" href="content/favicon.ico">
     <link type="application/atom+xml" title="Learn Haxe" href="http://ashes999.github.io/learnhaxe/atom.xml/" rel="alternate" />
 
-    <title>Learn Haxe</title>
+    <title>Dynamically Adding and Reloading Assets in Haxeflixel | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -60,9 +60,34 @@
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <p>12 posts tagged with Haxe:</p>
-<ul><li><a href="appending-to-a-file-in-haxe.html">Appending to a File in Haxe</a></li><li><a href="properties-and-dynamic.html">Properties and Dynamic</a></li><li><a href="filestat-ctime-on-unix.html">Filestat Ctime on Unix</a></li><li><a href="recursively-delete-a-directory-in-haxe.html">Recursively Delete a Directory in Haxe</a></li><li><a href="sorting-an-array-of-strings-in-haxe.html">Sorting an Array of Strings in Haxe</a></li><li><a href="trim-replace-and-more-haxe-string-extensions.html">Trim Replace and More Haxe String Extensions</a></li><li><a href="reading-command-line-arguments-in-haxe.html">Reading Command Line Arguments in Haxe</a></li><li><a href="check-if-a-directory-exists-haxe.html">Check if a Directory Exists Haxe</a></li><li><a href="namespaces-and-class-names-in-haxe.html">Namespaces and Class Names in Haxe</a></li><li><a href="exit-from-the-command-line-in-haxe.html">Exit From the Command Line in Haxe</a></li><li><a href="creating-standalone-neko-games-on-windows-and-linux.html">Creating Standalone Neko Games on Windows and Linux</a></li><li><a href="neko-plugin-architecture-with-reflection.html">Neko Plugin Architecture With Reflection</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Dynamically Adding and Reloading Assets in Haxeflixel</h2>
+<p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p class="blog-post-meta">Posted 2016-01-20</p>
+<p>Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)</p><ul><li>First, run your project via <code>lime test neko</code></li><li>Second, add (or modify) your assets to the <code>assets</code> directory.</li><li>Finally, run <code>lime update neko</code>. This copies and re-bundles the assets, in a way that the running process can access them.</li></ul>
+<h2>Internal Details</h2>
+<p>When you run your lime project, it actually creates a copies of the <code>assets</code> directory in <code>export/&lt;os name&gt;/neko/bin</code>. Interestingly, copying your asset files here isn't enough; you still need to run <code>lime update neko</code> to make them accessible to the running game.</p>
+<p>Also, when the assets reload, they become available to calls like <code>getBitmapData</code> et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.</p>
+<p>You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/dynamically-adding-and-reloading-assets-in-haxeflixel"; // Absolute page URL
+  this.page.identifier = "71f1585055cedf864adadc88e898466b515dafa4"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>
