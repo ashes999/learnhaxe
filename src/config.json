@@ -2,5 +2,6 @@
   "siteName": "Learn Haxe",
   "siteUrl": "http://ashes999.github.io/learnhaxe",
   "authorName": "ashes999",
-  "authorEmail": "ashes999@yahoo.com"
+  "authorEmail": "ashes999@yahoo.com",
+  "googleAnalyticsId": "UA-57858649-1"
 }
