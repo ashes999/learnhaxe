@@ -185,30 +185,16 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
-      		<title>Recursively Delete a Directory in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
-      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
+      		<title>Trim Replace and More Haxe String Extensions</title>
+          <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
+      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
       		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Recursively Delete a Directory in Haxe</summary>
+      		<summary>Trim Replace and More Haxe String Extensions</summary>
       		<content type="xhtml">
-      			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
-<p>This code recursively deletes directories and their contents:</p>
-<pre><code>private function deleteDirRecursively(path:String) : Void
-{
-  if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path))
-  {
-    var entries = sys.FileSystem.readDirectory(path);
-    for (entry in entries) {
-      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
-        deleteDirRecursively(path + '/' + entry);
-        sys.FileSystem.deleteDirectory(path + '/' + entry);
-      } else {
-        sys.FileSystem.deleteFile(path + '/' + entry);
-      }
-    }
-  }
-}</code></pre>
-<p>It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.</p>
+      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
+<pre><code>import StringTools;</code></pre>
+<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
+<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
       		</content>
       		<author>
       			<name>ashes999</name>
@@ -243,16 +229,30 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
       			<email>ashes999@yahoo.com</email>
       		</author>
       	</entry><entry>
-      		<title>Trim Replace and More Haxe String Extensions</title>
-          <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
-      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
+      		<title>Recursively Delete a Directory in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
+      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
       		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Trim Replace and More Haxe String Extensions</summary>
+      		<summary>Recursively Delete a Directory in Haxe</summary>
       		<content type="xhtml">
-      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
-<pre><code>import StringTools;</code></pre>
-<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
-<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+      			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
+<p>This code recursively deletes directories and their contents:</p>
+<pre><code>private function deleteDirRecursively(path:String) : Void
+{
+  if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path))
+  {
+    var entries = sys.FileSystem.readDirectory(path);
+    for (entry in entries) {
+      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
+        deleteDirRecursively(path + '/' + entry);
+        sys.FileSystem.deleteDirectory(path + '/' + entry);
+      } else {
+        sys.FileSystem.deleteFile(path + '/' + entry);
+      }
+    }
+  }
+}</code></pre>
+<p>It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.</p>
       		</content>
       		<author>
       			<name>ashes999</name>
