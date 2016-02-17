@@ -42,7 +42,7 @@ if (window.location.href.indexOf('file://') == -1) {
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <a class="blog-nav-item" href="about.html">About</a>
+          <a class='blog-nav-item' href="about.html">About</a>
         </nav>
       </div>
     </div>
@@ -60,7 +60,7 @@ if (window.location.href.indexOf('file://') == -1) {
 
           <div class="blog-post">
             <h2 class="blog-post-title">Appending to a File in Haxe</h2>
-<p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
 <p class="blog-post-meta">Posted 2015-12-28</p>
 <p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
 <p>The <code>FileOutput</code> <a href="http://api.haxe.org/sys/io/FileOutput.html">API</a> looks pretty sparse and unusable, until you click on the <a href="http://api.haxe.org/haxe/io/Output.html">base-class <code>Output</code> API</a>. There, you see promising methods, like <a href="http://api.haxe.org/haxe/io/Output.html#writeString"><code>writeString</code></a>.</p>

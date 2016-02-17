@@ -3,7 +3,49 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-01-20T00:00:00Z</updated><entry>
+  	    <updated>2016-02-17T00:00:00Z</updated><entry>
+      		<title>Iterate Over all Fields of Anonymous Structures in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/iterate-over-all-fields-of-anonymous-structures-in-haxe" />
+      		<id>urn:uuid:94a7e75dcb116844746188990b45172b</id>
+      		<updated>2016-02-17T00:00:00Z</updated>
+      		<summary>Iterate Over all Fields of Anonymous Structures in Haxe</summary>
+      		<content type="xhtml">
+      			<p>How do you iterate over all fields of an <a href="http://haxe.org/manual/types-anonymous-structure.html">anonymous structure</a> (possibly behind a <code>typedef</code>) in Haxe and print out all the values?</p>
+<p>The <a href="http://haxe.org/manual/std-reflection.html">Haxe reflection docs</a> suggest:</p>
+<blockquote>
+<p>The reflection API consists of two classes:
+- Reflect: A lightweight API which work best on anonymous structures, with limited support for classes.
+- Type: A more robust API for working with classes and enums.</p></blockquote>
+<p><code>Reflect</code> seems promising. From perusing the API docs, I noticed a <code>fields</code> method. <a href="http://api.haxe.org/Reflect.html#fields">The docs</a> say:</p>
+<blockquote>
+<p>static fields (o:Dynamic):Array<String></p></blockquote>
+<p>Returns the fields of structure o.</p>
+<blockquote>
+<p>This method is only guaranteed to work on anonymous structures. Refer to Type.getInstanceFields for a function supporting class instances.</p></blockquote>
+<p>That looks promising. Running <code>Reflect.fields({ "name": "Butterfly", "version": "0.3" })</code> gives me the array <code>["name", "version"]</code> back.</p>
+<p><code>Reflect</code> also includes <a href="http://api.haxe.org/Reflect.html#getProperty">a <code>getProperty</code> method</a>, which returns the value of a property. Plug this into a for-loop, like so:</p>
+<pre><code>var target = { "name": "Butterfly", "version": "0.3" };
+var fields = Reflect.fields(target);
+for (field in fields) {
+  var value = Reflect.getProperty(target, field);
+  trace('${field} =&gt; ${value}');
+}</code></pre>
+<p>This traces:</p>
+<blockquote>
+<p>name => Butterfly
+version => 0.3</p></blockquote>
+<p>Also, note that Reflect also <a href="http://api.haxe.org/Reflect.html#field">contains a <code>field</code> method</a> which is syntactically similar to <code>getProperty</code> (same inputs and outputs); the difference is that <code>field</code> ignores accessors, while <code>getProperty</code> applies accessors.</p>
+<p>Given the choice, in this specific case of anonymous structures, I would use <code>field</code> instead of <code>getProperty</code> for readability.  This:</p>
+<p><code>for (var field in Reflect.fields(target)) { Reflect.field(...) }</code></p>
+<p>Reads more sensibly than:</p>
+<p><code>for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }</code></p>
+<p>If you apply this on something other than an anonymous structure, you should probably opt for <code>getProperty</code> instead.</p>
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry><entry>
       		<title>Dynamically Adding and Reloading Assets in Haxeflixel</title>
           <link href="http://ashes999.github.io/learnhaxe/dynamically-adding-and-reloading-assets-in-haxeflixel" />
       		<id>urn:uuid:7831ef7024bdda0da3c935848e7e6c2d</id>
@@ -223,36 +265,6 @@ Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the fi
   }
 });</code></pre>
 <p>Alternatively, you can create the function <code>sortAlphabetically(a:String, b:String):Int</code> and call <code>someArray.sort(sortAlphabetically)</code>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry><entry>
-      		<title>Recursively Delete a Directory in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
-      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Recursively Delete a Directory in Haxe</summary>
-      		<content type="xhtml">
-      			<p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
-<p>This code recursively deletes directories and their contents:</p>
-<pre><code>private function deleteDirRecursively(path:String) : Void
-{
-  if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path))
-  {
-    var entries = sys.FileSystem.readDirectory(path);
-    for (entry in entries) {
-      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
-        deleteDirRecursively(path + '/' + entry);
-        sys.FileSystem.deleteDirectory(path + '/' + entry);
-      } else {
-        sys.FileSystem.deleteFile(path + '/' + entry);
-      }
-    }
-  }
-}</code></pre>
-<p>It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.</p>
       		</content>
       		<author>
       			<name>ashes999</name>

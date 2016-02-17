@@ -42,7 +42,7 @@ if (window.location.href.indexOf('file://') == -1) {
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <a class="blog-nav-item" href="about.html">About</a>
+          <a class='blog-nav-item' href="about.html">About</a>
         </nav>
       </div>
     </div>
@@ -60,7 +60,7 @@ if (window.location.href.indexOf('file://') == -1) {
 
           <div class="blog-post">
             <h2 class="blog-post-title">Recursively Delete a Directory in Haxe</h2>
-<p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
 <p class="blog-post-meta">Posted 2015-11-28</p>
 <p>Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the <code>sys.FileSystem</code> class <a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory">includes a deleteDirectory method</a>, it throws an exception if the directory contains subdirectories or files.</p>
 <p>This code recursively deletes directories and their contents:</p>

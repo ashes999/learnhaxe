@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Iterate Over all Fields of Anonymous Structures in Haxe | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,10 +59,59 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <p>6 posts tagged with HaxeFlixel:</p>
-<ul><li><a href="dynamically-adding-and-reloading-assets-in-haxeflixel.html">Dynamically Adding and Reloading Assets in Haxeflixel</a></li><li><a href="logitech-f310-support-in-haxeflixe.html">Logitech F310 Support in Haxeflixe</a></li><li><a href="embedding-fonts-in-haxeflixel-with-flxtext.html">Embedding Fonts in Haxeflixel With Flxtext</a></li><li><a href="setting-the-image-on-a-haxeflixel-flxbutton.html">Setting the Image on a Haxeflixel Flxbutton</a></li><li><a href="haxeflixel-on-ouya.html">Haxeflixel on Ouya</a></li><li><a href="animated-gifs-in-haxeflixel.html">Animated Gifs in Haxeflixel</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Iterate Over all Fields of Anonymous Structures in Haxe</h2>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p class="blog-post-meta">Posted 2016-02-17</p>
+<p>How do you iterate over all fields of an <a href="http://haxe.org/manual/types-anonymous-structure.html">anonymous structure</a> (possibly behind a <code>typedef</code>) in Haxe and print out all the values?</p>
+<p>The <a href="http://haxe.org/manual/std-reflection.html">Haxe reflection docs</a> suggest:</p>
+<blockquote>
+<p>The reflection API consists of two classes:
+- Reflect: A lightweight API which work best on anonymous structures, with limited support for classes.
+- Type: A more robust API for working with classes and enums.</p></blockquote>
+<p><code>Reflect</code> seems promising. From perusing the API docs, I noticed a <code>fields</code> method. <a href="http://api.haxe.org/Reflect.html#fields">The docs</a> say:</p>
+<blockquote>
+<p>static fields (o:Dynamic):Array<String></p></blockquote>
+<p>Returns the fields of structure o.</p>
+<blockquote>
+<p>This method is only guaranteed to work on anonymous structures. Refer to Type.getInstanceFields for a function supporting class instances.</p></blockquote>
+<p>That looks promising. Running <code>Reflect.fields({ "name": "Butterfly", "version": "0.3" })</code> gives me the array <code>["name", "version"]</code> back.</p>
+<p><code>Reflect</code> also includes <a href="http://api.haxe.org/Reflect.html#getProperty">a <code>getProperty</code> method</a>, which returns the value of a property. Plug this into a for-loop, like so:</p>
+<pre><code>var target = { "name": "Butterfly", "version": "0.3" };
+var fields = Reflect.fields(target);
+for (field in fields) {
+  var value = Reflect.getProperty(target, field);
+  trace('${field} =&gt; ${value}');
+}</code></pre>
+<p>This traces:</p>
+<blockquote>
+<p>name => Butterfly
+version => 0.3</p></blockquote>
+<p>Also, note that Reflect also <a href="http://api.haxe.org/Reflect.html#field">contains a <code>field</code> method</a> which is syntactically similar to <code>getProperty</code> (same inputs and outputs); the difference is that <code>field</code> ignores accessors, while <code>getProperty</code> applies accessors.</p>
+<p>Given the choice, in this specific case of anonymous structures, I would use <code>field</code> instead of <code>getProperty</code> for readability.  This:</p>
+<p><code>for (var field in Reflect.fields(target)) { Reflect.field(...) }</code></p>
+<p>Reads more sensibly than:</p>
+<p><code>for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }</code></p>
+<p>If you apply this on something other than an anonymous structure, you should probably opt for <code>getProperty</code> instead.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/iterate-over-all-fields-of-anonymous-structures-in-haxe"; // Absolute page URL
+  this.page.identifier = "8c77cbc26271d70cbd896e810e6dde00d911c5b7"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>

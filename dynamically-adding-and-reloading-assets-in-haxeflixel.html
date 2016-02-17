@@ -42,7 +42,7 @@ if (window.location.href.indexOf('file://') == -1) {
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <a class="blog-nav-item" href="about.html">About</a>
+          <a class='blog-nav-item' href="about.html">About</a>
         </nav>
       </div>
     </div>
@@ -60,7 +60,7 @@ if (window.location.href.indexOf('file://') == -1) {
 
           <div class="blog-post">
             <h2 class="blog-post-title">Dynamically Adding and Reloading Assets in Haxeflixel</h2>
-<p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+            <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
 <p class="blog-post-meta">Posted 2016-01-20</p>
 <p>Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)</p><ul><li>First, run your project via <code>lime test neko</code></li><li>Second, add (or modify) your assets to the <code>assets</code> directory.</li><li>Finally, run <code>lime update neko</code>. This copies and re-bundles the assets, in a way that the running process can access them.</li></ul>
 <h2>Internal Details</h2>
