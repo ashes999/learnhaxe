@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>$siteName</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -29,7 +29,7 @@
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <butterfly-pages />
+          <butterfly-pages link-attributes="class='blog-nav-item'" />
         </nav>
       </div>
     </div>
@@ -37,7 +37,7 @@
     <div class="container">
 
       <div class="blog-header">
-        <h1 class="blog-title">Learn Haxe</h1>
+        <h1 class="blog-title">$siteName</h1>
         <p class="lead blog-description">An easier way to learn how to use the Haxe core and related technologies.</p>
       </div>
 
@@ -46,6 +46,7 @@
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
+            <h2 class="blog-post-title"><butterfly-title /></h2>
             <butterfly-content />
             <butterfly-comments />
           </div>
@@ -77,7 +78,7 @@
           <div class="sidebar-module">
             <h4>Elsewhere</h4>
             <ol class="list-unstyled">
-              <li><a href="http://github.com/ashes999/learnhaxe">Learn Haxe source on GitHub</a></li>
+              <li><a href="http://github.com/ashes999/learnhaxe">$siteName source on GitHub</a></li>
             </ol>
           </div>
         </div><!-- /.blog-sidebar -->
