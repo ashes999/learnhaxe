@@ -1,5 +1,5 @@
 meta-id: e6e6fad5afbacb434fa773adec7cb0211ae59b53
-
+meta-title: Setting the Image on a HaxeFlixel FlxButton
 meta-tags: HaxeFlixel
 meta-publishedOn: 2015-04-09
 

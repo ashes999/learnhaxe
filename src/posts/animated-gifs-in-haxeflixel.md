@@ -1,5 +1,5 @@
 meta-id: 8076d551e1181e1b76b8e376b849d9794daaa498
-
+meta-title: Animated GIFs in HaxeFlixel
 meta-tags: HaxeFlixel
 meta-publishedOn: 2015-01-10
 

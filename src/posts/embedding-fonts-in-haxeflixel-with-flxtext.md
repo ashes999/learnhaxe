@@ -1,5 +1,5 @@
 meta-id: a20bb3116db754de2bfc7f1a1a1b80e30bf876dd
-
+meta-title: Embedding Fonts in HaxeFlixel with FlxText
 meta-tags: HaxeFlixel
 meta-publishedOn: 2015-12-22
 
