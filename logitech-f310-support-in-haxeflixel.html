@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Animated GIFs in HaxeFlixel | Learn Haxe</title>
+    <title>Logitech F310 Support in HaxeFlixel | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,40 +59,46 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Animated GIFs in HaxeFlixel</h2>
+            <h2 class="blog-post-title">Logitech F310 Support in HaxeFlixel</h2>
             <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
-<p class="blog-post-meta">Posted 2015-01-10</p>
-<p>Why would you want to display animated GIFs in a HaxeFlixel game?</p>
-<p>Simple: every mobile device has a maximum texture size; you can see this on the Haxe <a href="http://haxeflixel.com/documentation/mobile-targets/">mobile targets</a> page. The smallest maximum is <code>1024×1024</code>.</p>
-<p>What if you want a large animated background of that size, or of a similar size? You can’t even use a spritesheet, because it would run over the maximum texture size.</p>
-<p>Enter animated GIFs. Since GIFs generally use diffs for pixel changes from frame to frame, they’re small, cheap, fast, and high-quality (if you stick to the 256-colour limit).</p>
-<h2>YAGP + HaxeFlixel = GIFs</h2>
-<p>HaxeFlixel doesn’t currently natively support GIFs. Instead, I looked to third-party libraries. <code>haxe-gif</code> froze on Flash (which is a game breaker for me), and instead I ended up using <a href="https://github.com/Yanrishatum/yagp">yagp</a>. From their <code>README.md</code>:</p>
-<blockquote>
-<p>This library provides simple API to parse animated GIF images. In difference between haxe-gif library, this library successfully parses most of the Gif images (exclude too big images).</p></blockquote>
-<p>The library must be installed through <code>haxelib</code> with the GitHub repository, as it’s not on the central repository yet.</p>
-<p>It takes a few lines to get a GIF set up:</p>
-<pre><code>// Parsing from openfl.utils.ByteArray:
-var gif:Gif = GifDecoder.parseByteArray(Assets.getBytes(“gif_file.gif”));
-var gif:Gif = GifDecoder.parseText(text);
-
-// Simple player example:
-var player:GifPlayer = new GifPlayer(gif);
-// openfl.display.Bitmap wrapper for GifPlayer.
-// GifPlayer provides only BitmapData for further displaying and must be updated manually.
-var wrapper:GifPlayerWrapper = new GifPlayerWrapper(player);
-addChild(wrapper);</code></pre>
-<p>I admittedly don’t understand why I need a <code>GifPlayer</code> and <code>GifPlayerWrapper</code>. The library works quite well, and performs quite well, even on mobile. Integrating with HaxeFlixel only required two other things:</p><ol><li>Update <code>Project.xml</code> and add <code></code>. This will tell <code>lime</code> to process your <code>gif</code> files as binary, so you can load them via <code>Assets.getBytes</code>.</li><li>Add the sprite to the stage via <code>FlxG.addChildBelowMouse(wrapper);</code></li></ol>
-<h2>Caveats</h2>
-<p>Yes, it works, but how well? Here are some issues I ran into:</p><ul><li>Loading and displaying the GIF is quite slow (on the order of a few seconds).</li><li>The GIF plays smoothly, but leaks memory; even if you change states, some memory leaks</li><li>The GIF library isn’t part of HaxeFlixel, so you need to scale it up or down appropriately (<code>GifPlayerWrapper</code> has <code>scaleX</code> and <code>scaleY</code> properties you can use)</li></ul>
-<p>Overall, it works quite well, and I will definitely look into this later if and when I need large animations.</p>
+<p class="blog-post-meta">Posted 2016-01-12</p>
+<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
+<p>Right?</p>
+<p>It turns out that the <code>LogitechButtonID</code> class contains values based on the <strong>Cordless Rumblepad 2</strong> controller. If you look <a href="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1440&amp;bih=799&amp;q=rumblepad+2&amp;oq=rumblepad+2&amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA">at screenshots</a>, you'll notice the pads all have numbers on them.</p>
+<p>That's no good -- the F310 uses <code>A</code>, <code>B</code>, <code>X</code>, and <code>Y</code> for buttons, with left and right triggers (<code>LB</code> and <code>RB</code> respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:</p>
+<pre><code>static inline read only FOUR:Int = 11
+Placement equivalent to 'Y' button on the Xbox 360 controller</code></pre>
+<p>That only leaves the D-Pads. The built in enum values don't work; instead, I used <a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39">the four <code>dpad*</code> properties</a> defined on the controller itself; these work perfectly.</p>
+<p>If you want to try this for yourself, it's quite easy:</p>
+<p>1) Run <code>flixel create</code> and then select demo <code>34</code>, <code>GamepadTest</code>.</p>
+<p>2) Replace the contents of the <code>GamepadIDs</code> class with the correct button enum values:</p>
+<pre><code>public static inline var A = LogitechButtonID.TWO;
+public static inline var B = LogitechButtonID.THREE;
+public static inline var X = LogitechButtonID.ONE;
+public static inline var Y = LogitechButtonID.FOUR;
+public static inline var LB = LogitechButtonID.FIVE;
+public static inline var RB = LogitechButtonID.SIX;
+public static inline var START = LogitechButtonID.TEN;
+public static inline var SELECT = LogitechButtonID.NINE;
+public static inline var LEFT_ANALOGUE = LogitechButtonID.LEFT_ANALOGUE;
+public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
+public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
+public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
+public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
+public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;</code></pre>
+<p>3) Modify <code>PlayState.hx</code>'s <code>updateDpad</code> function; the values assigned to the four <code>dpad*</code> variables should be:</p>
+<pre><code>var dpadLeft = _gamePad.dpadLeft;
+var dpadRight = _gamePad.dpadRight;
+var dpadUp = _gamePad.dpadUp;
+var dpadDown = _gamePad.dpadDown;</code></pre>
+<p>Run <code>lime test neko</code> and observe that all input displays as expected.</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/animated-gifs-in-haxeflixel"; // Absolute page URL
-  this.page.identifier = "8076d551e1181e1b76b8e376b849d9794daaa498"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixel"; // Absolute page URL
+  this.page.identifier = "ab541e331c5408001c04fd5dd1d140db2ee767de"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE

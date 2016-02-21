@@ -3,83 +3,117 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-02-17T00:00:00Z</updated><entry>
+  	    <updated>2016-02-21T00:00:00Z</updated><entry>
+      		<title>Hue Rotating Sprites in HaxeFlixel</title>
+          <link href="http://ashes999.github.io/learnhaxe/hue-rotating-sprites-in-haxeflixel" />
+      		<id>urn:uuid:eb29021aa54bd67a78caeea77a433e49</id>
+      		<updated>2016-02-21T00:00:00Z</updated>
+      		<summary>Hue Rotating Sprites in HaxeFlixel</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;I began a quest to answer a question: can I hue rotate sprites, within HaxeFlixel itself?  The answer is &lt;em&gt;yes&lt;/em&gt;, although it requires a non-trivial amount of work.&lt;/p&gt;
+&lt;p&gt;The first clue is that the HaxeFlixel &lt;code&gt;FlxSprite&lt;/code&gt; class contains a &lt;code&gt;pixels&lt;/code&gt; field, which contains &lt;code&gt;BitmapData&lt;/code&gt;; a list of actual pixel values (colours in the format &lt;code&gt;0xRRGGBB&lt;/code&gt;) which you can access (and manipulate). My first try included changing these via &lt;a href="http://stackoverflow.com/a/8509802/210780"&gt;this formula&lt;/a&gt;; the results looked strange.&lt;/p&gt;
+&lt;p&gt;I abandoned that route and decided to use &lt;a href="http://stackoverflow.com/a/8510751/210780"&gt;this method&lt;/a&gt;, which uses a matrix to multiply the RGB component values based on the hue rotation.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;BitmapData&lt;/code&gt; has an &lt;a href="http://api.haxeflixel.com/flash/display/BitmapData.html#applyFilter"&gt;applyFilter method&lt;/a&gt;. For the final &lt;code&gt;filter&lt;/code&gt; parameter, which lacks documentation, you can pass in an instance of &lt;code&gt;ColorMatrixFilter&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ColorMatrixFilter&lt;/code&gt; doesn't appear in the HaxeFlixel docs (it's &lt;a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/filters/ColorMatrixFilter.html"&gt;from Flash&lt;/a&gt;). You pass in the values for a 5x4 matrix; the first three columns of the first three rows take in RGB values.&lt;/p&gt;
+&lt;p&gt;I translated and passed in the values provided in the Stack Overflow answer above; it looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var hueRotation:Int = 0; // degrees. Tested with values from 0...359
+// cosA and sinA are in radians
+var cosA:Float = Math.cos(hueRotation * Math.PI / 180);
+var sinA:Float = Math.sin(hueRotation * Math.PI / 180);
+
+sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new ColorMatrixFilter(
+  [cosA + (1.0 - cosA) / 3.0, 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, 0, 0,
+  1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0*(1.0 - cosA), 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 0, 0,
+  1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0 * (1.0 - cosA), 0, 0,
+  0, 0, 0, 1, 0])); // identity row&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The output worked, except for three things:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;I used several copies of the same image, and every copy looked the same. It turns out that HaxeFlixel shares &lt;code&gt;BitmapData&lt;/code&gt; across instances of the same sprite; I bypassed this by setting &lt;code&gt;sprite.pixels = sprite.pixels.clone()&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;The effect didn't apply on Flash. For Flash, you need to add &lt;code&gt;sprite.dirty = true&lt;/code&gt; (possibly in a &lt;code&gt;#if flash&lt;/code&gt; ... &lt;code&gt;#end&lt;/code&gt; block).&lt;/li&gt;&lt;li&gt;The colours are slightly off. If you rotate a simple block of colours (red, green, blue, and white), you see that the colours appear a bit darker than they should be (compare it to what you get in GIMP).&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;The result looks great.  And the performance? In my case, I intended to hue-rotate sprites once (and keep them at that hue forever). Manipulating the sprite's &lt;code&gt;.pixels&lt;/code&gt; directly is the same as loadimg a graphic that already has the transformation -- there's no additional cost in each frame if we only do this once when the sprite is created. (Thanks to &lt;a href="https://github.com/gama11"&gt;Gama11&lt;/a&gt; for pointing this out.)&lt;/p&gt;
+&lt;p&gt;For the time being, you can view the complete HaxeFlixel proof-of-concept project &lt;a href="https://github.com/ashes999/haxeflixel-hue-rotation"&gt;here, on GitHub&lt;/a&gt;.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Iterate Over all Fields of Anonymous Structures in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/iterate-over-all-fields-of-anonymous-structures-in-haxe" />
       		<id>urn:uuid:94a7e75dcb116844746188990b45172b</id>
       		<updated>2016-02-17T00:00:00Z</updated>
       		<summary>Iterate Over all Fields of Anonymous Structures in Haxe</summary>
       		<content type="xhtml">
-      			<p>How do you iterate over all fields of an <a href="http://haxe.org/manual/types-anonymous-structure.html">anonymous structure</a> (possibly behind a <code>typedef</code>) in Haxe and print out all the values?</p>
-<p>The <a href="http://haxe.org/manual/std-reflection.html">Haxe reflection docs</a> suggest:</p>
-<blockquote>
-<p>The reflection API consists of two classes:
+      			&lt;p&gt;How do you iterate over all fields of an &lt;a href="http://haxe.org/manual/types-anonymous-structure.html"&gt;anonymous structure&lt;/a&gt; (possibly behind a &lt;code&gt;typedef&lt;/code&gt;) in Haxe and print out all the values?&lt;/p&gt;
+&lt;p&gt;The &lt;a href="http://haxe.org/manual/std-reflection.html"&gt;Haxe reflection docs&lt;/a&gt; suggest:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The reflection API consists of two classes:
 - Reflect: A lightweight API which work best on anonymous structures, with limited support for classes.
-- Type: A more robust API for working with classes and enums.</p></blockquote>
-<p><code>Reflect</code> seems promising. From perusing the API docs, I noticed a <code>fields</code> method. <a href="http://api.haxe.org/Reflect.html#fields">The docs</a> say:</p>
-<blockquote>
-<p>static fields (o:Dynamic):Array<String></p></blockquote>
-<p>Returns the fields of structure o.</p>
-<blockquote>
-<p>This method is only guaranteed to work on anonymous structures. Refer to Type.getInstanceFields for a function supporting class instances.</p></blockquote>
-<p>That looks promising. Running <code>Reflect.fields({ "name": "Butterfly", "version": "0.3" })</code> gives me the array <code>["name", "version"]</code> back.</p>
-<p><code>Reflect</code> also includes <a href="http://api.haxe.org/Reflect.html#getProperty">a <code>getProperty</code> method</a>, which returns the value of a property. Plug this into a for-loop, like so:</p>
-<pre><code>var target = { "name": "Butterfly", "version": "0.3" };
+- Type: A more robust API for working with classes and enums.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;Reflect&lt;/code&gt; seems promising. From perusing the API docs, I noticed a &lt;code&gt;fields&lt;/code&gt; method. &lt;a href="http://api.haxe.org/Reflect.html#fields"&gt;The docs&lt;/a&gt; say:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;static fields (o:Dynamic):Array&lt;String&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Returns the fields of structure o.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This method is only guaranteed to work on anonymous structures. Refer to Type.getInstanceFields for a function supporting class instances.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;That looks promising. Running &lt;code&gt;Reflect.fields({ "name": "Butterfly", "version": "0.3" })&lt;/code&gt; gives me the array &lt;code&gt;["name", "version"]&lt;/code&gt; back.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Reflect&lt;/code&gt; also includes &lt;a href="http://api.haxe.org/Reflect.html#getProperty"&gt;a &lt;code&gt;getProperty&lt;/code&gt; method&lt;/a&gt;, which returns the value of a property. Plug this into a for-loop, like so:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var target = { "name": "Butterfly", "version": "0.3" };
 var fields = Reflect.fields(target);
 for (field in fields) {
   var value = Reflect.getProperty(target, field);
-  trace('${field} =&gt; ${value}');
-}</code></pre>
-<p>This traces:</p>
-<blockquote>
-<p>name => Butterfly
-version => 0.3</p></blockquote>
-<p>Also, note that Reflect also <a href="http://api.haxe.org/Reflect.html#field">contains a <code>field</code> method</a> which is syntactically similar to <code>getProperty</code> (same inputs and outputs); the difference is that <code>field</code> ignores accessors, while <code>getProperty</code> applies accessors.</p>
-<p>Given the choice, in this specific case of anonymous structures, I would use <code>field</code> instead of <code>getProperty</code> for readability.  This:</p>
-<p><code>for (var field in Reflect.fields(target)) { Reflect.field(...) }</code></p>
-<p>Reads more sensibly than:</p>
-<p><code>for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }</code></p>
-<p>If you apply this on something other than an anonymous structure, you should probably opt for <code>getProperty</code> instead.</p>
+  trace('${field} =&amp;gt; ${value}');
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This traces:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;name =&gt; Butterfly
+version =&gt; 0.3&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Also, note that Reflect also &lt;a href="http://api.haxe.org/Reflect.html#field"&gt;contains a &lt;code&gt;field&lt;/code&gt; method&lt;/a&gt; which is syntactically similar to &lt;code&gt;getProperty&lt;/code&gt; (same inputs and outputs); the difference is that &lt;code&gt;field&lt;/code&gt; ignores accessors, while &lt;code&gt;getProperty&lt;/code&gt; applies accessors.&lt;/p&gt;
+&lt;p&gt;Given the choice, in this specific case of anonymous structures, I would use &lt;code&gt;field&lt;/code&gt; instead of &lt;code&gt;getProperty&lt;/code&gt; for readability.  This:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;for (var field in Reflect.fields(target)) { Reflect.field(...) }&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Reads more sensibly than:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;If you apply this on something other than an anonymous structure, you should probably opt for &lt;code&gt;getProperty&lt;/code&gt; instead.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
+      	</entry>
+      	<entry>
       		<title>Dynamically Adding and Reloading Assets in Haxeflixel</title>
           <link href="http://ashes999.github.io/learnhaxe/dynamically-adding-and-reloading-assets-in-haxeflixel" />
       		<id>urn:uuid:7831ef7024bdda0da3c935848e7e6c2d</id>
       		<updated>2016-01-20T00:00:00Z</updated>
       		<summary>Dynamically Adding and Reloading Assets in Haxeflixel</summary>
       		<content type="xhtml">
-      			<p>Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)</p><ul><li>First, run your project via <code>lime test neko</code></li><li>Second, add (or modify) your assets to the <code>assets</code> directory.</li><li>Finally, run <code>lime update neko</code>. This copies and re-bundles the assets, in a way that the running process can access them.</li></ul>
-<h2>Internal Details</h2>
-<p>When you run your lime project, it actually creates a copies of the <code>assets</code> directory in <code>export/&lt;os name&gt;/neko/bin</code>. Interestingly, copying your asset files here isn't enough; you still need to run <code>lime update neko</code> to make them accessible to the running game.</p>
-<p>Also, when the assets reload, they become available to calls like <code>getBitmapData</code> et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.</p>
-<p>You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)</p>
+      			&lt;p&gt;Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)&lt;/p&gt;&lt;ul&gt;&lt;li&gt;First, run your project via &lt;code&gt;lime test neko&lt;/code&gt;&lt;/li&gt;&lt;li&gt;Second, add (or modify) your assets to the &lt;code&gt;assets&lt;/code&gt; directory.&lt;/li&gt;&lt;li&gt;Finally, run &lt;code&gt;lime update neko&lt;/code&gt;. This copies and re-bundles the assets, in a way that the running process can access them.&lt;/li&gt;&lt;/ul&gt;
+&lt;h2&gt;Internal Details&lt;/h2&gt;
+&lt;p&gt;When you run your lime project, it actually creates a copies of the &lt;code&gt;assets&lt;/code&gt; directory in &lt;code&gt;export/&amp;lt;os name&amp;gt;/neko/bin&lt;/code&gt;. Interestingly, copying your asset files here isn't enough; you still need to run &lt;code&gt;lime update neko&lt;/code&gt; to make them accessible to the running game.&lt;/p&gt;
+&lt;p&gt;Also, when the assets reload, they become available to calls like &lt;code&gt;getBitmapData&lt;/code&gt; et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.&lt;/p&gt;
+&lt;p&gt;You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
-      		<title>Logitech F310 Support in Haxeflixe</title>
-          <link href="http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixe" />
-      		<id>urn:uuid:63e5e080f7f0cec9300e8936403e142a</id>
+      	</entry>
+      	<entry>
+      		<title>Logitech F310 Support in HaxeFlixel</title>
+          <link href="http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixel" />
+      		<id>urn:uuid:5b3cc642376ebcf61b696095ee76478e</id>
       		<updated>2016-01-12T00:00:00Z</updated>
-      		<summary>Logitech F310 Support in Haxeflixe</summary>
+      		<summary>Logitech F310 Support in HaxeFlixel</summary>
       		<content type="xhtml">
-      			<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
-<p>Right?</p>
-<p>It turns out that the <code>LogitechButtonID</code> class contains values based on the <strong>Cordless Rumblepad 2</strong> controller. If you look <a href="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1440&amp;bih=799&amp;q=rumblepad+2&amp;oq=rumblepad+2&amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA">at screenshots</a>, you'll notice the pads all have numbers on them.</p>
-<p>That's no good -- the F310 uses <code>A</code>, <code>B</code>, <code>X</code>, and <code>Y</code> for buttons, with left and right triggers (<code>LB</code> and <code>RB</code> respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:</p>
-<pre><code>static inline read only FOUR:Int = 11
-Placement equivalent to 'Y' button on the Xbox 360 controller</code></pre>
-<p>That only leaves the D-Pads. The built in enum values don't work; instead, I used <a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39">the four <code>dpad*</code> properties</a> defined on the controller itself; these work perfectly.</p>
-<p>If you want to try this for yourself, it's quite easy:</p>
-<p>1) Run <code>flixel create</code> and then select demo <code>34</code>, <code>GamepadTest</code>.</p>
-<p>2) Replace the contents of the <code>GamepadIDs</code> class with the correct button enum values:</p>
-<pre><code>public static inline var A = LogitechButtonID.TWO;
+      			&lt;p&gt;I recently received a &lt;a href="http://gaming.logitech.com/en-us/product/f310-gamepad"&gt;Logitech F310 gamepad&lt;/a&gt;. Since HaxeFlixel already &lt;a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html"&gt;has gamepad support&lt;/a&gt; (buttons, deadzone, D-Pad, etc.), including support for &lt;a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html"&gt;reading Logitech button input&lt;/a&gt;, I figured it would work out-of-the-box, right?&lt;/p&gt;
+&lt;p&gt;Right?&lt;/p&gt;
+&lt;p&gt;It turns out that the &lt;code&gt;LogitechButtonID&lt;/code&gt; class contains values based on the &lt;strong&gt;Cordless Rumblepad 2&lt;/strong&gt; controller. If you look &lt;a href="https://www.google.com/search?site=&amp;amp;tbm=isch&amp;amp;source=hp&amp;amp;biw=1440&amp;amp;bih=799&amp;amp;q=rumblepad+2&amp;amp;oq=rumblepad+2&amp;amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA"&gt;at screenshots&lt;/a&gt;, you'll notice the pads all have numbers on them.&lt;/p&gt;
+&lt;p&gt;That's no good -- the F310 uses &lt;code&gt;A&lt;/code&gt;, &lt;code&gt;B&lt;/code&gt;, &lt;code&gt;X&lt;/code&gt;, and &lt;code&gt;Y&lt;/code&gt; for buttons, with left and right triggers (&lt;code&gt;LB&lt;/code&gt; and &lt;code&gt;RB&lt;/code&gt; respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;static inline read only FOUR:Int = 11
+Placement equivalent to 'Y' button on the Xbox 360 controller&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That only leaves the D-Pads. The built in enum values don't work; instead, I used &lt;a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39"&gt;the four &lt;code&gt;dpad*&lt;/code&gt; properties&lt;/a&gt; defined on the controller itself; these work perfectly.&lt;/p&gt;
+&lt;p&gt;If you want to try this for yourself, it's quite easy:&lt;/p&gt;
+&lt;p&gt;1) Run &lt;code&gt;flixel create&lt;/code&gt; and then select demo &lt;code&gt;34&lt;/code&gt;, &lt;code&gt;GamepadTest&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;2) Replace the contents of the &lt;code&gt;GamepadIDs&lt;/code&gt; class with the correct button enum values:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public static inline var A = LogitechButtonID.TWO;
 public static inline var B = LogitechButtonID.THREE;
 public static inline var X = LogitechButtonID.ONE;
 public static inline var Y = LogitechButtonID.FOUR;
@@ -92,66 +126,69 @@ public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
 public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
 public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
 public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
-public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;</code></pre>
-<p>3) Modify <code>PlayState.hx</code>'s <code>updateDpad</code> function; the values assigned to the four <code>dpad*</code> variables should be:</p>
-<pre><code>var dpadLeft = _gamePad.dpadLeft;
+public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;3) Modify &lt;code&gt;PlayState.hx&lt;/code&gt;'s &lt;code&gt;updateDpad&lt;/code&gt; function; the values assigned to the four &lt;code&gt;dpad*&lt;/code&gt; variables should be:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var dpadLeft = _gamePad.dpadLeft;
 var dpadRight = _gamePad.dpadRight;
 var dpadUp = _gamePad.dpadUp;
-var dpadDown = _gamePad.dpadDown;</code></pre>
-<p>Run <code>lime test neko</code> and observe that all input displays as expected.</p>
+var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Run &lt;code&gt;lime test neko&lt;/code&gt; and observe that all input displays as expected.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
+      	</entry>
+      	<entry>
       		<title>Appending to a File in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe" />
       		<id>urn:uuid:4b7bda57b940ac159b93bc734983c4cb</id>
       		<updated>2015-12-28T00:00:00Z</updated>
       		<summary>Appending to a File in Haxe</summary>
       		<content type="xhtml">
-      			<p>It's not obvious how to append to a file in Haxe. If you check the <a href="http://api.haxe.org/sys/io/File.html">sys.io.File API</a>, you'll find an <a href="http://api.haxe.org/sys/io/File.html#append">append method</a>, which looks promising, but outputs an instance of <code>FileOutput</code>.</p>
-<p>The <code>FileOutput</code> <a href="http://api.haxe.org/sys/io/FileOutput.html">API</a> looks pretty sparse and unusable, until you click on the <a href="http://api.haxe.org/haxe/io/Output.html">base-class <code>Output</code> API</a>. There, you see promising methods, like <a href="http://api.haxe.org/haxe/io/Output.html#writeString"><code>writeString</code></a>.</p>
-<p>To combine these together, you can append a string to a file like so (don't forget to close the output stream):</p>
-<pre><code>public function append(message:String, fileName:String) {
+      			&lt;p&gt;It's not obvious how to append to a file in Haxe. If you check the &lt;a href="http://api.haxe.org/sys/io/File.html"&gt;sys.io.File API&lt;/a&gt;, you'll find an &lt;a href="http://api.haxe.org/sys/io/File.html#append"&gt;append method&lt;/a&gt;, which looks promising, but outputs an instance of &lt;code&gt;FileOutput&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;FileOutput&lt;/code&gt; &lt;a href="http://api.haxe.org/sys/io/FileOutput.html"&gt;API&lt;/a&gt; looks pretty sparse and unusable, until you click on the &lt;a href="http://api.haxe.org/haxe/io/Output.html"&gt;base-class &lt;code&gt;Output&lt;/code&gt; API&lt;/a&gt;. There, you see promising methods, like &lt;a href="http://api.haxe.org/haxe/io/Output.html#writeString"&gt;&lt;code&gt;writeString&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To combine these together, you can append a string to a file like so (don't forget to close the output stream):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public function append(message:String, fileName:String) {
   var output:FileOutput = sys.io.File.append(fileName, false);
   output.writeString(message);
   output.close()
-}</code></pre>
+}&lt;/code&gt;&lt;/pre&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
-      		<title>Embedding Fonts in Haxeflixel With Flxtext</title>
+      	</entry>
+      	<entry>
+      		<title>Embedding Fonts in HaxeFlixel with FlxText</title>
           <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
-      		<id>urn:uuid:37b0dd21a6d89a19e35f072a3895808d</id>
+      		<id>urn:uuid:e1c872bc8e22d9121f7396c6b441aef0</id>
       		<updated>2015-12-22T00:00:00Z</updated>
-      		<summary>Embedding Fonts in Haxeflixel With Flxtext</summary>
+      		<summary>Embedding Fonts in HaxeFlixel with FlxText</summary>
       		<content type="xhtml">
-      			<p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
-<p>The third method strikes me as the most maintainable, because it's <strong>immediately obvious which font you're using</strong>, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to <code>Assets</code>? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).</p>
-<p>The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.</p>
-<p><a href="https://www.google.com/fonts">Google Fonts</a> provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.</p>
+      			&lt;p&gt;The &lt;a href="api.haxeflixel.com/flixel/text/FlxText.html"&gt;FlxText class&lt;/a&gt; provides three ways to set the font:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;By setting the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font"&gt;font field&lt;/a&gt; to a font name (eg. &lt;code&gt;Times New Roman&lt;/code&gt;). This works with embedded fonts (TTF file is in &lt;code&gt;Assets&lt;/code&gt; and included in the final binaries)&lt;/li&gt;&lt;li&gt;By setting the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont"&gt;systemFont field&lt;/a&gt; to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of &lt;a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm"&gt;web safe fonts&lt;/a&gt; which you can try.&lt;/li&gt;&lt;li&gt;By calling the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat"&gt;setFormat method&lt;/a&gt;. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. &lt;code&gt;setFormat("assets/MyCustomFont.ttf", ...)&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;The third method strikes me as the most maintainable, because it's &lt;strong&gt;immediately obvious which font you're using&lt;/strong&gt;, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to &lt;code&gt;Assets&lt;/code&gt;? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).&lt;/p&gt;
+&lt;p&gt;The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.google.com/fonts"&gt;Google Fonts&lt;/a&gt; provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
+      	</entry>
+      	<entry>
       		<title>Properties and Dynamic</title>
           <link href="http://ashes999.github.io/learnhaxe/properties-and-dynamic" />
       		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
       		<updated>2015-12-10T00:00:00Z</updated>
       		<summary>Properties and Dynamic</summary>
       		<content type="xhtml">
-      			<p>While reading through the <a href="http://haxe.org/manual/">Haxe manual</a> (which, by the way, is a good reference, but not a good learning resource), I stumbled upon <a href="http://haxe.org/manual/class-field-property-type-system-impact.html">this page about properties</a>:</p>
-<blockquote>
-<p>The presence of properties has several consequences on the type system. Most importantly, it is necessary to understand that properties are a compile-time feature and thus <strong>require the types to be known.</strong> If we were to assign a class with properties to <code>Dynamic</code>, field access would <strong>not</strong> respect accessor methods. Likewise, access restrictions no longer apply and all access is virtually public.</p></blockquote>
-<p>(If you don't understand properties yet, go and read <a href="http://haxe.org/manual/class-field-property.html">this</a> and <a href="http://haxe.org/manual/class-field-property-common-combinations.html">this</a> first.) This example demonstrates how this works:</p>
-<pre><code>class Test {
+      			&lt;p&gt;While reading through the &lt;a href="http://haxe.org/manual/"&gt;Haxe manual&lt;/a&gt; (which, by the way, is a good reference, but not a good learning resource), I stumbled upon &lt;a href="http://haxe.org/manual/class-field-property-type-system-impact.html"&gt;this page about properties&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The presence of properties has several consequences on the type system. Most importantly, it is necessary to understand that properties are a compile-time feature and thus &lt;strong&gt;require the types to be known.&lt;/strong&gt; If we were to assign a class with properties to &lt;code&gt;Dynamic&lt;/code&gt;, field access would &lt;strong&gt;not&lt;/strong&gt; respect accessor methods. Likewise, access restrictions no longer apply and all access is virtually public.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;(If you don't understand properties yet, go and read &lt;a href="http://haxe.org/manual/class-field-property.html"&gt;this&lt;/a&gt; and &lt;a href="http://haxe.org/manual/class-field-property-common-combinations.html"&gt;this&lt;/a&gt; first.) This example demonstrates how this works:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class Test {
     static function main() {
         var p = new Props();
         p.x = 35;
@@ -176,98 +213,88 @@ class Props {
     {
         return -2;
     }
-}</code></pre>
-<p>(You can also try <a href="http://try.haxe.org/#CA2Cf">this example online</a>.) The output is:</p>
-<pre><code>16:42:46:878   p.x is -1
-16:42:46:878   p2.x is 35</code></pre>
-<p>Because the Haxe runtime knows that <code>p</code> is an instance of <code>Props</code>, it can apply the getter/setter functions. Because <code>p2</code> is typed as <code>Dynamic</code>, the runtime doesn't respect the field access. (In this case, the runtime treats the field like a regular field or public variable.)</p>
-<p>Use <code>Dynamic</code> judiciously, and tread carefully if you use it on instances of classes that have properties. If you rely on your getter/setter to set up certain invariants about your properties, you  may find them no longer respected.</p>
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(You can also try &lt;a href="http://try.haxe.org/#CA2Cf"&gt;this example online&lt;/a&gt;.) The output is:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;16:42:46:878   p.x is -1
+16:42:46:878   p2.x is 35&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because the Haxe runtime knows that &lt;code&gt;p&lt;/code&gt; is an instance of &lt;code&gt;Props&lt;/code&gt;, it can apply the getter/setter functions. Because &lt;code&gt;p2&lt;/code&gt; is typed as &lt;code&gt;Dynamic&lt;/code&gt;, the runtime doesn't respect the field access. (In this case, the runtime treats the field like a regular field or public variable.)&lt;/p&gt;
+&lt;p&gt;Use &lt;code&gt;Dynamic&lt;/code&gt; judiciously, and tread carefully if you use it on instances of classes that have properties. If you rely on your getter/setter to set up certain invariants about your properties, you  may find them no longer respected.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
-      		<title>Filestat Ctime on Unix</title>
+      	</entry>
+      	<entry>
+      		<title>FileStat.ctime on Unix</title>
           <link href="http://ashes999.github.io/learnhaxe/filestat-ctime-on-unix" />
-      		<id>urn:uuid:fcb6cf468312b74675ed31c2cc1f756c</id>
+      		<id>urn:uuid:832822d4e3e67ec64d48b7ca440a3f9f</id>
       		<updated>2015-12-01T00:00:00Z</updated>
-      		<summary>Filestat Ctime on Unix</summary>
+      		<summary>FileStat.ctime on Unix</summary>
       		<content type="xhtml">
-      			<p>The <a href="http://api.haxe.org/sys/FileStat.html#ctime">API docs for sys.FileStat</a> state that <code>ctime</code> returns <code>the creation time for the file (not all filesystems support this)</code>.</p>
-<p>This returns correctly on Windows, but not on Linux (I tested with both <code>cpp</code> and <code>neko</code> targets).</p>
-<p>Windows stores the file creation time. On Linux, the story is more complicated. <code>ctime</code> is a C++ API. Windows stores the file creation time.  On Linux, according to <a href="http://unix.stackexchange.com/a/20464/64805">this Unix SE question</a> (which is mostly derived from <code>man</code> pages):</p>
-<blockquote>
-<p>Most unices do not have a concept of file creation time. [...]
-Note that <strong>the ctime</strong> (<code>ls -lc</code>) <strong>is not the file creation time</strong>, it's the <a href="http://en.wikipedia.org/wiki/Inode">inode</a> change time. The inode change time is updated whenever anything about the file changes (contents or metadata) except that the ctime isn't updated when the file is merely read (even if the atime is updated). In particular, the ctime is always more recent than the mtime (file content modification time) unless the mtime has been explicitly set to a date in the future.</p></blockquote>
-<p>I couldn't trace the Haxe source all the way down the stack, but I believe it does access the Unix <code>ctime</code> on Unix. This leaves us in a bind: how do we know the file creation time on Unix?</p>
-<p>One option I came up with is to use <a href="http://api.haxe.org/sys/io/Process.html">sys.io.Process</a> to fork a process, execute a command like <code>stat</code> to get the file time, and parse the output. This is possible, but on Ubuntu 14.04, I tested this, and the file birth time is unknown (the filesystem doesn't store it). This is also expensive, and the results should be cached.</p>
-<p>If this is not possible or performant, the other option may be to store the time somewhere yourself. I ran into this while creating <a href="http://github.com/ashes999/butterfly">Butterfly</a>, a static blog generator which uses file time to guess the blog post publish date. Jekyll (a similar, Ruby based appliaction) requires users enter the post time in the filename.</p>
-<p>There may be other solutions, but I don't know of any.</p>
+      			&lt;p&gt;The &lt;a href="http://api.haxe.org/sys/FileStat.html#ctime"&gt;API docs for sys.FileStat&lt;/a&gt; state that &lt;code&gt;ctime&lt;/code&gt; returns &lt;code&gt;the creation time for the file (not all filesystems support this)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This returns correctly on Windows, but not on Linux (I tested with both &lt;code&gt;cpp&lt;/code&gt; and &lt;code&gt;neko&lt;/code&gt; targets).&lt;/p&gt;
+&lt;p&gt;Windows stores the file creation time. On Linux, the story is more complicated. &lt;code&gt;ctime&lt;/code&gt; is a C++ API. Windows stores the file creation time.  On Linux, according to &lt;a href="http://unix.stackexchange.com/a/20464/64805"&gt;this Unix SE question&lt;/a&gt; (which is mostly derived from &lt;code&gt;man&lt;/code&gt; pages):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Most unices do not have a concept of file creation time. [...]
+Note that &lt;strong&gt;the ctime&lt;/strong&gt; (&lt;code&gt;ls -lc&lt;/code&gt;) &lt;strong&gt;is not the file creation time&lt;/strong&gt;, it's the &lt;a href="http://en.wikipedia.org/wiki/Inode"&gt;inode&lt;/a&gt; change time. The inode change time is updated whenever anything about the file changes (contents or metadata) except that the ctime isn't updated when the file is merely read (even if the atime is updated). In particular, the ctime is always more recent than the mtime (file content modification time) unless the mtime has been explicitly set to a date in the future.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;I couldn't trace the Haxe source all the way down the stack, but I believe it does access the Unix &lt;code&gt;ctime&lt;/code&gt; on Unix. This leaves us in a bind: how do we know the file creation time on Unix?&lt;/p&gt;
+&lt;p&gt;One option I came up with is to use &lt;a href="http://api.haxe.org/sys/io/Process.html"&gt;sys.io.Process&lt;/a&gt; to fork a process, execute a command like &lt;code&gt;stat&lt;/code&gt; to get the file time, and parse the output. This is possible, but on Ubuntu 14.04, I tested this, and the file birth time is unknown (the filesystem doesn't store it). This is also expensive, and the results should be cached.&lt;/p&gt;
+&lt;p&gt;If this is not possible or performant, the other option may be to store the time somewhere yourself. I ran into this while creating &lt;a href="http://github.com/ashes999/butterfly"&gt;Butterfly&lt;/a&gt;, a static blog generator which uses file time to guess the blog post publish date. Jekyll (a similar, Ruby based appliaction) requires users enter the post time in the filename.&lt;/p&gt;
+&lt;p&gt;There may be other solutions, but I don't know of any.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
+      	</entry>
+      	<entry>
       		<title>Using a Haxelib in Haxe</title>
           <link href="http://ashes999.github.io/learnhaxe/using-a-haxelib-in-haxe" />
       		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
       		<updated>2015-11-29T00:00:00Z</updated>
       		<summary>Using a Haxelib in Haxe</summary>
       		<content type="xhtml">
-      			<p>Haxe includes a built-in package manager, <a href="http://haxe.org/manual/haxelib.html">haxelib</a>. You can install, upgrade, and manage libraries <a href="http://lib.haxe.org/">via the command-line</a>.</p>
-<p>Once you install a library through haxelib, you need to tell the compiler to include it when you compile. As mentioned <a href="http://haxe.org/manual/haxelib-using-haxe.html">on this page</a>, you specify the library via the command-line:</p>
-<p><code>haxe -lib &lt;libName&gt; ...</code></p>
-<p>This includes the library code. Don't forget to add the relevant <code>import ...</code> statements to include library classes (if the library uses packages).</p>
-<p>To include multiple libraries, just add more <code>-lib &lt;foo&gt;</code> arguments.</p>
+      			&lt;p&gt;Haxe includes a built-in package manager, &lt;a href="http://haxe.org/manual/haxelib.html"&gt;haxelib&lt;/a&gt;. You can install, upgrade, and manage libraries &lt;a href="http://lib.haxe.org/"&gt;via the command-line&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Once you install a library through haxelib, you need to tell the compiler to include it when you compile. As mentioned &lt;a href="http://haxe.org/manual/haxelib-using-haxe.html"&gt;on this page&lt;/a&gt;, you specify the library via the command-line:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;haxe -lib &amp;lt;libName&amp;gt; ...&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;This includes the library code. Don't forget to add the relevant &lt;code&gt;import ...&lt;/code&gt; statements to include library classes (if the library uses packages).&lt;/p&gt;
+&lt;p&gt;To include multiple libraries, just add more &lt;code&gt;-lib &amp;lt;foo&amp;gt;&lt;/code&gt; arguments.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
-      		<title>Trim Replace and More Haxe String Extensions</title>
-          <link href="http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions" />
-      		<id>urn:uuid:36b26814652785ed97e62def60fc2be5</id>
+      	</entry>
+      	<entry>
+      		<title>Recursively Delete a Directory in Haxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
+      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
       		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Trim Replace and More Haxe String Extensions</summary>
+      		<summary>Recursively Delete a Directory in Haxe</summary>
       		<content type="xhtml">
-      			<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
-<pre><code>import StringTools;</code></pre>
-<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
-<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+      			&lt;p&gt;Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the &lt;code&gt;sys.FileSystem&lt;/code&gt; class &lt;a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory"&gt;includes a deleteDirectory method&lt;/a&gt;, it throws an exception if the directory contains subdirectories or files.&lt;/p&gt;
+&lt;p&gt;This code recursively deletes directories and their contents:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;private function deleteDirRecursively(path:String) : Void
+{
+  if (sys.FileSystem.exists(path) &amp;amp;&amp;amp; sys.FileSystem.isDirectory(path))
+  {
+    var entries = sys.FileSystem.readDirectory(path);
+    for (entry in entries) {
+      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
+        deleteDirRecursively(path + '/' + entry);
+        sys.FileSystem.deleteDirectory(path + '/' + entry);
+      } else {
+        sys.FileSystem.deleteFile(path + '/' + entry);
+      }
+    }
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
       			<email>ashes999@yahoo.com</email>
       		</author>
-      	</entry><entry>
-      		<title>Sorting an Array of Strings in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/sorting-an-array-of-strings-in-haxe" />
-      		<id>urn:uuid:0999daa431699b363238889657b7233d</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Sorting an Array of Strings in Haxe</summary>
-      		<content type="xhtml">
-      			<p>To sort an array of strings alphabetically, you can use the <code>Array.Sort</code> method (see: <a href="http://api.haxe.org/Array.html#sort">API</a>). It takes a function parameter <code>f(a, b)</code> that returns a negative integer if <code>a</code> is greater, zero if <code>a</code> and <code>b</code> are equal, and a positive integer if <code>b</code> is greater.</p>
-<p>To sort the array, you can use this method:</p>
-<pre><code>someArray.sort(function(a:String, b:String):Int {
-  a = a.toUpperCase();
-  b = b.toUpperCase();
-
-  if (a &lt; b) {
-    return -1;
-  }
-  else if (a &gt; b) {
-    return 1;
-  } else {
-    return 0;
-  }
-});</code></pre>
-<p>Alternatively, you can create the function <code>sortAlphabetically(a:String, b:String):Int</code> and call <code>someArray.sort(sortAlphabetically)</code>.</p>
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry></feed>
+      	</entry>
+      	</feed>

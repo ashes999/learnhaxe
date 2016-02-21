@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Animated GIFs in HaxeFlixel | Learn Haxe</title>
+    <title>Hue Rotating Sprites in HaxeFlixel | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,40 +59,35 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Animated GIFs in HaxeFlixel</h2>
+            <h2 class="blog-post-title">Hue Rotating Sprites in HaxeFlixel</h2>
             <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
-<p class="blog-post-meta">Posted 2015-01-10</p>
-<p>Why would you want to display animated GIFs in a HaxeFlixel game?</p>
-<p>Simple: every mobile device has a maximum texture size; you can see this on the Haxe <a href="http://haxeflixel.com/documentation/mobile-targets/">mobile targets</a> page. The smallest maximum is <code>1024×1024</code>.</p>
-<p>What if you want a large animated background of that size, or of a similar size? You can’t even use a spritesheet, because it would run over the maximum texture size.</p>
-<p>Enter animated GIFs. Since GIFs generally use diffs for pixel changes from frame to frame, they’re small, cheap, fast, and high-quality (if you stick to the 256-colour limit).</p>
-<h2>YAGP + HaxeFlixel = GIFs</h2>
-<p>HaxeFlixel doesn’t currently natively support GIFs. Instead, I looked to third-party libraries. <code>haxe-gif</code> froze on Flash (which is a game breaker for me), and instead I ended up using <a href="https://github.com/Yanrishatum/yagp">yagp</a>. From their <code>README.md</code>:</p>
-<blockquote>
-<p>This library provides simple API to parse animated GIF images. In difference between haxe-gif library, this library successfully parses most of the Gif images (exclude too big images).</p></blockquote>
-<p>The library must be installed through <code>haxelib</code> with the GitHub repository, as it’s not on the central repository yet.</p>
-<p>It takes a few lines to get a GIF set up:</p>
-<pre><code>// Parsing from openfl.utils.ByteArray:
-var gif:Gif = GifDecoder.parseByteArray(Assets.getBytes(“gif_file.gif”));
-var gif:Gif = GifDecoder.parseText(text);
+<p class="blog-post-meta">Posted 2016-02-21</p>
+<p>I began a quest to answer a question: can I hue rotate sprites, within HaxeFlixel itself?  The answer is <em>yes</em>, although it requires a non-trivial amount of work.</p>
+<p>The first clue is that the HaxeFlixel <code>FlxSprite</code> class contains a <code>pixels</code> field, which contains <code>BitmapData</code>; a list of actual pixel values (colours in the format <code>0xRRGGBB</code>) which you can access (and manipulate). My first try included changing these via <a href="http://stackoverflow.com/a/8509802/210780">this formula</a>; the results looked strange.</p>
+<p>I abandoned that route and decided to use <a href="http://stackoverflow.com/a/8510751/210780">this method</a>, which uses a matrix to multiply the RGB component values based on the hue rotation.</p>
+<p><code>BitmapData</code> has an <a href="http://api.haxeflixel.com/flash/display/BitmapData.html#applyFilter">applyFilter method</a>. For the final <code>filter</code> parameter, which lacks documentation, you can pass in an instance of <code>ColorMatrixFilter</code>.</p>
+<p><code>ColorMatrixFilter</code> doesn't appear in the HaxeFlixel docs (it's <a href="http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/filters/ColorMatrixFilter.html">from Flash</a>). You pass in the values for a 5x4 matrix; the first three columns of the first three rows take in RGB values.</p>
+<p>I translated and passed in the values provided in the Stack Overflow answer above; it looks like this:</p>
+<pre><code>var hueRotation:Int = 0; // degrees. Tested with values from 0...359
+// cosA and sinA are in radians
+var cosA:Float = Math.cos(hueRotation * Math.PI / 180);
+var sinA:Float = Math.sin(hueRotation * Math.PI / 180);
 
-// Simple player example:
-var player:GifPlayer = new GifPlayer(gif);
-// openfl.display.Bitmap wrapper for GifPlayer.
-// GifPlayer provides only BitmapData for further displaying and must be updated manually.
-var wrapper:GifPlayerWrapper = new GifPlayerWrapper(player);
-addChild(wrapper);</code></pre>
-<p>I admittedly don’t understand why I need a <code>GifPlayer</code> and <code>GifPlayerWrapper</code>. The library works quite well, and performs quite well, even on mobile. Integrating with HaxeFlixel only required two other things:</p><ol><li>Update <code>Project.xml</code> and add <code></code>. This will tell <code>lime</code> to process your <code>gif</code> files as binary, so you can load them via <code>Assets.getBytes</code>.</li><li>Add the sprite to the stage via <code>FlxG.addChildBelowMouse(wrapper);</code></li></ol>
-<h2>Caveats</h2>
-<p>Yes, it works, but how well? Here are some issues I ran into:</p><ul><li>Loading and displaying the GIF is quite slow (on the order of a few seconds).</li><li>The GIF plays smoothly, but leaks memory; even if you change states, some memory leaks</li><li>The GIF library isn’t part of HaxeFlixel, so you need to scale it up or down appropriately (<code>GifPlayerWrapper</code> has <code>scaleX</code> and <code>scaleY</code> properties you can use)</li></ul>
-<p>Overall, it works quite well, and I will definitely look into this later if and when I need large animations.</p>
+sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new ColorMatrixFilter(
+  [cosA + (1.0 - cosA) / 3.0, 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, 0, 0,
+  1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0*(1.0 - cosA), 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 0, 0,
+  1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0 * (1.0 - cosA), 0, 0,
+  0, 0, 0, 1, 0])); // identity row</code></pre>
+<p>The output worked, except for three things:</p><ul><li>I used several copies of the same image, and every copy looked the same. It turns out that HaxeFlixel shares <code>BitmapData</code> across instances of the same sprite; I bypassed this by setting <code>sprite.pixels = sprite.pixels.clone()</code>.</li><li>The effect didn't apply on Flash. For Flash, you need to add <code>sprite.dirty = true</code> (possibly in a <code>#if flash</code> ... <code>#end</code> block).</li><li>The colours are slightly off. If you rotate a simple block of colours (red, green, blue, and white), you see that the colours appear a bit darker than they should be (compare it to what you get in GIMP).</li></ul>
+<p>The result looks great.  And the performance? In my case, I intended to hue-rotate sprites once (and keep them at that hue forever). Manipulating the sprite's <code>.pixels</code> directly is the same as loadimg a graphic that already has the transformation -- there's no additional cost in each frame if we only do this once when the sprite is created. (Thanks to <a href="https://github.com/gama11">Gama11</a> for pointing this out.)</p>
+<p>For the time being, you can view the complete HaxeFlixel proof-of-concept project <a href="https://github.com/ashes999/haxeflixel-hue-rotation">here, on GitHub</a>.</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/animated-gifs-in-haxeflixel"; // Absolute page URL
-  this.page.identifier = "8076d551e1181e1b76b8e376b849d9794daaa498"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/hue-rotating-sprites-in-haxeflixel"; // Absolute page URL
+  this.page.identifier = "73110e5375b496f64ac189281abe7cbfa1660ff6"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE

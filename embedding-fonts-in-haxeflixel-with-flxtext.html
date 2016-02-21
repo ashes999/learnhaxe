@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Embedding Fonts in Haxeflixel With Flxtext | Learn Haxe</title>
+    <title>Embedding Fonts in HaxeFlixel with FlxText | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,7 +59,7 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Embedding Fonts in Haxeflixel With Flxtext</h2>
+            <h2 class="blog-post-title">Embedding Fonts in HaxeFlixel with FlxText</h2>
             <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
 <p class="blog-post-meta">Posted 2015-12-22</p>
 <p>The <a href="api.haxeflixel.com/flixel/text/FlxText.html">FlxText class</a> provides three ways to set the font:</p><ul><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font">font field</a> to a font name (eg. <code>Times New Roman</code>). This works with embedded fonts (TTF file is in <code>Assets</code> and included in the final binaries)</li><li>By setting the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont">systemFont field</a> to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of <a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm">web safe fonts</a> which you can try.</li><li>By calling the <a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat">setFormat method</a>. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. <code>setFormat("assets/MyCustomFont.ttf", ...)</code></li></ul>
