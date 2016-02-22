@@ -28,11 +28,17 @@ sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new Co
   0, 0, 0, 1, 0])); // identity row
 ```
 
-The output worked, except for three things:
+The output worked:
+
+![Hue Rotation Sample Image](content/images/hue-rotation.png)
+
+Three three things didn't work as expected:
 
 - I used several copies of the same image, and every copy looked the same. It turns out that HaxeFlixel shares `BitmapData` across instances of the same sprite; I bypassed this by setting `sprite.pixels = sprite.pixels.clone()`.
 - The effect didn't apply on Flash. For Flash, you need to add `sprite.dirty = true` (possibly in a `#if flash` ... `#end` block).
-- The colours are slightly off. If you rotate a simple block of colours (red, green, blue, and white), you see that the colours appear a bit darker than they should be (compare it to what you get in GIMP).
+- The colours are slightly off. If you rotate a simple block of colours (red, green, blue, and white), you see that the colours appear a bit darker than they should be (compare it to what you get in GIMP):
+
+![Off-colors](content/images/color-skew.png)
 
 The result looks great.  And the performance? In my case, I intended to hue-rotate sprites once (and keep them at that hue forever). Manipulating the sprite's `.pixels` directly is the same as loadimg a graphic that already has the transformation -- there's no additional cost in each frame if we only do this once when the sprite is created. (Thanks to [Gama11](https://github.com/gama11) for pointing this out.)
 
