@@ -29,7 +29,7 @@
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <butterfly-pages link-attributes="class='blog-nav-item'" />
+          <butterfly-pages link-class="blog-nav-item" />
         </nav>
       </div>
     </div>
@@ -47,6 +47,7 @@
 
           <div class="blog-post">
             <h2 class="blog-post-title"><butterfly-title /></h2>
+            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
             <butterfly-content />
             <butterfly-comments />
           </div>
