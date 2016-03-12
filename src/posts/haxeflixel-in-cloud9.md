@@ -6,7 +6,7 @@ meta-publishedOn: 2016-03-12
 
 It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.
 
-- For Haxe, [download](http://haxe.org/download/) and run the Linux 64-bit binaries.
+- For Haxe, [download](http://haxe.org/download/) and run the Linux 64-bit binaries. (Copy the `tar` URL, eg. `http://haxe.org/download/file/3.2.1/haxe-3.2.1-linux64.tar.gz`, and grab it via `curl <url>`)
 - For OpenFL, run `haxelib install openfl`.
 - For HaxeFlixel, run `haxelib install flixel`. (Don't forget to install and setup `flixel-tools` too.)
 
