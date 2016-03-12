@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Trim, Replace, and More Haxe String Extensions | Learn Haxe</title>
+    <title>Haxeflixel in Cloud9 | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,20 +59,20 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Trim, Replace, and More Haxe String Extensions</h2>
-            <p class="blog-post-meta">Posted on 2015-11-28</p>
-            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
-<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
-<pre><code>import StringTools;</code></pre>
-<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
-<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+            <h2 class="blog-post-title">Haxeflixel in Cloud9</h2>
+            <p class="blog-post-meta">Posted on 2016-03-12</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a>, <a href="tag-OpenFL.html">OpenFL</a>, <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p><a href="https://c9.io/">Cloud9</a> provides remote, cloud-based development enviornments. Under the hood, they provision you a Linux VM with Docker. By default, they provide pre-build environments for Rails, C++, PHP, and other enviornments. But not Haxe.</p>
+<p>It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.</p><ul><li>For Haxe, <a href="http://haxe.org/download/">download</a> and run the Linux 64-bit binaries.</li><li>For OpenFL, run <code>haxelib install openfl</code>.</li><li>For HaxeFlixel, run <code>haxelib install flixel</code>. (Don't forget to install and setup <code>flixel-tools</code> too.)</li></ul>
+<p>That's it! You can build your Haxe apps, or your OpenFL/HaxeFlixel games in Flash. To view them:</p><ul><li>Find the binary in the workspace view</li><li>Right-click and pick Preview</li><li>Click the square/arrows icon to open in a new tab</li></ul>
+<p>This opens the SWF in a new window/tab where it runs properly.</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions"; // Absolute page URL
-  this.page.identifier = "65efb8f2ee7e53b22f379b4b9c71f2629bf7baf5"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/haxeflixel-in-cloud9"; // Absolute page URL
+  this.page.identifier = "0515f44276a8a55ed37895e362623a3dab6d175e"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE

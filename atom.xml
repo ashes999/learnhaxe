@@ -3,7 +3,24 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-02-21T00:00:00Z</updated><entry>
+  	    <updated>2016-03-12T00:00:00Z</updated><entry>
+      		<title>Haxeflixel in Cloud9</title>
+          <link href="http://ashes999.github.io/learnhaxe/haxeflixel-in-cloud9" />
+      		<id>urn:uuid:3741e7b78126e1586fbca302ff187643</id>
+      		<updated>2016-03-12T00:00:00Z</updated>
+      		<summary>Haxeflixel in Cloud9</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;&lt;a href="https://c9.io/"&gt;Cloud9&lt;/a&gt; provides remote, cloud-based development enviornments. Under the hood, they provision you a Linux VM with Docker. By default, they provide pre-build environments for Rails, C++, PHP, and other enviornments. But not Haxe.&lt;/p&gt;
+&lt;p&gt;It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;For Haxe, &lt;a href="http://haxe.org/download/"&gt;download&lt;/a&gt; and run the Linux 64-bit binaries.&lt;/li&gt;&lt;li&gt;For OpenFL, run &lt;code&gt;haxelib install openfl&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;For HaxeFlixel, run &lt;code&gt;haxelib install flixel&lt;/code&gt;. (Don't forget to install and setup &lt;code&gt;flixel-tools&lt;/code&gt; too.)&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;That's it! You can build your Haxe apps, or your OpenFL/HaxeFlixel games in Flash. To view them:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Find the binary in the workspace view&lt;/li&gt;&lt;li&gt;Right-click and pick Preview&lt;/li&gt;&lt;li&gt;Click the square/arrows icon to open in a new tab&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;This opens the SWF in a new window/tab where it runs properly.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Hue Rotating Sprites in HaxeFlixel</title>
           <link href="http://ashes999.github.io/learnhaxe/hue-rotating-sprites-in-haxeflixel" />
       		<id>urn:uuid:eb29021aa54bd67a78caeea77a433e49</id>
@@ -263,37 +280,6 @@ Note that &lt;strong&gt;the ctime&lt;/strong&gt; (&lt;code&gt;ls -lc&lt;/code&gt
 &lt;p&gt;&lt;code&gt;haxe -lib &amp;lt;libName&amp;gt; ...&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;This includes the library code. Don't forget to add the relevant &lt;code&gt;import ...&lt;/code&gt; statements to include library classes (if the library uses packages).&lt;/p&gt;
 &lt;p&gt;To include multiple libraries, just add more &lt;code&gt;-lib &amp;lt;foo&amp;gt;&lt;/code&gt; arguments.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Recursively Delete a Directory in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
-      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Recursively Delete a Directory in Haxe</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the &lt;code&gt;sys.FileSystem&lt;/code&gt; class &lt;a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory"&gt;includes a deleteDirectory method&lt;/a&gt;, it throws an exception if the directory contains subdirectories or files.&lt;/p&gt;
-&lt;p&gt;This code recursively deletes directories and their contents:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;private function deleteDirRecursively(path:String) : Void
-{
-  if (sys.FileSystem.exists(path) &amp;amp;&amp;amp; sys.FileSystem.isDirectory(path))
-  {
-    var entries = sys.FileSystem.readDirectory(path);
-    for (entry in entries) {
-      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
-        deleteDirRecursively(path + '/' + entry);
-        sys.FileSystem.deleteDirectory(path + '/' + entry);
-      } else {
-        sys.FileSystem.deleteFile(path + '/' + entry);
-      }
-    }
-  }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
