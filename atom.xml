@@ -3,7 +3,39 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-02-21T00:00:00Z</updated><entry>
+  	    <updated>2016-03-30T00:00:00Z</updated><entry>
+      		<title>Deserializing Class Instances From Json</title>
+          <link href="http://ashes999.github.io/learnhaxe/deserializing-class-instances-from-json" />
+      		<id>urn:uuid:bb1689ef576deb85044a94ac76e98bf6</id>
+      		<updated>2016-03-30T00:00:00Z</updated>
+      		<summary>Deserializing Class Instances From Json</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;If you google for how to deserialize some JSON into a Haxe class, you will most likely find &lt;a href="http://haxe.org/manual/std-Json-parsing.html"&gt;this API page on JSON parsing&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;While this method allows you to deserialize JSON into a struct, it only works with a &lt;code&gt;typedef&lt;/code&gt;. It won't work with an actual class (something that has methods).&lt;/p&gt;
+&lt;p&gt;The good news is that it is possible to deserialize to a class instance; the bad news is that it relies on reflection. The snippet below uses reflection to iterate over all fields in the &lt;code&gt;dynamic&lt;/code&gt; instance returned by &lt;code&gt;haxe.json.parse&lt;/code&gt;, and reflectively sets the values on &lt;code&gt;myInstance&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var raw = haxe.Json.parse(sys.io.File.getContent(configFile));
+var myInstance:WhateverClassYouWant = new WhateverClassYouWant();
+
+var structsFields:Array&amp;lt;String&amp;gt; = Reflect.fields(raw);
+var classFields:Array&amp;lt;String&amp;gt; = Type.getInstanceFields(Type.getClass(myInstance));
+
+for (field in structsFields)
+{
+    if (classFields.indexOf(field) &amp;gt; -1)
+    {
+        var value:Dynamic = Reflect.field(raw, field);
+        Reflect.setField(myInstance, field, value);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A couple of caveats to pay attention to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;We only set the field on &lt;code&gt;myInstance&lt;/code&gt; if it exists. This is safer than trusting the JSON blindly.&lt;/li&gt;&lt;li&gt;Any fields that aren't in &lt;code&gt;raw&lt;/code&gt; (or in the JSON) won't be set, and will have their default values.&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;As it stands, this solution can work pretty well as a class deserializer. You can use a similar method to reflect and serialize a class to JSON.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Hue Rotating Sprites in HaxeFlixel</title>
           <link href="http://ashes999.github.io/learnhaxe/hue-rotating-sprites-in-haxeflixel" />
       		<id>urn:uuid:eb29021aa54bd67a78caeea77a433e49</id>
@@ -263,37 +295,6 @@ Note that &lt;strong&gt;the ctime&lt;/strong&gt; (&lt;code&gt;ls -lc&lt;/code&gt
 &lt;p&gt;&lt;code&gt;haxe -lib &amp;lt;libName&amp;gt; ...&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;This includes the library code. Don't forget to add the relevant &lt;code&gt;import ...&lt;/code&gt; statements to include library classes (if the library uses packages).&lt;/p&gt;
 &lt;p&gt;To include multiple libraries, just add more &lt;code&gt;-lib &amp;lt;foo&amp;gt;&lt;/code&gt; arguments.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Recursively Delete a Directory in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/recursively-delete-a-directory-in-haxe" />
-      		<id>urn:uuid:23277b25e7c3ac0e5be838bc9596f7af</id>
-      		<updated>2015-11-28T00:00:00Z</updated>
-      		<summary>Recursively Delete a Directory in Haxe</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;Haxe doesn't include any built-in APIs to delete a directory recursively (including all subdirectories and files). Although the &lt;code&gt;sys.FileSystem&lt;/code&gt; class &lt;a href="http://api.haxe.org/sys/FileSystem.html#deleteDirectory"&gt;includes a deleteDirectory method&lt;/a&gt;, it throws an exception if the directory contains subdirectories or files.&lt;/p&gt;
-&lt;p&gt;This code recursively deletes directories and their contents:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;private function deleteDirRecursively(path:String) : Void
-{
-  if (sys.FileSystem.exists(path) &amp;amp;&amp;amp; sys.FileSystem.isDirectory(path))
-  {
-    var entries = sys.FileSystem.readDirectory(path);
-    for (entry in entries) {
-      if (sys.FileSystem.isDirectory(path + '/' + entry)) {
-        deleteDirRecursively(path + '/' + entry);
-        sys.FileSystem.deleteDirectory(path + '/' + entry);
-      } else {
-        sys.FileSystem.deleteFile(path + '/' + entry);
-      }
-    }
-  }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It works by deleting all files in a directory, and by recursively deleting subdirectories and removing them if they have contents.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>

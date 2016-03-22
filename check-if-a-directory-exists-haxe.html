@@ -42,7 +42,7 @@ if (window.location.href.indexOf('file://') == -1) {
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <a class='blog-nav-item' href="about.html">About</a>
+          <a class="blog-nav-item" href="about.html">About</a>
         </nav>
       </div>
     </div>
@@ -60,8 +60,8 @@ if (window.location.href.indexOf('file://') == -1) {
 
           <div class="blog-post">
             <h2 class="blog-post-title">Check if a Directory Exists Haxe</h2>
+            <p class="blog-post-meta">Posted on 2015-11-27</p>
             <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
-<p class="blog-post-meta">Posted 2015-11-27</p>
 <p>To check if a directory exists, you can use <code>sys.FileSystem.exists(path)</code>. This returns true if a file <em>or directory</em> exists at the specified path.</p>
 <p>To be sure it's a directory, you can also include <code>sys.FileSystem.isDirectory(path)</code>. You can combine them together:</p>
 <pre><code>if (sys.FileSystem.exists(path) &amp;&amp; sys.FileSystem.isDirectory(path)) {

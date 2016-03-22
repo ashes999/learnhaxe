@@ -42,7 +42,7 @@ if (window.location.href.indexOf('file://') == -1) {
       <div class="container">
         <nav class="blog-nav">
           <a class="blog-nav-item" href="index.html">Home</a>
-          <a class='blog-nav-item' href="about.html">About</a>
+          <a class="blog-nav-item" href="about.html">About</a>
         </nav>
       </div>
     </div>
@@ -60,8 +60,8 @@ if (window.location.href.indexOf('file://') == -1) {
 
           <div class="blog-post">
             <h2 class="blog-post-title">Properties and Dynamic</h2>
+            <p class="blog-post-meta">Posted on 2015-12-10</p>
             <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
-<p class="blog-post-meta">Posted 2015-12-10</p>
 <p>While reading through the <a href="http://haxe.org/manual/">Haxe manual</a> (which, by the way, is a good reference, but not a good learning resource), I stumbled upon <a href="http://haxe.org/manual/class-field-property-type-system-impact.html">this page about properties</a>:</p>
 <blockquote>
 <p>The presence of properties has several consequences on the type system. Most importantly, it is necessary to understand that properties are a compile-time feature and thus <strong>require the types to be known.</strong> If we were to assign a class with properties to <code>Dynamic</code>, field access would <strong>not</strong> respect accessor methods. Likewise, access restrictions no longer apply and all access is virtually public.</p></blockquote>

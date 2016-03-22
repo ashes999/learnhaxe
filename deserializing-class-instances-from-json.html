@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Trim, Replace, and More Haxe String Extensions | Learn Haxe</title>
+    <title>Deserializing Class Instances From Json | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,20 +59,35 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Trim, Replace, and More Haxe String Extensions</h2>
-            <p class="blog-post-meta">Posted on 2015-11-28</p>
+            <h2 class="blog-post-title">Deserializing Class Instances From Json</h2>
+            <p class="blog-post-meta">Posted on 2016-03-30</p>
             <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
-<p>Haxe includes convenient string-modification methods like <code>trim</code> and <code>replace</code>. They don't exist on the <code>String</code> class by default, but need to be included via the <code>StringTools</code> extension:</p>
-<pre><code>import StringTools;</code></pre>
-<p>Like C#, this is a static extension (syntactic sugar); you can find the full list of extension methods on the <a href="http://api.haxe.org/StringTools.html">StringTools API page</a>.</p>
-<p>You can learn more about static extensions via the <a href="http://haxe.org/manual/lf-static-extension.html">Static Extensions documentation page</a>.</p>
+<p>If you google for how to deserialize some JSON into a Haxe class, you will most likely find <a href="http://haxe.org/manual/std-Json-parsing.html">this API page on JSON parsing</a>.</p>
+<p>While this method allows you to deserialize JSON into a struct, it only works with a <code>typedef</code>. It won't work with an actual class (something that has methods).</p>
+<p>The good news is that it is possible to deserialize to a class instance; the bad news is that it relies on reflection. The snippet below uses reflection to iterate over all fields in the <code>dynamic</code> instance returned by <code>haxe.json.parse</code>, and reflectively sets the values on <code>myInstance</code>:</p>
+<pre><code>var raw = haxe.Json.parse(sys.io.File.getContent(configFile));
+var myInstance:WhateverClassYouWant = new WhateverClassYouWant();
+
+var structsFields:Array&lt;String&gt; = Reflect.fields(raw);
+var classFields:Array&lt;String&gt; = Type.getInstanceFields(Type.getClass(myInstance));
+
+for (field in structsFields)
+{
+    if (classFields.indexOf(field) &gt; -1)
+    {
+        var value:Dynamic = Reflect.field(raw, field);
+        Reflect.setField(myInstance, field, value);
+    }
+}</code></pre>
+<p>A couple of caveats to pay attention to:</p><ul><li>We only set the field on <code>myInstance</code> if it exists. This is safer than trusting the JSON blindly.</li><li>Any fields that aren't in <code>raw</code> (or in the JSON) won't be set, and will have their default values.</li></ul>
+<p>As it stands, this solution can work pretty well as a class deserializer. You can use a similar method to reflect and serialize a class to JSON.</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/trim-replace-and-more-haxe-string-extensions"; // Absolute page URL
-  this.page.identifier = "65efb8f2ee7e53b22f379b4b9c71f2629bf7baf5"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/deserializing-class-instances-from-json"; // Absolute page URL
+  this.page.identifier = "ef7605006e3be9b2f02e75c913ef9370c1a92941"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE
