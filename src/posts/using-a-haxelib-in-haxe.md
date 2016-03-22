@@ -1,6 +1,6 @@
 meta-id: db9fdfd20a2f8ad7a6adbe9d90f323c6e230c5f1
 
-meta-tags: Haxelib
+meta-tags: Haxe
 meta-publishedOn: 2015-11-29
 
 Haxe includes a built-in package manager, [haxelib](http://haxe.org/manual/haxelib.html). You can install, upgrade, and manage libraries [via the command-line](http://lib.haxe.org/).
