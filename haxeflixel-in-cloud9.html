@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Haxeflixel in Cloud9 | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,11 +59,33 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
-            <p>1 posts tagged with Haxelib:</p>
-<ul><li><a href="using-a-haxelib-in-haxe.html">Using a Haxelib in Haxe</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Haxeflixel in Cloud9</h2>
+            <p class="blog-post-meta">Posted on 2016-03-12</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a>, <a href="tag-OpenFL.html">OpenFL</a>, <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p><a href="https://c9.io/">Cloud9</a> provides remote, cloud-based development enviornments. Under the hood, they provision you a Linux VM with Docker. By default, they provide pre-build environments for Rails, C++, PHP, and other enviornments. But not Haxe.</p>
+<p>It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.</p><ul><li>For Haxe, <a href="http://haxe.org/download/">download</a> and run the Linux 64-bit binaries. (Copy the <code>tar</code> URL, eg. <code>http://haxe.org/download/file/3.2.1/haxe-3.2.1-linux64.tar.gz</code>, and grab it via <code>curl &lt;url&gt;</code>)</li><li>For OpenFL, run <code>haxelib install openfl</code>.</li><li>For HaxeFlixel, run <code>haxelib install flixel</code>. (Don't forget to install and setup <code>flixel-tools</code> too.)</li></ul>
+<p>That's it! You can build your Haxe apps, or your OpenFL/HaxeFlixel games in Flash. To view them:</p><ul><li>Find the binary in the workspace view</li><li>Right-click and pick Preview</li><li>Click the square/arrows icon to open in a new tab</li></ul>
+<p>This opens the SWF in a new window/tab where it runs properly.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/haxeflixel-in-cloud9"; // Absolute page URL
+  this.page.identifier = "0515f44276a8a55ed37895e362623a3dab6d175e"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>
@@ -85,7 +107,6 @@ if (window.location.href.indexOf('file://') == -1) {
             <ul class="list-unstyled">
               <ul><li><a href="tag-Haxe.html">Haxe</a></li>
 <li><a href="tag-HaxeFlixel.html">HaxeFlixel</a></li>
-<li><a href="tag-Haxelib.html">Haxelib</a></li>
 <li><a href="tag-OpenFL.html">OpenFL</a></li>
 </ul>
             </ul>

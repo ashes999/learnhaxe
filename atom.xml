@@ -36,6 +36,23 @@ for (field in structsFields)
       		</author>
       	</entry>
       	<entry>
+      		<title>Haxeflixel in Cloud9</title>
+          <link href="http://ashes999.github.io/learnhaxe/haxeflixel-in-cloud9" />
+      		<id>urn:uuid:3741e7b78126e1586fbca302ff187643</id>
+      		<updated>2016-03-12T00:00:00Z</updated>
+      		<summary>Haxeflixel in Cloud9</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;&lt;a href="https://c9.io/"&gt;Cloud9&lt;/a&gt; provides remote, cloud-based development enviornments. Under the hood, they provision you a Linux VM with Docker. By default, they provide pre-build environments for Rails, C++, PHP, and other enviornments. But not Haxe.&lt;/p&gt;
+&lt;p&gt;It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;For Haxe, &lt;a href="http://haxe.org/download/"&gt;download&lt;/a&gt; and run the Linux 64-bit binaries. (Copy the &lt;code&gt;tar&lt;/code&gt; URL, eg. &lt;code&gt;http://haxe.org/download/file/3.2.1/haxe-3.2.1-linux64.tar.gz&lt;/code&gt;, and grab it via &lt;code&gt;curl &amp;lt;url&amp;gt;&lt;/code&gt;)&lt;/li&gt;&lt;li&gt;For OpenFL, run &lt;code&gt;haxelib install openfl&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;For HaxeFlixel, run &lt;code&gt;haxelib install flixel&lt;/code&gt;. (Don't forget to install and setup &lt;code&gt;flixel-tools&lt;/code&gt; too.)&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;That's it! You can build your Haxe apps, or your OpenFL/HaxeFlixel games in Flash. To view them:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Find the binary in the workspace view&lt;/li&gt;&lt;li&gt;Right-click and pick Preview&lt;/li&gt;&lt;li&gt;Click the square/arrows icon to open in a new tab&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;This opens the SWF in a new window/tab where it runs properly.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Hue Rotating Sprites in HaxeFlixel</title>
           <link href="http://ashes999.github.io/learnhaxe/hue-rotating-sprites-in-haxeflixel" />
       		<id>urn:uuid:eb29021aa54bd67a78caeea77a433e49</id>
@@ -277,24 +294,6 @@ Note that &lt;strong&gt;the ctime&lt;/strong&gt; (&lt;code&gt;ls -lc&lt;/code&gt
 &lt;p&gt;One option I came up with is to use &lt;a href="http://api.haxe.org/sys/io/Process.html"&gt;sys.io.Process&lt;/a&gt; to fork a process, execute a command like &lt;code&gt;stat&lt;/code&gt; to get the file time, and parse the output. This is possible, but on Ubuntu 14.04, I tested this, and the file birth time is unknown (the filesystem doesn't store it). This is also expensive, and the results should be cached.&lt;/p&gt;
 &lt;p&gt;If this is not possible or performant, the other option may be to store the time somewhere yourself. I ran into this while creating &lt;a href="http://github.com/ashes999/butterfly"&gt;Butterfly&lt;/a&gt;, a static blog generator which uses file time to guess the blog post publish date. Jekyll (a similar, Ruby based appliaction) requires users enter the post time in the filename.&lt;/p&gt;
 &lt;p&gt;There may be other solutions, but I don't know of any.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Using a Haxelib in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/using-a-haxelib-in-haxe" />
-      		<id>urn:uuid:830b23882926fc96c5abd3735dbcb93c</id>
-      		<updated>2015-11-29T00:00:00Z</updated>
-      		<summary>Using a Haxelib in Haxe</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;Haxe includes a built-in package manager, &lt;a href="http://haxe.org/manual/haxelib.html"&gt;haxelib&lt;/a&gt;. You can install, upgrade, and manage libraries &lt;a href="http://lib.haxe.org/"&gt;via the command-line&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Once you install a library through haxelib, you need to tell the compiler to include it when you compile. As mentioned &lt;a href="http://haxe.org/manual/haxelib-using-haxe.html"&gt;on this page&lt;/a&gt;, you specify the library via the command-line:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;haxe -lib &amp;lt;libName&amp;gt; ...&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;This includes the library code. Don't forget to add the relevant &lt;code&gt;import ...&lt;/code&gt; statements to include library classes (if the library uses packages).&lt;/p&gt;
-&lt;p&gt;To include multiple libraries, just add more &lt;code&gt;-lib &amp;lt;foo&amp;gt;&lt;/code&gt; arguments.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
