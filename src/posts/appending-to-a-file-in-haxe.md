@@ -13,6 +13,6 @@ To combine these together, you can append a string to a file like so (don't forg
 public function append(message:String, fileName:String) {
   var output:FileOutput = sys.io.File.append(fileName, false);
   output.writeString(message);
-  output.close()
+  output.close();
 }
 ```
