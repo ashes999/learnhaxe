@@ -3,11 +3,81 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-03-30T00:00:00Z</updated><entry>
+  	    <updated>2016-03-28T00:00:00Z</updated><entry>
+      		<title>Testing Private Code with @:allow and @:access</title>
+          <link href="http://ashes999.github.io/learnhaxe/testing-private-code-with-allow-and-access" />
+      		<id>urn:uuid:b7bbe82da7312f82e7af4f867378b96c</id>
+      		<updated>2016-03-28T00:00:00Z</updated>
+      		<summary>Testing Private Code with @:allow and @:access</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;When writing unit tests, you sometimes face the choice of changing class/method/property access to &lt;code&gt;public&lt;/code&gt; instead of &lt;code&gt;private&lt;/code&gt; to facilitate testing. Sometimes, it can feel like a terrible decision to break the public interface of a class &lt;em&gt;just&lt;/em&gt; to make it easier to test.&lt;/p&gt;
+&lt;p&gt;Fortunately, you don't have to do that. Haxe allows you to annotate classes and methods with two access modifiers:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;code&gt;@:allow(package.and.class.Name)&lt;/code&gt;: Allow the class &lt;code&gt;Name&lt;/code&gt; in the namespace &lt;code&gt;package.and.class&lt;/code&gt; to access this class' private methods and properties.&lt;/li&gt;&lt;li&gt;&lt;code&gt;@:access(package.and.class.Name)&lt;/code&gt;: allow this method/class to access &lt;code&gt;package.and.class.Name&lt;/code&gt;'s private methods and properties. Useful when you can't modify the class you want to test, or it's impractical to give access to all the test classes that need it.&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;(You can read more about them on the &lt;a href="http://haxe.org/manual/lf-access-control.html"&gt;Access Control documentation page&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;A word of caution: this borders on white-box testing (i.e. verifying the implementation works in a specific way) -- which creates fragile tests that require frequent change. I suggest, as much as possible, &lt;em&gt;not to rely on private code for testing&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Instead, rely on some observable, public properties or methods that allow you to &lt;em&gt;indirectly&lt;/em&gt;. For example, if you have a &lt;code&gt;Player&lt;/code&gt; class in an RPG, you probably can't test the &lt;code&gt;levelUp&lt;/code&gt; method directly; instead, you can grant your player lots of experience, and observe that it eventually does level up.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
+      		<title>Integration Testing in MUnit with HaxeFlixel</title>
+          <link href="http://ashes999.github.io/learnhaxe/integration-testing-in-munit-with-haxeflixel" />
+      		<id>urn:uuid:0a38c32179c21134e55c625511b016b9</id>
+      		<updated>2016-03-28T00:00:00Z</updated>
+      		<summary>Integration Testing in MUnit with HaxeFlixel</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;How can you test your HaxeFlixel game code? Testing games is tricky, because it's often hard to circumvent/simulate input (keyboard, mouse, etc.), and view code is often tightly coupled to logic.&lt;/p&gt;
+&lt;p&gt;HaxeFlixel's demos (probably inadvertantly) encourage a simple, direct style of development where you throw most of your code into states. This makes it difficult to test.&lt;/p&gt;
+&lt;h3&gt;Testing Strategies&lt;/h3&gt;
+&lt;p&gt;I suggest you use two strategies for testing:&lt;/p&gt;
+&lt;p&gt;1) As much as possible, &lt;strong&gt;write your logic in simple Haxe classes.&lt;/strong&gt; Keep as much logic as you can out of &lt;code&gt;FlxState&lt;/code&gt; classes, and try not to extend the Flixel classes.  This makes it difficult to handle things like "create a &lt;code&gt;Player&lt;/code&gt; class that responds to keyboard input." To do this, you probably need an abstraction (method/event) in the &lt;code&gt;Player&lt;/code&gt; class that responds to input, and some code in an &lt;code&gt;InputSystem&lt;/code&gt; class or the &lt;code&gt;FlxState&lt;/code&gt; that broadcasts input when it receives it from HaxeFlixel. Which brings me to the second strategy.&lt;/p&gt;
+&lt;p&gt;2) &lt;strong&gt;Test whatever is easy to test in your &lt;code&gt;FlxState&lt;/code&gt; classes.&lt;/strong&gt; You almost certainly cannot test everything (and have to go through great lengths to test everything). Sometimes, the cost and complexity doesn't justify the fragile tests. Test whatever you can reasonably test.&lt;/p&gt;
+&lt;h3&gt;Testing with HaxeFlixel&lt;/h3&gt;
+&lt;p&gt;Since unit testing simple Haxe classes with &lt;code&gt;munit&lt;/code&gt; is easy, I documented the steps you need to set up integration testing.  The key is to realize that &lt;strong&gt;instead of using MUnit, you'll use lime as the test runner.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Why? Because, as Gama11 mentioned &lt;a href="https://groups.google.com/d/msg/haxeflixel/ow87nKG3t80/eKI4KFDtAAAJ"&gt;here&lt;/a&gt;, HaxeFlixel relies on &lt;code&gt;lime&lt;/code&gt; to build projects. Lime performs additional processing, like including libraries from &lt;code&gt;include.xml&lt;/code&gt; files.&lt;/p&gt;
+&lt;p&gt;1) &lt;strong&gt;Delete your &lt;code&gt;test.hxml&lt;/code&gt; file.&lt;/strong&gt; You won't need it. &lt;/p&gt;
+&lt;p&gt;2)  &lt;strong&gt;Add a &lt;code&gt;project.xml&lt;/code&gt; file to your &lt;code&gt;test&lt;/code&gt; folder.&lt;/strong&gt; You can use this as a starter.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version="1.0" encoding="utf-8"?&amp;gt;
+&amp;lt;project&amp;gt;
+	&amp;lt;meta title="UnitTests" version="1.0.0" /&amp;gt;
+	&amp;lt;app file="TestMain" main="TestMain" /&amp;gt;
+	
+	&amp;lt;set name="SWF_VERSION" value="11.8" /&amp;gt;
+	&amp;lt;source path="../src" /&amp;gt;
+	
+	&amp;lt;set name="no-custom-backend" /&amp;gt;
+	&amp;lt;set name="unit-test" /&amp;gt;
+	
+	&amp;lt;haxelib name="munit" /&amp;gt;
+	&amp;lt;haxelib name="flixel" /&amp;gt;
+	&amp;lt;haxelib name="hamcrest" /&amp;gt;
+	
+	&amp;lt;haxedef name="FLX_UNIT_TEST" /&amp;gt;
+&amp;lt;/project&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This transforms your &lt;code&gt;test&lt;/code&gt; directory into a stand-alone HaxeFlixel project that you can build with &lt;code&gt;lime&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;3) &lt;strong&gt;Modify &lt;code&gt;TestMain.hx&lt;/code&gt;.&lt;/strong&gt; (If you don't have a copy, run &lt;code&gt;haxelib run munit test&lt;/code&gt; to generate one.) Add two lines as the first two lines in the constructor:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public function new()
+{
+   // Flixel was not designed for unit testing so we can only have one instance for now.
+   Lib.current.stage.addChild(new FlxGame(800, 600, null, 1, 60, 60, true));
+   // ...
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;(The comment comes from the same line in the HaxeFlixel code base.)&lt;/p&gt;
+&lt;p&gt;That's it! Now you can write code instantiating and using &lt;code&gt;FlxState&lt;/code&gt; instances like normal, and testing conditions.&lt;/p&gt;
+&lt;p&gt;To run the tests, just run &lt;code&gt;lime test &amp;lt;platform&amp;gt;&lt;/code&gt; from the &lt;code&gt;test&lt;/code&gt; directory. (Neko works out of the box; Flash requires some additional trickery to send the results to the MUnit test runner.)&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Deserializing Class Instances From Json</title>
           <link href="http://ashes999.github.io/learnhaxe/deserializing-class-instances-from-json" />
       		<id>urn:uuid:bb1689ef576deb85044a94ac76e98bf6</id>
-      		<updated>2016-03-30T00:00:00Z</updated>
+      		<updated>2016-03-22T00:00:00Z</updated>
       		<summary>Deserializing Class Instances From Json</summary>
       		<content type="xhtml">
       			&lt;p&gt;If you google for how to deserialize some JSON into a Haxe class, you will most likely find &lt;a href="http://haxe.org/manual/std-Json-parsing.html"&gt;this API page on JSON parsing&lt;/a&gt;.&lt;/p&gt;
@@ -204,7 +274,7 @@ var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;public function append(message:String, fileName:String) {
   var output:FileOutput = sys.io.File.append(fileName, false);
   output.writeString(message);
-  output.close()
+  output.close();
 }&lt;/code&gt;&lt;/pre&gt;
       		</content>
       		<author>
@@ -223,77 +293,6 @@ var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The third method strikes me as the most maintainable, because it's &lt;strong&gt;immediately obvious which font you're using&lt;/strong&gt;, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to &lt;code&gt;Assets&lt;/code&gt;? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).&lt;/p&gt;
 &lt;p&gt;The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://www.google.com/fonts"&gt;Google Fonts&lt;/a&gt; provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Properties and Dynamic</title>
-          <link href="http://ashes999.github.io/learnhaxe/properties-and-dynamic" />
-      		<id>urn:uuid:16fb3f8251b8e3556573f1f1773341ff</id>
-      		<updated>2015-12-10T00:00:00Z</updated>
-      		<summary>Properties and Dynamic</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;While reading through the &lt;a href="http://haxe.org/manual/"&gt;Haxe manual&lt;/a&gt; (which, by the way, is a good reference, but not a good learning resource), I stumbled upon &lt;a href="http://haxe.org/manual/class-field-property-type-system-impact.html"&gt;this page about properties&lt;/a&gt;:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The presence of properties has several consequences on the type system. Most importantly, it is necessary to understand that properties are a compile-time feature and thus &lt;strong&gt;require the types to be known.&lt;/strong&gt; If we were to assign a class with properties to &lt;code&gt;Dynamic&lt;/code&gt;, field access would &lt;strong&gt;not&lt;/strong&gt; respect accessor methods. Likewise, access restrictions no longer apply and all access is virtually public.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;(If you don't understand properties yet, go and read &lt;a href="http://haxe.org/manual/class-field-property.html"&gt;this&lt;/a&gt; and &lt;a href="http://haxe.org/manual/class-field-property-common-combinations.html"&gt;this&lt;/a&gt; first.) This example demonstrates how this works:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class Test {
-    static function main() {
-        var p = new Props();
-        p.x = 35;
-        trace('p.x is ${p.x}');
-
-        var p2:Dynamic = new Props();
-        p2.x = 35;
-        trace('p2.x is ${p2.x}');
-    }
-}
-
-class Props {
-    public function new() { }
-    public var x(get, set):Int;
-
-    function get_x() : Int
-    {
-        return -1;
-    }
-
-    function set_x(x:Int) : Int
-    {
-        return -2;
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;(You can also try &lt;a href="http://try.haxe.org/#CA2Cf"&gt;this example online&lt;/a&gt;.) The output is:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;16:42:46:878   p.x is -1
-16:42:46:878   p2.x is 35&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Because the Haxe runtime knows that &lt;code&gt;p&lt;/code&gt; is an instance of &lt;code&gt;Props&lt;/code&gt;, it can apply the getter/setter functions. Because &lt;code&gt;p2&lt;/code&gt; is typed as &lt;code&gt;Dynamic&lt;/code&gt;, the runtime doesn't respect the field access. (In this case, the runtime treats the field like a regular field or public variable.)&lt;/p&gt;
-&lt;p&gt;Use &lt;code&gt;Dynamic&lt;/code&gt; judiciously, and tread carefully if you use it on instances of classes that have properties. If you rely on your getter/setter to set up certain invariants about your properties, you  may find them no longer respected.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>FileStat.ctime on Unix</title>
-          <link href="http://ashes999.github.io/learnhaxe/filestat-ctime-on-unix" />
-      		<id>urn:uuid:832822d4e3e67ec64d48b7ca440a3f9f</id>
-      		<updated>2015-12-01T00:00:00Z</updated>
-      		<summary>FileStat.ctime on Unix</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;The &lt;a href="http://api.haxe.org/sys/FileStat.html#ctime"&gt;API docs for sys.FileStat&lt;/a&gt; state that &lt;code&gt;ctime&lt;/code&gt; returns &lt;code&gt;the creation time for the file (not all filesystems support this)&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;This returns correctly on Windows, but not on Linux (I tested with both &lt;code&gt;cpp&lt;/code&gt; and &lt;code&gt;neko&lt;/code&gt; targets).&lt;/p&gt;
-&lt;p&gt;Windows stores the file creation time. On Linux, the story is more complicated. &lt;code&gt;ctime&lt;/code&gt; is a C++ API. Windows stores the file creation time.  On Linux, according to &lt;a href="http://unix.stackexchange.com/a/20464/64805"&gt;this Unix SE question&lt;/a&gt; (which is mostly derived from &lt;code&gt;man&lt;/code&gt; pages):&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Most unices do not have a concept of file creation time. [...]
-Note that &lt;strong&gt;the ctime&lt;/strong&gt; (&lt;code&gt;ls -lc&lt;/code&gt;) &lt;strong&gt;is not the file creation time&lt;/strong&gt;, it's the &lt;a href="http://en.wikipedia.org/wiki/Inode"&gt;inode&lt;/a&gt; change time. The inode change time is updated whenever anything about the file changes (contents or metadata) except that the ctime isn't updated when the file is merely read (even if the atime is updated). In particular, the ctime is always more recent than the mtime (file content modification time) unless the mtime has been explicitly set to a date in the future.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;I couldn't trace the Haxe source all the way down the stack, but I believe it does access the Unix &lt;code&gt;ctime&lt;/code&gt; on Unix. This leaves us in a bind: how do we know the file creation time on Unix?&lt;/p&gt;
-&lt;p&gt;One option I came up with is to use &lt;a href="http://api.haxe.org/sys/io/Process.html"&gt;sys.io.Process&lt;/a&gt; to fork a process, execute a command like &lt;code&gt;stat&lt;/code&gt; to get the file time, and parse the output. This is possible, but on Ubuntu 14.04, I tested this, and the file birth time is unknown (the filesystem doesn't store it). This is also expensive, and the results should be cached.&lt;/p&gt;
-&lt;p&gt;If this is not possible or performant, the other option may be to store the time somewhere yourself. I ran into this while creating &lt;a href="http://github.com/ashes999/butterfly"&gt;Butterfly&lt;/a&gt;, a static blog generator which uses file time to guess the blog post publish date. Jekyll (a similar, Ruby based appliaction) requires users enter the post time in the filename.&lt;/p&gt;
-&lt;p&gt;There may be other solutions, but I don't know of any.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>

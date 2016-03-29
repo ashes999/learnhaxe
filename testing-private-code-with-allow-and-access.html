@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Testing Private Code with @:allow and @:access | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,11 +59,34 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
-            <p>9 posts tagged with HaxeFlixel:</p>
-<ul><li><a href="integration-testing-in-munit-with-haxeflixel.html">Integration Testing in MUnit with HaxeFlixel</a></li><li><a href="haxeflixel-in-cloud9.html">Haxeflixel in Cloud9</a></li><li><a href="hue-rotating-sprites-in-haxeflixel.html">Hue Rotating Sprites in HaxeFlixel</a></li><li><a href="dynamically-adding-and-reloading-assets-in-haxeflixel.html">Dynamically Adding and Reloading Assets in Haxeflixel</a></li><li><a href="logitech-f310-support-in-haxeflixel.html">Logitech F310 Support in HaxeFlixel</a></li><li><a href="embedding-fonts-in-haxeflixel-with-flxtext.html">Embedding Fonts in HaxeFlixel with FlxText</a></li><li><a href="setting-the-image-on-a-haxeflixel-flxbutton.html">Setting the Image on a HaxeFlixel FlxButton</a></li><li><a href="haxeflixel-on-ouya.html">HaxeFlixel on OUYA</a></li><li><a href="animated-gifs-in-haxeflixel.html">Animated GIFs in HaxeFlixel</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Testing Private Code with @:allow and @:access</h2>
+            <p class="blog-post-meta">Posted on 2016-03-28</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p>When writing unit tests, you sometimes face the choice of changing class/method/property access to <code>public</code> instead of <code>private</code> to facilitate testing. Sometimes, it can feel like a terrible decision to break the public interface of a class <em>just</em> to make it easier to test.</p>
+<p>Fortunately, you don't have to do that. Haxe allows you to annotate classes and methods with two access modifiers:</p><ul><li><code>@:allow(package.and.class.Name)</code>: Allow the class <code>Name</code> in the namespace <code>package.and.class</code> to access this class' private methods and properties.</li><li><code>@:access(package.and.class.Name)</code>: allow this method/class to access <code>package.and.class.Name</code>'s private methods and properties. Useful when you can't modify the class you want to test, or it's impractical to give access to all the test classes that need it.</li></ul>
+<p>(You can read more about them on the <a href="http://haxe.org/manual/lf-access-control.html">Access Control documentation page</a>.)</p>
+<p>A word of caution: this borders on white-box testing (i.e. verifying the implementation works in a specific way) -- which creates fragile tests that require frequent change. I suggest, as much as possible, <em>not to rely on private code for testing</em>.</p>
+<p>Instead, rely on some observable, public properties or methods that allow you to <em>indirectly</em>. For example, if you have a <code>Player</code> class in an RPG, you probably can't test the <code>levelUp</code> method directly; instead, you can grant your player lots of experience, and observe that it eventually does level up.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/testing-private-code-with-allow-and-access"; // Absolute page URL
+  this.page.identifier = "6d24e2594ba5f3031e60ff2286bb66b459b5719e"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>

@@ -68,7 +68,7 @@ if (window.location.href.indexOf('file://') == -1) {
 <pre><code>public function append(message:String, fileName:String) {
   var output:FileOutput = sys.io.File.append(fileName, false);
   output.writeString(message);
-  output.close()
+  output.close();
 }</code></pre>
 
             <div id="disqus_thread"></div>

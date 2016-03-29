@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Deserializing Class Instances From Json | Learn Haxe</title>
+    <title>Integration Testing in MUnit with HaxeFlixel | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,35 +59,55 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Deserializing Class Instances From Json</h2>
-            <p class="blog-post-meta">Posted on 2016-03-22</p>
-            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
-<p>If you google for how to deserialize some JSON into a Haxe class, you will most likely find <a href="http://haxe.org/manual/std-Json-parsing.html">this API page on JSON parsing</a>.</p>
-<p>While this method allows you to deserialize JSON into a struct, it only works with a <code>typedef</code>. It won't work with an actual class (something that has methods).</p>
-<p>The good news is that it is possible to deserialize to a class instance; the bad news is that it relies on reflection. The snippet below uses reflection to iterate over all fields in the <code>dynamic</code> instance returned by <code>haxe.json.parse</code>, and reflectively sets the values on <code>myInstance</code>:</p>
-<pre><code>var raw = haxe.Json.parse(sys.io.File.getContent(configFile));
-var myInstance:WhateverClassYouWant = new WhateverClassYouWant();
-
-var structsFields:Array&lt;String&gt; = Reflect.fields(raw);
-var classFields:Array&lt;String&gt; = Type.getInstanceFields(Type.getClass(myInstance));
-
-for (field in structsFields)
+            <h2 class="blog-post-title">Integration Testing in MUnit with HaxeFlixel</h2>
+            <p class="blog-post-meta">Posted on 2016-03-28</p>
+            <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
+<p>How can you test your HaxeFlixel game code? Testing games is tricky, because it's often hard to circumvent/simulate input (keyboard, mouse, etc.), and view code is often tightly coupled to logic.</p>
+<p>HaxeFlixel's demos (probably inadvertantly) encourage a simple, direct style of development where you throw most of your code into states. This makes it difficult to test.</p>
+<h3>Testing Strategies</h3>
+<p>I suggest you use two strategies for testing:</p>
+<p>1) As much as possible, <strong>write your logic in simple Haxe classes.</strong> Keep as much logic as you can out of <code>FlxState</code> classes, and try not to extend the Flixel classes.  This makes it difficult to handle things like "create a <code>Player</code> class that responds to keyboard input." To do this, you probably need an abstraction (method/event) in the <code>Player</code> class that responds to input, and some code in an <code>InputSystem</code> class or the <code>FlxState</code> that broadcasts input when it receives it from HaxeFlixel. Which brings me to the second strategy.</p>
+<p>2) <strong>Test whatever is easy to test in your <code>FlxState</code> classes.</strong> You almost certainly cannot test everything (and have to go through great lengths to test everything). Sometimes, the cost and complexity doesn't justify the fragile tests. Test whatever you can reasonably test.</p>
+<h3>Testing with HaxeFlixel</h3>
+<p>Since unit testing simple Haxe classes with <code>munit</code> is easy, I documented the steps you need to set up integration testing.  The key is to realize that <strong>instead of using MUnit, you'll use lime as the test runner.</strong></p>
+<p>Why? Because, as Gama11 mentioned <a href="https://groups.google.com/d/msg/haxeflixel/ow87nKG3t80/eKI4KFDtAAAJ">here</a>, HaxeFlixel relies on <code>lime</code> to build projects. Lime performs additional processing, like including libraries from <code>include.xml</code> files.</p>
+<p>1) <strong>Delete your <code>test.hxml</code> file.</strong> You won't need it. </p>
+<p>2)  <strong>Add a <code>project.xml</code> file to your <code>test</code> folder.</strong> You can use this as a starter.</p>
+<pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;project&gt;
+	&lt;meta title="UnitTests" version="1.0.0" /&gt;
+	&lt;app file="TestMain" main="TestMain" /&gt;
+	
+	&lt;set name="SWF_VERSION" value="11.8" /&gt;
+	&lt;source path="../src" /&gt;
+	
+	&lt;set name="no-custom-backend" /&gt;
+	&lt;set name="unit-test" /&gt;
+	
+	&lt;haxelib name="munit" /&gt;
+	&lt;haxelib name="flixel" /&gt;
+	&lt;haxelib name="hamcrest" /&gt;
+	
+	&lt;haxedef name="FLX_UNIT_TEST" /&gt;
+&lt;/project&gt;</code></pre>
+<p>This transforms your <code>test</code> directory into a stand-alone HaxeFlixel project that you can build with <code>lime</code>.</p>
+<p>3) <strong>Modify <code>TestMain.hx</code>.</strong> (If you don't have a copy, run <code>haxelib run munit test</code> to generate one.) Add two lines as the first two lines in the constructor:</p>
+<pre><code>public function new()
 {
-    if (classFields.indexOf(field) &gt; -1)
-    {
-        var value:Dynamic = Reflect.field(raw, field);
-        Reflect.setField(myInstance, field, value);
-    }
+   // Flixel was not designed for unit testing so we can only have one instance for now.
+   Lib.current.stage.addChild(new FlxGame(800, 600, null, 1, 60, 60, true));
+   // ...
 }</code></pre>
-<p>A couple of caveats to pay attention to:</p><ul><li>We only set the field on <code>myInstance</code> if it exists. This is safer than trusting the JSON blindly.</li><li>Any fields that aren't in <code>raw</code> (or in the JSON) won't be set, and will have their default values.</li></ul>
-<p>As it stands, this solution can work pretty well as a class deserializer. You can use a similar method to reflect and serialize a class to JSON.</p>
+<p>(The comment comes from the same line in the HaxeFlixel code base.)</p>
+<p>That's it! Now you can write code instantiating and using <code>FlxState</code> instances like normal, and testing conditions.</p>
+<p>To run the tests, just run <code>lime test &lt;platform&gt;</code> from the <code>test</code> directory. (Neko works out of the box; Flash requires some additional trickery to send the results to the MUnit test runner.)</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/deserializing-class-instances-from-json"; // Absolute page URL
-  this.page.identifier = "ef7605006e3be9b2f02e75c913ef9370c1a92941"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/integration-testing-in-munit-with-haxeflixel"; // Absolute page URL
+  this.page.identifier = "73e442436a0dbe9c5e3b943dd860f517f95b8a1d"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE
