@@ -1,7 +1,7 @@
 meta-id: ef7605006e3be9b2f02e75c913ef9370c1a92941
 
 meta-tags: Haxe
-meta-publishedOn: 2016-03-30
+meta-publishedOn: 2016-03-22
 If you google for how to deserialize some JSON into a Haxe class, you will most likely find [this API page on JSON parsing](http://haxe.org/manual/std-Json-parsing.html).
 
 While this method allows you to deserialize JSON into a struct, it only works with a `typedef`. It won't work with an actual class (something that has methods).
