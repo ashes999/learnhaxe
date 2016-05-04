@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Adding Static Methods to Existing Classes | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,11 +59,55 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
-            <p>18 posts tagged with Haxe:</p>
-<ul><li><a href="adding-static-methods-to-existing-classes.html">Adding Static Methods to Existing Classes</a></li><li><a href="testing-private-code-with-allow-and-access.html">Testing Private Code with @:allow and @:access</a></li><li><a href="deserializing-class-instances-from-json.html">Deserializing Class Instances From Json</a></li><li><a href="haxeflixel-in-cloud9.html">Haxeflixel in Cloud9</a></li><li><a href="iterate-over-all-fields-of-anonymous-structures-in-haxe.html">Iterate Over all Fields of Anonymous Structures in Haxe</a></li><li><a href="appending-to-a-file-in-haxe.html">Appending to a File in Haxe</a></li><li><a href="properties-and-dynamic.html">Properties and Dynamic</a></li><li><a href="filestat-ctime-on-unix.html">FileStat.ctime on Unix</a></li><li><a href="using-a-haxelib-in-haxe.html">Using a Haxelib in Haxe</a></li><li><a href="trim-replace-and-more-haxe-string-extensions.html">Trim, Replace, and More Haxe String Extensions</a></li><li><a href="sorting-an-array-of-strings-in-haxe.html">Sorting an Array of Strings in Haxe</a></li><li><a href="recursively-delete-a-directory-in-haxe.html">Recursively Delete a Directory in Haxe</a></li><li><a href="reading-command-line-arguments-in-haxe.html">Reading Command Line Arguments in Haxe</a></li><li><a href="check-if-a-directory-exists-haxe.html">Check if a Directory Exists Haxe</a></li><li><a href="exit-from-the-command-line-in-haxe.html">Exit From the Command Line in Haxe</a></li><li><a href="namespaces-and-class-names-in-haxe.html">Namespaces and Class Names in Haxe</a></li><li><a href="creating-standalone-neko-games-on-windows-and-linux.html">Creating Standalone Neko Games on Windows and Linux</a></li><li><a href="neko-plugin-architecture-with-reflection.html">Neko Plugin Architecture With Reflection</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Adding Static Methods to Existing Classes</h2>
+            <p class="blog-post-meta">Posted on 2016-05-04</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Haxe.html">Haxe</a></p>
+<p>Haxe allows you to add static methods to existing classes (eg. <code>Math</code>) via the Static Extensions feature. The "secret sauce" is to specify the first parameter of the extension as <code>Class&lt;X&gt;</code> where <code>X</code> is the class you want to add static methods to (eg. <code>Math</code>), and to make the method public.</p>
+<p>Here's a class with a static method that adds a <code>randomBetween(a, b)</code> method to <code>Math</code>:</p>
+<h2>Implementation</h2>
+<pre><code>// MathExtensions.hx
+import Math;
+
+class MathExtensions {
+    /** Returns a random number between a (inclusive) and b (exclusive). */
+    public static function randomBetween(clazz:Class&lt;Math&gt;, a:Int, b:Int) {
+        var diff:Int = b - a;
+        return a + Math.floor(Math.random() * diff);
+    }
+}</code></pre>
+<p>Note that the method is <code>public</code>, <code>static</code>, and the first parameter is <code>Class&lt;Math&gt;</code>.</p>
+<h2>Usage</h2>
+<p>Here's how to consume the code:</p>
+<pre><code>// Main.hx
+using MathExtensions;
+
+class Test {
+    static function main() {
+        trace('Random value between 10 and 20: ${Math.randomBetween(10, 20)}');
+    }
+}</code></pre>
+<p>Using this, you can add all kinds of interesting extensions to pre-existing classes (eg. core Haxe classes, or classes from other Haxe libraries). </p>
+<p>You can read more about static extensions in the <a href="haxe.org/manual/lf-static-extension.html">Haxe manual entry</a>.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/adding-static-methods-to-existing-classes"; // Absolute page URL
+  this.page.identifier = "b934450f36d07690ef30b40de6fdaed37aec4be1"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>

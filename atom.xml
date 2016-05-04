@@ -3,7 +3,46 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-03-28T00:00:00Z</updated><entry>
+  	    <updated>2016-05-04T00:00:00Z</updated><entry>
+      		<title>Adding Static Methods to Existing Classes</title>
+          <link href="http://ashes999.github.io/learnhaxe/adding-static-methods-to-existing-classes" />
+      		<id>urn:uuid:8c7519ba55165baadd9bbbca879b3475</id>
+      		<updated>2016-05-04T00:00:00Z</updated>
+      		<summary>Adding Static Methods to Existing Classes</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;Haxe allows you to add static methods to existing classes (eg. &lt;code&gt;Math&lt;/code&gt;) via the Static Extensions feature. The "secret sauce" is to specify the first parameter of the extension as &lt;code&gt;Class&amp;lt;X&amp;gt;&lt;/code&gt; where &lt;code&gt;X&lt;/code&gt; is the class you want to add static methods to (eg. &lt;code&gt;Math&lt;/code&gt;), and to make the method public.&lt;/p&gt;
+&lt;p&gt;Here's a class with a static method that adds a &lt;code&gt;randomBetween(a, b)&lt;/code&gt; method to &lt;code&gt;Math&lt;/code&gt;:&lt;/p&gt;
+&lt;h2&gt;Implementation&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;// MathExtensions.hx
+import Math;
+
+class MathExtensions {
+    /** Returns a random number between a (inclusive) and b (exclusive). */
+    public static function randomBetween(clazz:Class&amp;lt;Math&amp;gt;, a:Int, b:Int) {
+        var diff:Int = b - a;
+        return a + Math.floor(Math.random() * diff);
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that the method is &lt;code&gt;public&lt;/code&gt;, &lt;code&gt;static&lt;/code&gt;, and the first parameter is &lt;code&gt;Class&amp;lt;Math&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Usage&lt;/h2&gt;
+&lt;p&gt;Here's how to consume the code:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// Main.hx
+using MathExtensions;
+
+class Test {
+    static function main() {
+        trace('Random value between 10 and 20: ${Math.randomBetween(10, 20)}');
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Using this, you can add all kinds of interesting extensions to pre-existing classes (eg. core Haxe classes, or classes from other Haxe libraries). &lt;/p&gt;
+&lt;p&gt;You can read more about static extensions in the &lt;a href="haxe.org/manual/lf-static-extension.html"&gt;Haxe manual entry&lt;/a&gt;.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Testing Private Code with @:allow and @:access</title>
           <link href="http://ashes999.github.io/learnhaxe/testing-private-code-with-allow-and-access" />
       		<id>urn:uuid:b7bbe82da7312f82e7af4f867378b96c</id>
@@ -276,23 +315,6 @@ var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
   output.writeString(message);
   output.close();
 }&lt;/code&gt;&lt;/pre&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Embedding Fonts in HaxeFlixel with FlxText</title>
-          <link href="http://ashes999.github.io/learnhaxe/embedding-fonts-in-haxeflixel-with-flxtext" />
-      		<id>urn:uuid:e1c872bc8e22d9121f7396c6b441aef0</id>
-      		<updated>2015-12-22T00:00:00Z</updated>
-      		<summary>Embedding Fonts in HaxeFlixel with FlxText</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;The &lt;a href="api.haxeflixel.com/flixel/text/FlxText.html"&gt;FlxText class&lt;/a&gt; provides three ways to set the font:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;By setting the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#font"&gt;font field&lt;/a&gt; to a font name (eg. &lt;code&gt;Times New Roman&lt;/code&gt;). This works with embedded fonts (TTF file is in &lt;code&gt;Assets&lt;/code&gt; and included in the final binaries)&lt;/li&gt;&lt;li&gt;By setting the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#systemFont"&gt;systemFont field&lt;/a&gt; to a font name. This only works with system fonts, which can be tricky if your app has to work across Windows and Linux, or across mobile and desktop. There's a small list of &lt;a href="http://webdesign.about.com/od/fonts/qt/web-safe-fonts.htm"&gt;web safe fonts&lt;/a&gt; which you can try.&lt;/li&gt;&lt;li&gt;By calling the &lt;a href="http://api.haxeflixel.com/flixel/text/FlxText.html#setFormat"&gt;setFormat method&lt;/a&gt;. You can specify lots of properties together; in particular, you can specify the path to a TTF file, eg. &lt;code&gt;setFormat("assets/MyCustomFont.ttf", ...)&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;
-&lt;p&gt;The third method strikes me as the most maintainable, because it's &lt;strong&gt;immediately obvious which font you're using&lt;/strong&gt;, and where that font file originates from. With system fonts and embedded fonts, if the font doesn't work, it's more work to triage and isolate exactly where the problem lies (did you add the font file to &lt;code&gt;Assets&lt;/code&gt;? Is it embedding properly? Did you specify the correct name? Does it work on other targets?).&lt;/p&gt;
-&lt;p&gt;The third method also has the best chance to be consistent and cross-platform compatible (by virtue of using embedded fonts), because you're not relying on whatever fonts might be included in the device's system.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://www.google.com/fonts"&gt;Google Fonts&lt;/a&gt; provides a wealth of fonts which you can use.  You can download all of them (as TTF and OTF) and embed them in your HaxeFlixel games.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
