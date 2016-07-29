@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Logitech F310 Support in HaxeFlixel | Learn Haxe</title>
+    <title>Collision Detection and Resolution in Luxe | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,46 +59,30 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title">Logitech F310 Support in HaxeFlixel</h2>
-            <p class="blog-post-meta">Posted on 2016-01-12</p>
-            <p><strong>Tagged with:</strong> <a href="tag-HaxeFlixel.html">HaxeFlixel</a></p>
-<p>I recently received a <a href="http://gaming.logitech.com/en-us/product/f310-gamepad">Logitech F310 gamepad</a>. Since HaxeFlixel already <a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html">has gamepad support</a> (buttons, deadzone, D-Pad, etc.), including support for <a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html">reading Logitech button input</a>, I figured it would work out-of-the-box, right?</p>
-<p>Right?</p>
-<p>It turns out that the <code>LogitechButtonID</code> class contains values based on the <strong>Cordless Rumblepad 2</strong> controller. If you look <a href="https://www.google.com/search?site=&amp;tbm=isch&amp;source=hp&amp;biw=1440&amp;bih=799&amp;q=rumblepad+2&amp;oq=rumblepad+2&amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA">at screenshots</a>, you'll notice the pads all have numbers on them.</p>
-<p>That's no good -- the F310 uses <code>A</code>, <code>B</code>, <code>X</code>, and <code>Y</code> for buttons, with left and right triggers (<code>LB</code> and <code>RB</code> respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:</p>
-<pre><code>static inline read only FOUR:Int = 11
-Placement equivalent to 'Y' button on the Xbox 360 controller</code></pre>
-<p>That only leaves the D-Pads. The built in enum values don't work; instead, I used <a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39">the four <code>dpad*</code> properties</a> defined on the controller itself; these work perfectly.</p>
-<p>If you want to try this for yourself, it's quite easy:</p>
-<p>1) Run <code>flixel create</code> and then select demo <code>34</code>, <code>GamepadTest</code>.</p>
-<p>2) Replace the contents of the <code>GamepadIDs</code> class with the correct button enum values:</p>
-<pre><code>public static inline var A = LogitechButtonID.TWO;
-public static inline var B = LogitechButtonID.THREE;
-public static inline var X = LogitechButtonID.ONE;
-public static inline var Y = LogitechButtonID.FOUR;
-public static inline var LB = LogitechButtonID.FIVE;
-public static inline var RB = LogitechButtonID.SIX;
-public static inline var START = LogitechButtonID.TEN;
-public static inline var SELECT = LogitechButtonID.NINE;
-public static inline var LEFT_ANALOGUE = LogitechButtonID.LEFT_ANALOGUE;
-public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
-public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
-public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
-public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
-public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;</code></pre>
-<p>3) Modify <code>PlayState.hx</code>'s <code>updateDpad</code> function; the values assigned to the four <code>dpad*</code> variables should be:</p>
-<pre><code>var dpadLeft = _gamePad.dpadLeft;
-var dpadRight = _gamePad.dpadRight;
-var dpadUp = _gamePad.dpadUp;
-var dpadDown = _gamePad.dpadDown;</code></pre>
-<p>Run <code>lime test neko</code> and observe that all input displays as expected.</p>
+            <h2 class="blog-post-title">Collision Detection and Resolution in Luxe</h2>
+            <p class="blog-post-meta">Posted on 2016-07-29</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Luxe.html">Luxe</a></p>
+<p>Disclaimer: I just started using Luxe. First impression: engine seems very usable (great API design) and things work well. But, very poorly documented (API docs are sparse and there aren't many blog posts about how to do things using Luxe.)</p>
+<p>I'm working on a <a href="https://github.com/ashes999/opal-quest/tree/luxe">small arena 2D shooter in Luxe</a>. I have a ship (<code>Sprite</code> instance) and a bunch of walls (also <code>Sprite</code> instances). How can I:</p><ul><li>Find out when the ship hits a wall?</li><li>Prevent the ship from moving into the wall, or move the ship back out of the wall after the collision?</li></ul>
+<p>Luxe includes a number of packages/classes related to collision detection. I stumbled upon the <a href="http://luxeengine.com/docs/api/luxe/collision/shapes/Polygon.html"><code>Polygon</code> class</a>. It includes two helpful methods:</p><ul><li><code>Polygon.rectangle(x, y, width, height):</code> create a rectangular polygon, specifying position and size.</li><li><code>polygonInstance.testPolygon(polygon):</code> check if <code>polygonInstance</code> intersects <code>testPolygon</code>.</li></ul>
+<p>if <code>testPolygon</code> finds an intersection, it returns a non-null object with a number of fields. Of interest to us is the <code>separation</code> property, which tells us how much to move <code>polygonInstance</code> to get it to stop colliding with <code>polygon</code>.</p>
+<p>Putting these together, we get something like this:</p>
+<pre><code>var shipPolygon = Polygon.rectangle(ship.pos.x, ship.pos.y, ship.size.x, ship.size.y);
+var wallPolygon = Polygon.rectangle(wall.pos.x, wall.pos.y, wall.size.x, wall.size.y);
+var result = shipPolygon.testPolygon(wall);
+if (result != null)
+{
+    ship.pos.x += result.separation.x;
+    ship.pos.y += result.separation.y;
+}</code></pre>
+<p>This correctly causes the <code>ship</code> to stop when it hits <code>wall</code>.</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 var disqus_config = function () {
-  this.page.url = "http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixel"; // Absolute page URL
-  this.page.identifier = "ab541e331c5408001c04fd5dd1d140db2ee767de"; // Any unique, stable string identifier
+  this.page.url = "http://ashes999.github.io/learnhaxe/collision-detection-and-resolution-in-luxe"; // Absolute page URL
+  this.page.identifier = "f9b47ee908e9ebabce9fabbfdd7596e3cd65dd27"; // Any unique, stable string identifier
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE

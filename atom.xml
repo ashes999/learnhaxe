@@ -3,39 +3,27 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-05-04T00:00:00Z</updated><entry>
-      		<title>Adding Static Methods to Existing Classes</title>
-          <link href="http://ashes999.github.io/learnhaxe/adding-static-methods-to-existing-classes" />
-      		<id>urn:uuid:8c7519ba55165baadd9bbbca879b3475</id>
-      		<updated>2016-05-04T00:00:00Z</updated>
-      		<summary>Adding Static Methods to Existing Classes</summary>
+  	    <updated>2016-07-29T00:00:00Z</updated><entry>
+      		<title>Collision Detection and Resolution in Luxe</title>
+          <link href="http://ashes999.github.io/learnhaxe/collision-detection-and-resolution-in-luxe" />
+      		<id>urn:uuid:e22e476cab81cb5813effdef1f758eff</id>
+      		<updated>2016-07-29T00:00:00Z</updated>
+      		<summary>Collision Detection and Resolution in Luxe</summary>
       		<content type="xhtml">
-      			&lt;p&gt;Haxe allows you to add static methods to existing classes (eg. &lt;code&gt;Math&lt;/code&gt;) via the Static Extensions feature. The "secret sauce" is to specify the first parameter of the extension as &lt;code&gt;Class&amp;lt;X&amp;gt;&lt;/code&gt; where &lt;code&gt;X&lt;/code&gt; is the class you want to add static methods to (eg. &lt;code&gt;Math&lt;/code&gt;), and to make the method public.&lt;/p&gt;
-&lt;p&gt;Here's a class with a static method that adds a &lt;code&gt;randomBetween(a, b)&lt;/code&gt; method to &lt;code&gt;Math&lt;/code&gt;:&lt;/p&gt;
-&lt;h2&gt;Implementation&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;// MathExtensions.hx
-import Math;
-
-class MathExtensions {
-    /** Returns a random number between a (inclusive) and b (exclusive). */
-    public static function randomBetween(clazz:Class&amp;lt;Math&amp;gt;, a:Int, b:Int) {
-        var diff:Int = b - a;
-        return a + Math.floor(Math.random() * diff);
-    }
+      			&lt;p&gt;Disclaimer: I just started using Luxe. First impression: engine seems very usable (great API design) and things work well. But, very poorly documented (API docs are sparse and there aren't many blog posts about how to do things using Luxe.)&lt;/p&gt;
+&lt;p&gt;I'm working on a &lt;a href="https://github.com/ashes999/opal-quest/tree/luxe"&gt;small arena 2D shooter in Luxe&lt;/a&gt;. I have a ship (&lt;code&gt;Sprite&lt;/code&gt; instance) and a bunch of walls (also &lt;code&gt;Sprite&lt;/code&gt; instances). How can I:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Find out when the ship hits a wall?&lt;/li&gt;&lt;li&gt;Prevent the ship from moving into the wall, or move the ship back out of the wall after the collision?&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;Luxe includes a number of packages/classes related to collision detection. I stumbled upon the &lt;a href="http://luxeengine.com/docs/api/luxe/collision/shapes/Polygon.html"&gt;&lt;code&gt;Polygon&lt;/code&gt; class&lt;/a&gt;. It includes two helpful methods:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;code&gt;Polygon.rectangle(x, y, width, height):&lt;/code&gt; create a rectangular polygon, specifying position and size.&lt;/li&gt;&lt;li&gt;&lt;code&gt;polygonInstance.testPolygon(polygon):&lt;/code&gt; check if &lt;code&gt;polygonInstance&lt;/code&gt; intersects &lt;code&gt;testPolygon&lt;/code&gt;.&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;if &lt;code&gt;testPolygon&lt;/code&gt; finds an intersection, it returns a non-null object with a number of fields. Of interest to us is the &lt;code&gt;separation&lt;/code&gt; property, which tells us how much to move &lt;code&gt;polygonInstance&lt;/code&gt; to get it to stop colliding with &lt;code&gt;polygon&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Putting these together, we get something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;var shipPolygon = Polygon.rectangle(ship.pos.x, ship.pos.y, ship.size.x, ship.size.y);
+var wallPolygon = Polygon.rectangle(wall.pos.x, wall.pos.y, wall.size.x, wall.size.y);
+var result = shipPolygon.testPolygon(wall);
+if (result != null)
+{
+    ship.pos.x += result.separation.x;
+    ship.pos.y += result.separation.y;
 }&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note that the method is &lt;code&gt;public&lt;/code&gt;, &lt;code&gt;static&lt;/code&gt;, and the first parameter is &lt;code&gt;Class&amp;lt;Math&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Usage&lt;/h2&gt;
-&lt;p&gt;Here's how to consume the code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;// Main.hx
-using MathExtensions;
-
-class Test {
-    static function main() {
-        trace('Random value between 10 and 20: ${Math.randomBetween(10, 20)}');
-    }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Using this, you can add all kinds of interesting extensions to pre-existing classes (eg. core Haxe classes, or classes from other Haxe libraries). &lt;/p&gt;
-&lt;p&gt;You can read more about static extensions in the &lt;a href="haxe.org/manual/lf-static-extension.html"&gt;Haxe manual entry&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This correctly causes the &lt;code&gt;ship&lt;/code&gt; to stop when it hits &lt;code&gt;wall&lt;/code&gt;.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
