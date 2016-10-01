@@ -3,7 +3,44 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-07-29T00:00:00Z</updated><entry>
+  	    <updated>2016-09-30T00:00:00Z</updated><entry>
+      		<title>Loading Json in kha</title>
+          <link href="http://ashes999.github.io/learnhaxe/loading-json-in-kha" />
+      		<id>urn:uuid:4b287d4050b5cd64855b26a1f574edf9</id>
+      		<updated>2016-09-30T00:00:00Z</updated>
+      		<summary>Loading Json in kha</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;With some macro magic, Kha allows you to load assets asynchronously. Here's how that looks with images:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Assets.loadEverything(function()
+{
+  var playerImage = Assets.images.player;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you have a &lt;code&gt;player.png&lt;/code&gt; file in &lt;code&gt;Assets/images&lt;/code&gt;, this snippet loads that data into the &lt;code&gt;playerImage&lt;/code&gt; variable.&lt;/p&gt;
+&lt;p&gt;That works great with images, but what about JSON? Can I add &lt;code&gt;monsters.json&lt;/code&gt; to &lt;code&gt;Assets/data&lt;/code&gt; and load it with &lt;code&gt;Assets.images.data.monsters&lt;/code&gt;?&lt;/p&gt;
+&lt;p&gt;Nope. This doesn't compile; if you check the &lt;a href="http://api.kha.technology/kha/Assets.html"&gt;Assets class documentation&lt;/a&gt;, you'll notice that it has &lt;code&gt;blobs&lt;/code&gt;, &lt;code&gt;fonts&lt;/code&gt;, &lt;code&gt;images&lt;/code&gt;, &lt;code&gt;sounds&lt;/code&gt;, &lt;code&gt;videos&lt;/code&gt;. Of these, &lt;code&gt;blobs&lt;/code&gt; looks promising, but the documentation for &lt;code&gt;BlobList&lt;/code&gt; is non-existent.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/KTXSoftware/Kha/wiki/Managing-Your-Assets"&gt;Some of the wiki documentation&lt;/a&gt; mentions that:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Any other format [other than images, sounds, and vidos] will not be changed and will be available in your code through &lt;code&gt;Assets.blobs&lt;/code&gt; as &lt;code&gt;Bytes&lt;/code&gt;.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;It turns out that you can load your data using &lt;code&gt;Assets.blobs.monsters_json&lt;/code&gt;. This is a little unintuitive (no directory structure/naming?), but it works. It also gives you back &lt;code&gt;Bytes&lt;/code&gt;; you can call &lt;code&gt;.toString()&lt;/code&gt; on it to read it as text.&lt;/p&gt;
+&lt;p&gt;If we put this JSON into &lt;code&gt;Assets/data/monsters.json&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+    "names": [
+        "slime", "bat", "spider"
+    ]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can use this code to get back &lt;code&gt;names&lt;/code&gt; as an &lt;code&gt;Array&amp;lt;String&amp;gt;&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Assets.loadEverything(function()
+{
+    var monsterNames = Json.parse(Assets.blobs.monsters_json.toString()).names;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Try to keep your filenames distinct, even across directories, to avoid naming collisions.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Collision Detection and Resolution in Luxe</title>
           <link href="http://ashes999.github.io/learnhaxe/collision-detection-and-resolution-in-luxe" />
       		<id>urn:uuid:e22e476cab81cb5813effdef1f758eff</id>
@@ -282,27 +319,6 @@ var dpadRight = _gamePad.dpadRight;
 var dpadUp = _gamePad.dpadUp;
 var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Run &lt;code&gt;lime test neko&lt;/code&gt; and observe that all input displays as expected.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Appending to a File in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/appending-to-a-file-in-haxe" />
-      		<id>urn:uuid:4b7bda57b940ac159b93bc734983c4cb</id>
-      		<updated>2015-12-28T00:00:00Z</updated>
-      		<summary>Appending to a File in Haxe</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;It's not obvious how to append to a file in Haxe. If you check the &lt;a href="http://api.haxe.org/sys/io/File.html"&gt;sys.io.File API&lt;/a&gt;, you'll find an &lt;a href="http://api.haxe.org/sys/io/File.html#append"&gt;append method&lt;/a&gt;, which looks promising, but outputs an instance of &lt;code&gt;FileOutput&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;FileOutput&lt;/code&gt; &lt;a href="http://api.haxe.org/sys/io/FileOutput.html"&gt;API&lt;/a&gt; looks pretty sparse and unusable, until you click on the &lt;a href="http://api.haxe.org/haxe/io/Output.html"&gt;base-class &lt;code&gt;Output&lt;/code&gt; API&lt;/a&gt;. There, you see promising methods, like &lt;a href="http://api.haxe.org/haxe/io/Output.html#writeString"&gt;&lt;code&gt;writeString&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;To combine these together, you can append a string to a file like so (don't forget to close the output stream):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public function append(message:String, fileName:String) {
-  var output:FileOutput = sys.io.File.append(fileName, false);
-  output.writeString(message);
-  output.close();
-}&lt;/code&gt;&lt;/pre&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
