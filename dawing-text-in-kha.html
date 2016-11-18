@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Dawing Text in kha | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,11 +59,86 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
-            <p>2 posts tagged with Kha:</p>
-<ul><li><a href="dawing-text-in-kha.html">Dawing Text in kha</a></li><li><a href="loading-json-in-kha.html">Loading Json in kha</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Dawing Text in kha</h2>
+            <p class="blog-post-meta">Posted on 2016-11-18</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Kha.html">Kha</a></p>
+<p>Drawing text in Kha requires a couple of steps:
+- Find and add a font (TTF) into your <code>Assets</code> directory
+- Load the font (along with all assets)
+- Draw the font on screen via <code>drawString</code></p>
+<p>Here's a minimal example demonstrating these steps, assuming that you downloaded the <code>Inconsolata</code> font into <code>Assets/fonts/inconsolata_regular.ttf</code>:</p>
+<pre><code>package;
+
+import kha.Framebuffer;
+import kha.Scheduler;
+import kha.System;
+import kha.Image;
+import kha.Scaler;
+import kha.Color;
+import kha.Font;
+import kha.Assets;
+
+class Unknown
+{	
+	private static var bgColor = Color.fromValue(0x26004d);
+	private var font:Font;
+	private var initialized:Bool = false;
+	
+	public function new()
+	{
+		System.notifyOnRender(render);
+		Scheduler.addTimeTask(update, 0, 1 / 60);
+		
+		Assets.loadEverything(function()
+		{
+			initialized = true;
+			font = Assets.fonts.Inconsolata_Regular;
+		});
+	}
+
+	public function render(framebuffer:Framebuffer): Void
+	{
+		if (!initialized)
+		{
+			return;
+		}
+
+		frames += 1;
+
+		// clear our backbuffer using graphics2
+        var g = framebuffer.g2;
+        g.begin(bgColor);
+
+		g.font = font;
+		g.fontSize = 24;
+        g.color = Color.fromValue(0xFF0000); // red text
+
+        g.drawString("Hello, world!", 50, 20); // Draw "Hello, World!" at (50, 20)
+		
+        g.end();
+	}
+}</code></pre>
+<p>This is an untested example, with lots of things removed (eg. back buffering). It demonstrates the main steps:</p><ul><li>Load the font (<code>Assets.loadEverything</code>)</li><li>Assign the font to a variable once it's loaded (anonymous function)</li><li>Use the font to draw to screen</li></ul>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/dawing-text-in-kha"; // Absolute page URL
+  this.page.identifier = "2021132733bbb4db085755a1bcac908c5a3f4ed7"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>

@@ -3,7 +3,77 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-09-30T00:00:00Z</updated><entry>
+  	    <updated>2016-11-18T00:00:00Z</updated><entry>
+      		<title>Dawing Text in kha</title>
+          <link href="http://ashes999.github.io/learnhaxe/dawing-text-in-kha" />
+      		<id>urn:uuid:d459d29083a1a9097b01200a90bd7a6a</id>
+      		<updated>2016-11-18T00:00:00Z</updated>
+      		<summary>Dawing Text in kha</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;Drawing text in Kha requires a couple of steps:
+- Find and add a font (TTF) into your &lt;code&gt;Assets&lt;/code&gt; directory
+- Load the font (along with all assets)
+- Draw the font on screen via &lt;code&gt;drawString&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Here's a minimal example demonstrating these steps, assuming that you downloaded the &lt;code&gt;Inconsolata&lt;/code&gt; font into &lt;code&gt;Assets/fonts/inconsolata_regular.ttf&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;package;
+
+import kha.Framebuffer;
+import kha.Scheduler;
+import kha.System;
+import kha.Image;
+import kha.Scaler;
+import kha.Color;
+import kha.Font;
+import kha.Assets;
+
+class Unknown
+{	
+	private static var bgColor = Color.fromValue(0x26004d);
+	private var font:Font;
+	private var initialized:Bool = false;
+	
+	public function new()
+	{
+		System.notifyOnRender(render);
+		Scheduler.addTimeTask(update, 0, 1 / 60);
+		
+		Assets.loadEverything(function()
+		{
+			initialized = true;
+			font = Assets.fonts.Inconsolata_Regular;
+		});
+	}
+
+	public function render(framebuffer:Framebuffer): Void
+	{
+		if (!initialized)
+		{
+			return;
+		}
+
+		frames += 1;
+
+		// clear our backbuffer using graphics2
+        var g = framebuffer.g2;
+        g.begin(bgColor);
+
+		g.font = font;
+		g.fontSize = 24;
+        g.color = Color.fromValue(0xFF0000); // red text
+
+        g.drawString("Hello, world!", 50, 20); // Draw "Hello, World!" at (50, 20)
+		
+        g.end();
+	}
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is an untested example, with lots of things removed (eg. back buffering). It demonstrates the main steps:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Load the font (&lt;code&gt;Assets.loadEverything&lt;/code&gt;)&lt;/li&gt;&lt;li&gt;Assign the font to a variable once it's loaded (anonymous function)&lt;/li&gt;&lt;li&gt;Use the font to draw to screen&lt;/li&gt;&lt;/ul&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Loading Json in kha</title>
           <link href="http://ashes999.github.io/learnhaxe/loading-json-in-kha" />
       		<id>urn:uuid:4b287d4050b5cd64855b26a1f574edf9</id>
@@ -276,49 +346,6 @@ version =&gt; 0.3&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;When you run your lime project, it actually creates a copies of the &lt;code&gt;assets&lt;/code&gt; directory in &lt;code&gt;export/&amp;lt;os name&amp;gt;/neko/bin&lt;/code&gt;. Interestingly, copying your asset files here isn't enough; you still need to run &lt;code&gt;lime update neko&lt;/code&gt; to make them accessible to the running game.&lt;/p&gt;
 &lt;p&gt;Also, when the assets reload, they become available to calls like &lt;code&gt;getBitmapData&lt;/code&gt; et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.&lt;/p&gt;
 &lt;p&gt;You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Logitech F310 Support in HaxeFlixel</title>
-          <link href="http://ashes999.github.io/learnhaxe/logitech-f310-support-in-haxeflixel" />
-      		<id>urn:uuid:5b3cc642376ebcf61b696095ee76478e</id>
-      		<updated>2016-01-12T00:00:00Z</updated>
-      		<summary>Logitech F310 Support in HaxeFlixel</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;I recently received a &lt;a href="http://gaming.logitech.com/en-us/product/f310-gamepad"&gt;Logitech F310 gamepad&lt;/a&gt;. Since HaxeFlixel already &lt;a href="http://api.haxeflixel.com/flixel/input/gamepad/FlxGamepad.html"&gt;has gamepad support&lt;/a&gt; (buttons, deadzone, D-Pad, etc.), including support for &lt;a href="http://api.haxeflixel.com/flixel/input/gamepad/LogitechButtonID.html"&gt;reading Logitech button input&lt;/a&gt;, I figured it would work out-of-the-box, right?&lt;/p&gt;
-&lt;p&gt;Right?&lt;/p&gt;
-&lt;p&gt;It turns out that the &lt;code&gt;LogitechButtonID&lt;/code&gt; class contains values based on the &lt;strong&gt;Cordless Rumblepad 2&lt;/strong&gt; controller. If you look &lt;a href="https://www.google.com/search?site=&amp;amp;tbm=isch&amp;amp;source=hp&amp;amp;biw=1440&amp;amp;bih=799&amp;amp;q=rumblepad+2&amp;amp;oq=rumblepad+2&amp;amp;gs_l=img.3..0j0i5i30l9.662.1846.0.1959.11.10.0.1.1.0.151.963.4j5.9.0....0...1ac.1.64.img..1.10.964.x4VlaV7zemA"&gt;at screenshots&lt;/a&gt;, you'll notice the pads all have numbers on them.&lt;/p&gt;
-&lt;p&gt;That's no good -- the F310 uses &lt;code&gt;A&lt;/code&gt;, &lt;code&gt;B&lt;/code&gt;, &lt;code&gt;X&lt;/code&gt;, and &lt;code&gt;Y&lt;/code&gt; for buttons, with left and right triggers (&lt;code&gt;LB&lt;/code&gt; and &lt;code&gt;RB&lt;/code&gt; respectively). Fortunately, the LogitechButtonID class' comments indicate which value applise to which button; these values match up exactly with the F310.  For example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;static inline read only FOUR:Int = 11
-Placement equivalent to 'Y' button on the Xbox 360 controller&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;That only leaves the D-Pads. The built in enum values don't work; instead, I used &lt;a href="https://github.com/HaxeFlixel/flixel/blob/master/flixel/input/gamepad/FlxGamepad.hx#L39"&gt;the four &lt;code&gt;dpad*&lt;/code&gt; properties&lt;/a&gt; defined on the controller itself; these work perfectly.&lt;/p&gt;
-&lt;p&gt;If you want to try this for yourself, it's quite easy:&lt;/p&gt;
-&lt;p&gt;1) Run &lt;code&gt;flixel create&lt;/code&gt; and then select demo &lt;code&gt;34&lt;/code&gt;, &lt;code&gt;GamepadTest&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;2) Replace the contents of the &lt;code&gt;GamepadIDs&lt;/code&gt; class with the correct button enum values:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public static inline var A = LogitechButtonID.TWO;
-public static inline var B = LogitechButtonID.THREE;
-public static inline var X = LogitechButtonID.ONE;
-public static inline var Y = LogitechButtonID.FOUR;
-public static inline var LB = LogitechButtonID.FIVE;
-public static inline var RB = LogitechButtonID.SIX;
-public static inline var START = LogitechButtonID.TEN;
-public static inline var SELECT = LogitechButtonID.NINE;
-public static inline var LEFT_ANALOGUE = LogitechButtonID.LEFT_ANALOGUE;
-public static inline var RIGHT_ANALOGUE = LogitechButtonID.RIGHT_ANALOGUE;
-public static inline var LEFT_ANALOGUE_X = LogitechButtonID.LEFT_ANALOGUE_X;
-public static inline var LEFT_ANALOGUE_Y = LogitechButtonID.LEFT_ANALOGUE_Y;
-public static inline var RIGHT_ANALOGUE_X = LogitechButtonID.RIGHT_ANALOGUE_X;
-public static inline var RIGHT_ANALOGUE_Y =  LogitechButtonID.RIGHT_ANALOGUE_Y;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;3) Modify &lt;code&gt;PlayState.hx&lt;/code&gt;'s &lt;code&gt;updateDpad&lt;/code&gt; function; the values assigned to the four &lt;code&gt;dpad*&lt;/code&gt; variables should be:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;var dpadLeft = _gamePad.dpadLeft;
-var dpadRight = _gamePad.dpadRight;
-var dpadUp = _gamePad.dpadUp;
-var dpadDown = _gamePad.dpadDown;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Run &lt;code&gt;lime test neko&lt;/code&gt; and observe that all input displays as expected.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
