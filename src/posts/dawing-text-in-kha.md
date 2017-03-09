@@ -1,9 +1,10 @@
 meta-id: 2021132733bbb4db085755a1bcac908c5a3f4ed7
-
+meta-title: Drawing Text in Kha
 meta-tags: Kha
 meta-publishedOn: 2016-11-18
 
 Drawing text in Kha requires a couple of steps:
+
 - Find and add a font (TTF) into your `Assets` directory
 - Load the font (along with all assets)
 - Draw the font on screen via `drawString`
