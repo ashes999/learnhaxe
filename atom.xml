@@ -3,17 +3,38 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2016-11-18T00:00:00Z</updated><entry>
-      		<title>Dawing Text in kha</title>
-          <link href="http://ashes999.github.io/learnhaxe/dawing-text-in-kha" />
-      		<id>urn:uuid:d459d29083a1a9097b01200a90bd7a6a</id>
-      		<updated>2016-11-18T00:00:00Z</updated>
-      		<summary>Dawing Text in kha</summary>
+  	    <updated>2017-03-08T00:00:00Z</updated><entry>
+      		<title>Drawing Images Transparently in Kha</title>
+          <link href="http://ashes999.github.io/learnhaxe/drawing-images-transparently-in-kha" />
+      		<id>urn:uuid:b365c58eaec024c8bd1cee47fdf5837b</id>
+      		<updated>2017-03-08T00:00:00Z</updated>
+      		<summary>Drawing Images Transparently in Kha</summary>
       		<content type="xhtml">
-      			&lt;p&gt;Drawing text in Kha requires a couple of steps:
-- Find and add a font (TTF) into your &lt;code&gt;Assets&lt;/code&gt; directory
-- Load the font (along with all assets)
-- Draw the font on screen via &lt;code&gt;drawString&lt;/code&gt;&lt;/p&gt;
+      			&lt;p&gt;In Kha, you can draw images semi-transparently. This doesn't refer to drawing parts of the image transparently, but rather drawing the image as a partially-transparent "layer" (eg. 25% transparent).&lt;/p&gt;
+&lt;p&gt;Although you might expect to find an &lt;code&gt;alpha&lt;/code&gt; or &lt;code&gt;opacity&lt;/code&gt; field on the &lt;code&gt;Image&lt;/code&gt; class. Kha keeps the &lt;code&gt;opacity&lt;/code&gt; field on the &lt;code&gt;Graphics&lt;/code&gt; class. For example, &lt;code&gt;kha.graphics.Graphics2&lt;/code&gt; has an &lt;code&gt;opacity&lt;/code&gt; field. You can use it like so: &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public function render(g:Graphics): Void
+{
+	g.begin(0); // black
+	g.drawImage(mountains, 0, 0); // drawn fully opaque
+	g.opacity = 0.25;
+	g.drawImage(ball, 100, 50); // draws the ball at 25% transparency
+	g.end();
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Be careful to reset &lt;code&gt;opacity&lt;/code&gt; back to &lt;code&gt;1.0&lt;/code&gt; when you're done, so that anything drawn after the transparent image appears normal.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
+      		<title>Drawing Text in Kha</title>
+          <link href="http://ashes999.github.io/learnhaxe/dawing-text-in-kha" />
+      		<id>urn:uuid:b34bb856535b0e1038c802e90e3491e4</id>
+      		<updated>2016-11-18T00:00:00Z</updated>
+      		<summary>Drawing Text in Kha</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;Drawing text in Kha requires a couple of steps:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Find and add a font (TTF) into your &lt;code&gt;Assets&lt;/code&gt; directory&lt;/li&gt;&lt;li&gt;Load the font (along with all assets)&lt;/li&gt;&lt;li&gt;Draw the font on screen via &lt;code&gt;drawString&lt;/code&gt;&lt;/li&gt;&lt;/ul&gt;
 &lt;p&gt;Here's a minimal example demonstrating these steps, assuming that you downloaded the &lt;code&gt;Inconsolata&lt;/code&gt; font into &lt;code&gt;Assets/fonts/inconsolata_regular.ttf&lt;/code&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;package;
 
@@ -74,11 +95,11 @@ class Unknown
       		</author>
       	</entry>
       	<entry>
-      		<title>Loading Json in kha</title>
+      		<title>Loading JSON in Kha</title>
           <link href="http://ashes999.github.io/learnhaxe/loading-json-in-kha" />
-      		<id>urn:uuid:4b287d4050b5cd64855b26a1f574edf9</id>
+      		<id>urn:uuid:bb73091df131bcc92554dbe7e8d119e8</id>
       		<updated>2016-09-30T00:00:00Z</updated>
-      		<summary>Loading Json in kha</summary>
+      		<summary>Loading JSON in Kha</summary>
       		<content type="xhtml">
       			&lt;p&gt;With some macro magic, Kha allows you to load assets asynchronously. Here's how that looks with images:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Assets.loadEverything(function()
@@ -328,24 +349,6 @@ version =&gt; 0.3&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;Reads more sensibly than:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;If you apply this on something other than an anonymous structure, you should probably opt for &lt;code&gt;getProperty&lt;/code&gt; instead.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Dynamically Adding and Reloading Assets in Haxeflixel</title>
-          <link href="http://ashes999.github.io/learnhaxe/dynamically-adding-and-reloading-assets-in-haxeflixel" />
-      		<id>urn:uuid:7831ef7024bdda0da3c935848e7e6c2d</id>
-      		<updated>2016-01-20T00:00:00Z</updated>
-      		<summary>Dynamically Adding and Reloading Assets in Haxeflixel</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;Yes, you can dynamically load (and reload) assets at runtime in your HaxeFlixel project, courtesy of OpenFL. (Caveat: I tried all this on Neko, although it should work equally on any platform.)&lt;/p&gt;&lt;ul&gt;&lt;li&gt;First, run your project via &lt;code&gt;lime test neko&lt;/code&gt;&lt;/li&gt;&lt;li&gt;Second, add (or modify) your assets to the &lt;code&gt;assets&lt;/code&gt; directory.&lt;/li&gt;&lt;li&gt;Finally, run &lt;code&gt;lime update neko&lt;/code&gt;. This copies and re-bundles the assets, in a way that the running process can access them.&lt;/li&gt;&lt;/ul&gt;
-&lt;h2&gt;Internal Details&lt;/h2&gt;
-&lt;p&gt;When you run your lime project, it actually creates a copies of the &lt;code&gt;assets&lt;/code&gt; directory in &lt;code&gt;export/&amp;lt;os name&amp;gt;/neko/bin&lt;/code&gt;. Interestingly, copying your asset files here isn't enough; you still need to run &lt;code&gt;lime update neko&lt;/code&gt; to make them accessible to the running game.&lt;/p&gt;
-&lt;p&gt;Also, when the assets reload, they become available to calls like &lt;code&gt;getBitmapData&lt;/code&gt; et all. These calls are already (currently) used by HaxeFlixel, so you don't need to do anything more to load them.&lt;/p&gt;
-&lt;p&gt;You can see how easy it is to reload assets for a live project, while debugging! I'm sure there are many, many creative possibilities for this (like creating an interactive game editor ...)&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>

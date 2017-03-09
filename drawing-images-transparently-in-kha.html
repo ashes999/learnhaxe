@@ -9,7 +9,7 @@
     <meta name="author" content="ashes999">
     <link rel="icon" href="content/favicon.ico">
 
-    <title>Learn Haxe</title>
+    <title>Drawing Images Transparently in Kha | Learn Haxe</title>
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
@@ -59,11 +59,40 @@ if (window.location.href.indexOf('file://') == -1) {
         <div class="col-sm-8 blog-main">
 
           <div class="blog-post">
-            <h2 class="blog-post-title"><butterfly-title /></h2>
-            <butterfly-post-date class="blog-post-meta" prefix="Posted on "/>
-            <p>3 posts tagged with Kha:</p>
-<ul><li><a href="drawing-images-transparently-in-kha.html">Drawing Images Transparently in Kha</a></li><li><a href="dawing-text-in-kha.html">Drawing Text in Kha</a></li><li><a href="loading-json-in-kha.html">Loading JSON in Kha</a></li></ul>
-            <butterfly-comments />
+            <h2 class="blog-post-title">Drawing Images Transparently in Kha</h2>
+            <p class="blog-post-meta">Posted on 2017-03-08</p>
+            <p><strong>Tagged with:</strong> <a href="tag-Kha.html">Kha</a></p>
+<p>In Kha, you can draw images semi-transparently. This doesn't refer to drawing parts of the image transparently, but rather drawing the image as a partially-transparent "layer" (eg. 25% transparent).</p>
+<p>Although you might expect to find an <code>alpha</code> or <code>opacity</code> field on the <code>Image</code> class. Kha keeps the <code>opacity</code> field on the <code>Graphics</code> class. For example, <code>kha.graphics.Graphics2</code> has an <code>opacity</code> field. You can use it like so: </p>
+<pre><code>public function render(g:Graphics): Void
+{
+	g.begin(0); // black
+	g.drawImage(mountains, 0, 0); // drawn fully opaque
+	g.opacity = 0.25;
+	g.drawImage(ball, 100, 50); // draws the ball at 25% transparency
+	g.end();
+}</code></pre>
+<p>Be careful to reset <code>opacity</code> back to <code>1.0</code> when you're done, so that anything drawn after the transparent image appears normal.</p>
+
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+var disqus_config = function () {
+  this.page.url = "http://ashes999.github.io/learnhaxe/drawing-images-transparently-in-kha"; // Absolute page URL
+  this.page.identifier = "2021132733bbb4db085755a1bcac908c5a3f4ed7"; // Any unique, stable string identifier
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = 'http://butterflyhx.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
           </div>
 
           <!--nav>
