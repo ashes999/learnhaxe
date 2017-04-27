@@ -124,7 +124,7 @@ class Unknown
 {
     var monsterNames = Json.parse(Assets.blobs.monsters_json.toString()).names;
 }&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Try to keep your filenames distinct, even across directories, to avoid naming collisions.&lt;/p&gt;
+&lt;p&gt;Note that you don't need to keep filenames distinct across directories to avoid naming collisions. &lt;a href="https://github.com/Kode/Kha/wiki/khafile.js#adding-assets"&gt;This Kha wiki page&lt;/a&gt; mentions that Kha packs them into a directory structure; so if you have &lt;code&gt;Assets/images/red/player.png&lt;/code&gt; and &lt;code&gt;Assets/images/blue/player.png&lt;/code&gt;, Kha will expose them as &lt;code&gt;Assets.images.red.player&lt;/code&gt; and &lt;code&gt;Assets.images.blue.player&lt;/code&gt; respectively.  (Thanks to &lt;a href="https://github.com/sh-dave"&gt;@sh-dave&lt;/a&gt; for &lt;a href="https://github.com/ashes999/learnhaxe/issues/2"&gt;clarifying this&lt;/a&gt;.)&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
@@ -261,11 +261,11 @@ for (field in structsFields)
       		</author>
       	</entry>
       	<entry>
-      		<title>Haxeflixel in Cloud9</title>
+      		<title>HaxeFlixel in Cloud9</title>
           <link href="http://ashes999.github.io/learnhaxe/haxeflixel-in-cloud9" />
-      		<id>urn:uuid:3741e7b78126e1586fbca302ff187643</id>
+      		<id>urn:uuid:b5efcd9c30563268537d98c96d982a36</id>
       		<updated>2016-03-12T00:00:00Z</updated>
-      		<summary>Haxeflixel in Cloud9</summary>
+      		<summary>HaxeFlixel in Cloud9</summary>
       		<content type="xhtml">
       			&lt;p&gt;&lt;a href="https://c9.io/"&gt;Cloud9&lt;/a&gt; provides remote, cloud-based development enviornments. Under the hood, they provision you a Linux VM with Docker. By default, they provide pre-build environments for Rails, C++, PHP, and other enviornments. But not Haxe.&lt;/p&gt;
 &lt;p&gt;It turns out that setting up Haxe, OpenFL, and HaxeFlixel is really simple.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;For Haxe, &lt;a href="http://haxe.org/download/"&gt;download&lt;/a&gt; and run the Linux 64-bit binaries. (Copy the &lt;code&gt;tar&lt;/code&gt; URL, eg. &lt;code&gt;http://haxe.org/download/file/3.2.1/haxe-3.2.1-linux64.tar.gz&lt;/code&gt;, and grab it via &lt;code&gt;curl &amp;lt;url&amp;gt;&lt;/code&gt;)&lt;/li&gt;&lt;li&gt;For OpenFL, run &lt;code&gt;haxelib install openfl&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;For HaxeFlixel, run &lt;code&gt;haxelib install flixel&lt;/code&gt;. (Don't forget to install and setup &lt;code&gt;flixel-tools&lt;/code&gt; too.)&lt;/li&gt;&lt;/ul&gt;

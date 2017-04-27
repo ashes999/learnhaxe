@@ -85,7 +85,7 @@ if (window.location.href.indexOf('file://') == -1) {
 {
     var monsterNames = Json.parse(Assets.blobs.monsters_json.toString()).names;
 }</code></pre>
-<p>Try to keep your filenames distinct, even across directories, to avoid naming collisions.</p>
+<p>Note that you don't need to keep filenames distinct across directories to avoid naming collisions. <a href="https://github.com/Kode/Kha/wiki/khafile.js#adding-assets">This Kha wiki page</a> mentions that Kha packs them into a directory structure; so if you have <code>Assets/images/red/player.png</code> and <code>Assets/images/blue/player.png</code>, Kha will expose them as <code>Assets.images.red.player</code> and <code>Assets.images.blue.player</code> respectively.  (Thanks to <a href="https://github.com/sh-dave">@sh-dave</a> for <a href="https://github.com/ashes999/learnhaxe/issues/2">clarifying this</a>.)</p>
 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
