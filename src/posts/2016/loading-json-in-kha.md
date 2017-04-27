@@ -43,4 +43,4 @@ Assets.loadEverything(function()
 }
 ```
 
-Try to keep your filenames distinct, even across directories, to avoid naming collisions.
+Note that you don't need to keep filenames distinct across directories to avoid naming collisions. [This Kha wiki page](https://github.com/Kode/Kha/wiki/khafile.js#adding-assets) mentions that Kha packs them into a directory structure; so if you have `Assets/images/red/player.png` and `Assets/images/blue/player.png`, Kha will expose them as `Assets.images.red.player` and `Assets.images.blue.player` respectively.  (Thanks to [@sh-dave](https://github.com/sh-dave) for [clarifying this](https://github.com/ashes999/learnhaxe/issues/2).)
