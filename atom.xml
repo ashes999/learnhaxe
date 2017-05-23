@@ -3,7 +3,54 @@
         <title>Learn Haxe</title>
         <link href="http://ashes999.github.io/learnhaxe" />
         <id>urn:uuid:51e6386ca9155b4889db67f17ba6089f</id>
-  	    <updated>2017-03-08T00:00:00Z</updated><entry>
+  	    <updated>2017-05-23T00:00:00Z</updated><entry>
+      		<title>Making PUT Calls in the Javascript Target</title>
+          <link href="http://ashes999.github.io/learnhaxe/making-put-calls-in-javascript-target" />
+      		<id>urn:uuid:e774439808f657217a50c8a9f1c14cd5</id>
+      		<updated>2017-05-23T00:00:00Z</updated>
+      		<summary>Making PUT Calls in the Javascript Target</summary>
+      		<content type="xhtml">
+      			&lt;p&gt;How can you write a Haxe client that can make PUT calls?&lt;/p&gt;
+&lt;p&gt;According to &lt;a href="https://stackoverflow.com/questions/27345757/how-to-send-http-put-request-from-haxe-neko"&gt;this StackOverflow question&lt;/a&gt;, you can use &lt;a href="http://api.haxe.org/haxe/Http.html"&gt;haxe.Http&lt;/a&gt; to make web requests. You can even use the &lt;code&gt;customRequest&lt;/code&gt; method to make &lt;code&gt;PUT&lt;/code&gt;/&lt;code&gt;PATCH&lt;/code&gt;/etc. But, as of writing (with Haxe 3.4.0), this method doesn't work on the Javascript target.&lt;/p&gt;
+&lt;p&gt;After asking on the mailing list, Franco Ponticelli pointed me to his lovely &lt;code&gt;thx&lt;/code&gt; library. I successfully made a REST &lt;code&gt;GET&lt;/code&gt;, &lt;code&gt;POST&lt;/code&gt;, and &lt;code&gt;PUT&lt;/code&gt; call on Neko and JS with his library.  Here's how I did it:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Install (&lt;code&gt;thx.http&lt;/code&gt;)[https://github.com/fponticelli/thx.http] from GitHub. That is: clone the repository, and run &lt;code&gt;haxelib dev thx.http .&lt;/code&gt; from the repository directory.&lt;/li&gt;&lt;li&gt;Create a new Haxe project and create a shell/batch file to compile it, including the &lt;code&gt;thx.http&lt;/code&gt; library as a dependency. (Sample: &lt;code&gt;haxe -main webclient.Main -cp webclient -js WebClient.js -lib thx.http&lt;/code&gt;)&lt;/li&gt;&lt;li&gt;Create the actual method, accepting (or hard-coding) input parameters (URL, HTTP metohd, and body).&lt;/li&gt;&lt;/ul&gt;
+&lt;p&gt;Here's my sample method from prototyping:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;public static function httpRequest(method:String, url:String):Void
+{
+    var body:String = "";
+
+    if (method != "GET") {
+        body = "{title: 'foo', body: 'bar', userId: 1}";
+    }
+
+    var info:RequestInfo;
+
+    if (method == "GET") {
+        info = new RequestInfo(Get, url, [
+            "Agent" =&amp;gt; "thx.http.Request"
+        ]);
+    } else {
+        info = new RequestInfo(Put, url, Text(body));
+    }
+
+    Request.make(info, Json)
+    .response
+    .flatMap(function(r) {
+        trace('${method} DONE (r=${r.statusCode}): ${r.body}');
+        return r.body;
+    })
+    .success(function(r) trace("Request successful: " + r))
+    .failure(function(e) trace("Request FAILED: " + e));
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice it uses promises (via the &lt;code&gt;thx&lt;/code&gt; libraries) to make the HTTP request and print out the results. &lt;/p&gt;
+&lt;p&gt;I compiled this against Neko and JS and both targets run and make a POST call successfully.&lt;/p&gt;
+&lt;p&gt;For testing, you can use the &lt;a href="https://jsonplaceholder.typicode.com/"&gt;JSON Placeholder&lt;/a&gt; faux web-service. It allows you to make &lt;code&gt;GET&lt;/code&gt;/&lt;code&gt;POST&lt;/code&gt;/&lt;code&gt;PUT&lt;/code&gt;/etc. calls, with minimal validation.&lt;/p&gt;
+      		</content>
+      		<author>
+      			<name>ashes999</name>
+      			<email>ashes999@yahoo.com</email>
+      		</author>
+      	</entry>
+      	<entry>
       		<title>Drawing Images Transparently in Kha</title>
           <link href="http://ashes999.github.io/learnhaxe/drawing-images-transparently-in-kha" />
       		<id>urn:uuid:b365c58eaec024c8bd1cee47fdf5837b</id>
@@ -306,49 +353,6 @@ sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new Co
 &lt;p&gt;&lt;img src="content/images/color-skew.png" alt="Off-colors" /&gt;&lt;/p&gt;
 &lt;p&gt;The result looks great.  And the performance? In my case, I intended to hue-rotate sprites once (and keep them at that hue forever). Manipulating the sprite's &lt;code&gt;.pixels&lt;/code&gt; directly is the same as loadimg a graphic that already has the transformation -- there's no additional cost in each frame if we only do this once when the sprite is created. (Thanks to &lt;a href="https://github.com/gama11"&gt;Gama11&lt;/a&gt; for pointing this out.)&lt;/p&gt;
 &lt;p&gt;For the time being, you can view the complete HaxeFlixel proof-of-concept project &lt;a href="https://github.com/ashes999/haxeflixel-hue-rotation"&gt;here, on GitHub&lt;/a&gt;.&lt;/p&gt;
-      		</content>
-      		<author>
-      			<name>ashes999</name>
-      			<email>ashes999@yahoo.com</email>
-      		</author>
-      	</entry>
-      	<entry>
-      		<title>Iterate Over all Fields of Anonymous Structures in Haxe</title>
-          <link href="http://ashes999.github.io/learnhaxe/iterate-over-all-fields-of-anonymous-structures-in-haxe" />
-      		<id>urn:uuid:94a7e75dcb116844746188990b45172b</id>
-      		<updated>2016-02-17T00:00:00Z</updated>
-      		<summary>Iterate Over all Fields of Anonymous Structures in Haxe</summary>
-      		<content type="xhtml">
-      			&lt;p&gt;How do you iterate over all fields of an &lt;a href="http://haxe.org/manual/types-anonymous-structure.html"&gt;anonymous structure&lt;/a&gt; (possibly behind a &lt;code&gt;typedef&lt;/code&gt;) in Haxe and print out all the values?&lt;/p&gt;
-&lt;p&gt;The &lt;a href="http://haxe.org/manual/std-reflection.html"&gt;Haxe reflection docs&lt;/a&gt; suggest:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The reflection API consists of two classes:
-- Reflect: A lightweight API which work best on anonymous structures, with limited support for classes.
-- Type: A more robust API for working with classes and enums.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;code&gt;Reflect&lt;/code&gt; seems promising. From perusing the API docs, I noticed a &lt;code&gt;fields&lt;/code&gt; method. &lt;a href="http://api.haxe.org/Reflect.html#fields"&gt;The docs&lt;/a&gt; say:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;static fields (o:Dynamic):Array&lt;String&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;Returns the fields of structure o.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This method is only guaranteed to work on anonymous structures. Refer to Type.getInstanceFields for a function supporting class instances.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;That looks promising. Running &lt;code&gt;Reflect.fields({ "name": "Butterfly", "version": "0.3" })&lt;/code&gt; gives me the array &lt;code&gt;["name", "version"]&lt;/code&gt; back.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Reflect&lt;/code&gt; also includes &lt;a href="http://api.haxe.org/Reflect.html#getProperty"&gt;a &lt;code&gt;getProperty&lt;/code&gt; method&lt;/a&gt;, which returns the value of a property. Plug this into a for-loop, like so:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;var target = { "name": "Butterfly", "version": "0.3" };
-var fields = Reflect.fields(target);
-for (field in fields) {
-  var value = Reflect.getProperty(target, field);
-  trace('${field} =&amp;gt; ${value}');
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This traces:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;name =&gt; Butterfly
-version =&gt; 0.3&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;Also, note that Reflect also &lt;a href="http://api.haxe.org/Reflect.html#field"&gt;contains a &lt;code&gt;field&lt;/code&gt; method&lt;/a&gt; which is syntactically similar to &lt;code&gt;getProperty&lt;/code&gt; (same inputs and outputs); the difference is that &lt;code&gt;field&lt;/code&gt; ignores accessors, while &lt;code&gt;getProperty&lt;/code&gt; applies accessors.&lt;/p&gt;
-&lt;p&gt;Given the choice, in this specific case of anonymous structures, I would use &lt;code&gt;field&lt;/code&gt; instead of &lt;code&gt;getProperty&lt;/code&gt; for readability.  This:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;for (var field in Reflect.fields(target)) { Reflect.field(...) }&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Reads more sensibly than:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;for (var field in Reflect.fields(target)) { Reflect.getProperty(...) }&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;If you apply this on something other than an anonymous structure, you should probably opt for &lt;code&gt;getProperty&lt;/code&gt; instead.&lt;/p&gt;
       		</content>
       		<author>
       			<name>ashes999</name>
